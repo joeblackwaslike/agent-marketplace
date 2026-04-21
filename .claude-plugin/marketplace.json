@@ -1,0 +1,36 @@
+{
+  "name": "agent-marketplace",
+  "metadata": {
+    "description": "A curated collection of Claude Code plugins by Joe Black",
+    "version": "1.0.0",
+    "homepage": "https://joeblackwaslike.github.io/agent-marketplace"
+  },
+  "owner": {
+    "name": "Joe Black",
+    "github": "joeblackwaslike"
+  },
+  "plugins": [
+    {
+      "name": "lessons-learned",
+      "description": "Automatic mistake capture and proactive lesson injection for AI coding agents. Mines conversation logs for mistake patterns, structures them as indexed lessons, and injects relevant warnings before the agent repeats the mistake.",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/joeblackwaslike/lessons-learned.git"
+      },
+      "version": "0.1.0",
+      "category": "productivity",
+      "keywords": ["lessons", "mistakes", "hooks", "memory", "injection"]
+    },
+    {
+      "name": "mcp-exec",
+      "description": "Sandboxed code execution MCP server — keep intermediate results out of the context window.",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/joeblackwaslike/mcp-exec.git"
+      },
+      "version": "0.1.0",
+      "category": "execution",
+      "keywords": ["mcp", "sandbox", "execution", "tools"]
+    }
+  ]
+}
