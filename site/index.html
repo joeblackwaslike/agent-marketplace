@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A curated collection of Claude Code plugins by Joe Black. Supercharge your AI coding agent." />
+    <title>Agent Marketplace — Claude Code Plugins</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero-inner">
+        <h1>Agent Marketplace</h1>
+        <p class="tagline">Supercharge your AI coding agent with battle-tested Claude Code plugins.</p>
+        <div class="install-block">
+          <code id="install-cmd">claude plugin marketplace add joeblackwaslike/agent-marketplace</code>
+          <button id="hero-copy-btn" aria-label="Copy install command">Copy</button>
+        </div>
+        <a
+          class="github-badge"
+          href="https://github.com/joeblackwaslike/agent-marketplace"
+          target="_blank"
+          rel="noopener"
+        >
+          <img
+            src="https://img.shields.io/github/stars/joeblackwaslike/agent-marketplace?style=social"
+            alt="GitHub Stars"
+          />
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section class="filters" aria-label="Filter plugins">
+        <div id="filter-pills" role="group" aria-label="Category filters"></div>
+      </section>
+      <section class="catalog" aria-label="Plugin catalog">
+        <div id="plugin-grid"></div>
+      </section>
+    </main>
+
+    <footer>
+      <a href="https://github.com/joeblackwaslike/agent-marketplace">GitHub</a>
+      <a href="https://github.com/joeblackwaslike/agent-marketplace/blob/main/CONTRIBUTING.md">Contributing</a>
+      <a href="https://github.com/joeblackwaslike/agent-marketplace/blob/main/LICENSE">MIT License</a>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
