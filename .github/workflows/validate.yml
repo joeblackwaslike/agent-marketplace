@@ -1,0 +1,39 @@
+name: Validate Marketplace
+
+on:
+  pull_request:
+    paths:
+      - '.claude-plugin/marketplace.json'
+      - 'schemas/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install ajv-cli
+        run: npm install -g ajv-cli@5 ajv-formats
+
+      - name: Validate marketplace.json against schema
+        run: |
+          ajv validate \
+            -s schemas/marketplace.schema.json \
+            -d .claude-plugin/marketplace.json \
+            --spec=draft7
+
+      - name: Check plugin source URLs resolve
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          jq -r '.plugins[].source.url' .claude-plugin/marketplace.json | while read url; do
+            repo="${url#https://github.com/}"
+            repo="${repo%.git}"
+            echo "Checking repo: $repo"
+            gh api "repos/$repo" --silent
+            echo "  ✓ $repo exists"
+          done
