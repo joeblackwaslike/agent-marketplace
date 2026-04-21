@@ -5,3 +5,9 @@ site/.vite/
 .DS_Store
 .env
 .env.local
+
+*.png
+*.jpg
+.serena/
+.superpowers/
+.playwright-mcp/
