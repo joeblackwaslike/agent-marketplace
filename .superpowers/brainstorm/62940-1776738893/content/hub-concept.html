@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hub Concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+body {
+  background: #0c0c0c;
+  font-family: 'Space Grotesk', sans-serif;
+  padding: 36px 28px 80px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.page-header h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.page-header p { color: #555; font-size: 0.82rem; }
+
+/* ── Panel wrapper ── */
+.panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.panel {
+  border-radius: 10px;
+  overflow: hidden;
+  outline: 1px solid #222;
+}
+.panel-label {
+  padding: 9px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.panel-label .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+.dark-label { background: #0d0d18; color: #818cf8; border-bottom: 1px solid #191930; }
+.dark-label .dot { background: #818cf8; }
+.light-label { background: #f0f0f0; color: #4f46e5; border-bottom: 1px solid #e0e0e0; }
+.light-label .dot { background: #4f46e5; }
+
+.frame {
+  width: 100%;
+  height: 520px;
+  overflow: hidden;
+  position: relative;
+}
+.inner {
+  width: 170%;
+  transform: scale(0.5882);
+  transform-origin: top left;
+  height: 884px;
+  overflow: hidden;
+}
+
+/* ════════════════════════════════════
+   DARK SITE
+   ════════════════════════════════════ */
+.dk {
+  background: #070810;
+  min-height: 884px;
+  font-family: 'Space Grotesk', sans-serif;
+  color: #e2e8f0;
+}
+
+/* Nav */
+.dk-nav {
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.dk-brand { display: flex; align-items: center; gap: 10px; }
+.dk-mono {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: 0.7rem; color: #fff; letter-spacing: -0.03em;
+}
+.dk-name { font-size: 0.85rem; font-weight: 600; color: #fff; letter-spacing: -0.01em; }
+.dk-name em { font-style: normal; color: #818cf8; }
+.dk-nav-center { display: flex; gap: 22px; }
+.dk-nav-center a {
+  font-size: 0.72rem; color: #475569; text-decoration: none; font-weight: 400;
+  letter-spacing: 0.01em;
+}
+.dk-socials { display: flex; gap: 6px; }
+.dk-si {
+  width: 28px; height: 28px; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; color: #475569;
+}
+
+/* Hero */
+.dk-hero {
+  padding: 52px 32px 40px;
+  position: relative; overflow: hidden;
+}
+.dk-glow {
+  position: absolute; top: -100px; left: -60px;
+  width: 500px; height: 360px;
+  background: radial-gradient(ellipse, rgba(99,102,241,0.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+.dk-glow2 {
+  position: absolute; top: -40px; right: -60px;
+  width: 400px; height: 300px;
+  background: radial-gradient(ellipse, rgba(168,85,247,0.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+.dk-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #818cf8; background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.2);
+  padding: 4px 10px; border-radius: 20px; margin-bottom: 20px;
+  position: relative;
+}
+.dk-tag-dot { width: 4px; height: 4px; border-radius: 50%; background: #818cf8; }
+.dk-h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 3.5rem; font-weight: 800; line-height: 0.92;
+  letter-spacing: -0.04em; margin-bottom: 16px; position: relative;
+}
+.dk-h1 .name { color: #fff; }
+.dk-h1 .role {
+  background: linear-gradient(130deg, #818cf8, #c084fc 60%, #f472b6 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  display: block; margin-top: 4px;
+}
+.dk-sub {
+  font-size: 0.88rem; color: #475569; font-weight: 300;
+  line-height: 1.72; max-width: 400px; margin-bottom: 28px; position: relative;
+}
+.dk-ctas { display: flex; gap: 10px; position: relative; }
+.dk-cta-pri {
+  font-size: 0.72rem; font-weight: 500;
+  background: #6366f1; color: #fff;
+  border-radius: 6px; padding: 9px 18px; border: none;
+  letter-spacing: 0.01em;
+}
+.dk-cta-sec {
+  font-size: 0.72rem; font-weight: 400;
+  background: rgba(255,255,255,0.04); color: #94a3b8;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 6px; padding: 9px 18px;
+  letter-spacing: 0.01em;
+}
+
+/* Section */
+.dk-section {
+  padding: 28px 32px 0;
+}
+.dk-sh {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+}
+.dk-sh-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #1e293b; white-space: nowrap;
+}
+.dk-sh-line { flex: 1; height: 1px; background: rgba(255,255,255,0.04); }
+.dk-sh-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem; color: #1e293b;
+}
+
+.dk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.dk-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px; padding: 14px; overflow: hidden; position: relative;
+}
+.dk-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(129,140,248,0.45), transparent);
+}
+.dk-cat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.52rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #6366f1; margin-bottom: 6px;
+}
+.dk-card-name { font-size: 0.88rem; font-weight: 600; color: #e2e8f0; margin-bottom: 4px; }
+.dk-card-desc { font-size: 0.62rem; color: #334155; line-height: 1.55; margin-bottom: 10px; }
+.dk-cmd {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.56rem;
+  color: #475569; background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.05); border-radius: 3px; padding: 5px 8px;
+}
+
+/* Writing row */
+.dk-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.dk-post {
+  border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 14px;
+}
+.dk-post-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #a855f7; margin-bottom: 6px;
+}
+.dk-post-title { font-size: 0.82rem; font-weight: 600; color: #e2e8f0; line-height: 1.35; margin-bottom: 4px; }
+.dk-post-date { font-family: 'JetBrains Mono', monospace; font-size: 0.52rem; color: #1e293b; }
+
+/* ════════════════════════════════════
+   LIGHT SITE — genuinely bright
+   ════════════════════════════════════ */
+.lt {
+  background: #ffffff;
+  min-height: 884px;
+  font-family: 'Space Grotesk', sans-serif;
+  color: #111;
+}
+
+/* Nav */
+.lt-nav {
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+}
+.lt-brand { display: flex; align-items: center; gap: 10px; }
+.lt-mono {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: 0.7rem; color: #fff; letter-spacing: -0.03em;
+}
+.lt-name { font-size: 0.85rem; font-weight: 600; color: #111; letter-spacing: -0.01em; }
+.lt-name em { font-style: normal; color: #6366f1; }
+.lt-nav-center { display: flex; gap: 22px; }
+.lt-nav-center a { font-size: 0.72rem; color: #aaa; text-decoration: none; font-weight: 400; }
+.lt-socials { display: flex; gap: 6px; }
+.lt-si {
+  width: 28px; height: 28px; border-radius: 6px;
+  border: 1px solid #ebebeb; background: #fafafa;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; color: #999;
+}
+
+/* Hero */
+.lt-hero {
+  padding: 52px 32px 40px;
+  border-bottom: 1px solid #f4f4f4;
+}
+.lt-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #6366f1; background: #eef2ff; border: 1px solid #c7d2fe;
+  padding: 4px 10px; border-radius: 20px; margin-bottom: 20px;
+}
+.lt-tag-dot { width: 4px; height: 4px; border-radius: 50%; background: #6366f1; }
+.lt-h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 3.5rem; font-weight: 800; line-height: 0.92;
+  letter-spacing: -0.04em; margin-bottom: 16px;
+  color: #0a0a0a;
+}
+.lt-h1 .role {
+  background: linear-gradient(130deg, #4f46e5, #7c3aed 55%, #9333ea 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  display: block; margin-top: 4px;
+}
+.lt-sub {
+  font-size: 0.88rem; color: #6b7280; font-weight: 300;
+  line-height: 1.72; max-width: 400px; margin-bottom: 28px;
+}
+.lt-ctas { display: flex; gap: 10px; }
+.lt-cta-pri {
+  font-size: 0.72rem; font-weight: 500;
+  background: #6366f1; color: #fff;
+  border-radius: 6px; padding: 9px 18px; border: none;
+}
+.lt-cta-sec {
+  font-size: 0.72rem; font-weight: 400;
+  background: #fff; color: #6b7280;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px; padding: 9px 18px;
+}
+
+/* Section */
+.lt-section { padding: 24px 32px 0; }
+.lt-sh {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+}
+.lt-sh-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #d1d5db; white-space: nowrap;
+}
+.lt-sh-line { flex: 1; height: 1px; background: #f3f4f6; }
+.lt-sh-count {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; color: #d1d5db;
+}
+
+.lt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.lt-card {
+  background: #fafafa; border: 1px solid #efefef;
+  border-radius: 8px; padding: 14px; position: relative; overflow: hidden;
+}
+.lt-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, #6366f1, #a855f7); opacity: 0.3;
+}
+.lt-cat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.52rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #6366f1; margin-bottom: 6px;
+}
+.lt-card-name { font-size: 0.88rem; font-weight: 600; color: #111; margin-bottom: 4px; }
+.lt-card-desc { font-size: 0.62rem; color: #6b7280; line-height: 1.55; margin-bottom: 10px; }
+.lt-cmd {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.56rem;
+  color: #9ca3af; background: #fff; border: 1px solid #e5e7eb;
+  border-radius: 3px; padding: 5px 8px; display: block;
+}
+
+/* Writing row */
+.lt-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.lt-post {
+  background: #fafafa; border: 1px solid #efefef; border-radius: 8px; padding: 14px;
+}
+.lt-post-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #9333ea; margin-bottom: 6px;
+}
+.lt-post-title { font-size: 0.82rem; font-weight: 600; color: #111; line-height: 1.35; margin-bottom: 4px; }
+.lt-post-date { font-family: 'JetBrains Mono', monospace; font-size: 0.52rem; color: #d1d5db; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Personal Hub — Dark &amp; Light</h1>
+  <p>Plugins · Writing · Projects · Resume · Social — all under one roof</p>
+</div>
+
+<div class="panels">
+
+  <!-- ── DARK ── -->
+  <div class="panel">
+    <div class="panel-label dark-label"><div class="dot"></div>Dark Mode</div>
+    <div class="frame">
+      <div class="inner">
+        <div class="dk">
+
+          <nav class="dk-nav">
+            <div class="dk-brand">
+              <div class="dk-mono">JB</div>
+              <div class="dk-name">Joe Black<em> ·dev</em></div>
+            </div>
+            <div class="dk-nav-center">
+              <a href="#">Plugins</a>
+              <a href="#">Writing</a>
+              <a href="#">Projects</a>
+              <a href="#">Resume</a>
+            </div>
+            <div class="dk-socials">
+              <div class="dk-si">gh</div>
+              <div class="dk-si">tw</div>
+              <div class="dk-si">in</div>
+              <div class="dk-si">sub</div>
+            </div>
+          </nav>
+
+          <div class="dk-hero">
+            <div class="dk-glow"></div>
+            <div class="dk-glow2"></div>
+            <div class="dk-tag"><div class="dk-tag-dot"></div>AI · Developer Tools · Open Source</div>
+            <div class="dk-h1">
+              <span class="name">Joe Black.</span>
+              <span class="role">Building for the<br/>agentic era.</span>
+            </div>
+            <div class="dk-sub">I build Claude Code plugins, AI developer tools, and write about what I learn. Currently obsessed with agentic workflows and autonomous coding agents.</div>
+            <div class="dk-ctas">
+              <div class="dk-cta-pri">Browse Plugins →</div>
+              <div class="dk-cta-sec">Read the Blog</div>
+            </div>
+          </div>
+
+          <div class="dk-section">
+            <div class="dk-sh">
+              <span class="dk-sh-label">Claude Code Plugins</span>
+              <div class="dk-sh-line"></div>
+              <span class="dk-sh-count">02</span>
+            </div>
+            <div class="dk-grid">
+              <div class="dk-card">
+                <div class="dk-cat">Productivity</div>
+                <div class="dk-card-name">lessons-learned</div>
+                <div class="dk-card-desc">Automatic mistake capture and proactive lesson injection for AI coding agents.</div>
+                <code class="dk-cmd">claude plugin install lessons-learned</code>
+              </div>
+              <div class="dk-card">
+                <div class="dk-cat">Execution</div>
+                <div class="dk-card-name">mcp-exec</div>
+                <div class="dk-card-desc">Sandboxed code execution MCP server — keep results out of context window.</div>
+                <code class="dk-cmd">claude plugin install mcp-exec</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="dk-section" style="padding-top:22px">
+            <div class="dk-sh">
+              <span class="dk-sh-label">Recent Writing</span>
+              <div class="dk-sh-line"></div>
+            </div>
+            <div class="dk-row">
+              <div class="dk-post">
+                <div class="dk-post-tag">Claude Code</div>
+                <div class="dk-post-title">How I built a plugin marketplace for Claude Code in a weekend</div>
+                <div class="dk-post-date">Apr 2026</div>
+              </div>
+              <div class="dk-post">
+                <div class="dk-post-tag">AI Agents</div>
+                <div class="dk-post-title">Why your AI agent keeps making the same mistakes</div>
+                <div class="dk-post-date">Mar 2026</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LIGHT ── -->
+  <div class="panel">
+    <div class="panel-label light-label"><div class="dot"></div>Light Mode</div>
+    <div class="frame">
+      <div class="inner">
+        <div class="lt">
+
+          <nav class="lt-nav">
+            <div class="lt-brand">
+              <div class="lt-mono">JB</div>
+              <div class="lt-name">Joe Black<em> ·dev</em></div>
+            </div>
+            <div class="lt-nav-center">
+              <a href="#">Plugins</a>
+              <a href="#">Writing</a>
+              <a href="#">Projects</a>
+              <a href="#">Resume</a>
+            </div>
+            <div class="lt-socials">
+              <div class="lt-si">gh</div>
+              <div class="lt-si">tw</div>
+              <div class="lt-si">in</div>
+              <div class="lt-si">sub</div>
+            </div>
+          </nav>
+
+          <div class="lt-hero">
+            <div class="lt-tag"><div class="lt-tag-dot"></div>AI · Developer Tools · Open Source</div>
+            <div class="lt-h1">
+              Joe Black.
+              <span class="role">Building for the<br/>agentic era.</span>
+            </div>
+            <div class="lt-sub">I build Claude Code plugins, AI developer tools, and write about what I learn. Currently obsessed with agentic workflows and autonomous coding agents.</div>
+            <div class="lt-ctas">
+              <div class="lt-cta-pri">Browse Plugins →</div>
+              <div class="lt-cta-sec">Read the Blog</div>
+            </div>
+          </div>
+
+          <div class="lt-section">
+            <div class="lt-sh">
+              <span class="lt-sh-label">Claude Code Plugins</span>
+              <div class="lt-sh-line"></div>
+              <span class="lt-sh-count">02</span>
+            </div>
+            <div class="lt-grid">
+              <div class="lt-card">
+                <div class="lt-cat">Productivity</div>
+                <div class="lt-card-name">lessons-learned</div>
+                <div class="lt-card-desc">Automatic mistake capture and proactive lesson injection for AI coding agents.</div>
+                <code class="lt-cmd">claude plugin install lessons-learned</code>
+              </div>
+              <div class="lt-card">
+                <div class="lt-cat">Execution</div>
+                <div class="lt-card-name">mcp-exec</div>
+                <div class="lt-card-desc">Sandboxed code execution MCP server — keep results out of context window.</div>
+                <code class="lt-cmd">claude plugin install mcp-exec</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="lt-section" style="padding-top:20px">
+            <div class="lt-sh">
+              <span class="lt-sh-label">Recent Writing</span>
+              <div class="lt-sh-line"></div>
+            </div>
+            <div class="lt-row">
+              <div class="lt-post">
+                <div class="lt-post-tag">Claude Code</div>
+                <div class="lt-post-title">How I built a plugin marketplace for Claude Code in a weekend</div>
+                <div class="lt-post-date">Apr 2026</div>
+              </div>
+              <div class="lt-post">
+                <div class="lt-post-tag">AI Agents</div>
+                <div class="lt-post-title">Why your AI agent keeps making the same mistakes</div>
+                <div class="lt-post-date">Mar 2026</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

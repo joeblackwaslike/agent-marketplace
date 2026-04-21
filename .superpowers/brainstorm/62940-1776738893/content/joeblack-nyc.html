@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>joeblack.nyc — concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ─── Reset ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+
+/* ─── Theme tokens ─── */
+:root {
+  --ease: cubic-bezier(0.16,1,0.3,1);
+}
+
+[data-theme="dark"] {
+  --bg:        #070810;
+  --bg2:       #0d0e1a;
+  --surface:   rgba(255,255,255,0.03);
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.04);
+  --ink:       #ffffff;
+  --ink2:      #e2e8f0;
+  --muted:     #475569;
+  --muted2:    #1e293b;
+  --accent:    #818cf8;
+  --accent2:   #6366f1;
+  --accent-bg: rgba(99,102,241,0.10);
+  --accent-bd: rgba(99,102,241,0.20);
+  --grad:      linear-gradient(130deg, #818cf8 0%, #c084fc 55%, #f472b6 100%);
+  --grad-sub:  linear-gradient(130deg, #4f46e5 0%, #7c3aed 100%);
+  --card-bg:   rgba(255,255,255,0.03);
+  --card-bd:   rgba(255,255,255,0.07);
+  --code-bg:   rgba(0,0,0,0.35);
+  --code-bd:   rgba(255,255,255,0.06);
+  --nav-bg:    rgba(7,8,16,0.85);
+  --post-bg:   rgba(255,255,255,0.02);
+  --tag-purple:#a855f7;
+  --icon-bg:   rgba(255,255,255,0.04);
+  --icon-bd:   rgba(255,255,255,0.08);
+  --toggle-bg: rgba(255,255,255,0.06);
+  --toggle-ico:#818cf8;
+  --divider:   rgba(255,255,255,0.04);
+  --sh-color:  #1e293b;
+}
+
+[data-theme="light"] {
+  --bg:        #ffffff;
+  --bg2:       #f8f9ff;
+  --surface:   #fafafa;
+  --border:    #efefef;
+  --border2:   #f4f4f4;
+  --ink:       #0a0a0a;
+  --ink2:      #111827;
+  --muted:     #6b7280;
+  --muted2:    #9ca3af;
+  --accent:    #6366f1;
+  --accent2:   #4f46e5;
+  --accent-bg: #eef2ff;
+  --accent-bd: #c7d2fe;
+  --grad:      linear-gradient(130deg, #4f46e5 0%, #7c3aed 55%, #9333ea 100%);
+  --grad-sub:  linear-gradient(130deg, #6366f1 0%, #9333ea 100%);
+  --card-bg:   #fafafa;
+  --card-bd:   #efefef;
+  --code-bg:   #ffffff;
+  --code-bd:   #e5e7eb;
+  --nav-bg:    rgba(255,255,255,0.90);
+  --post-bg:   #fafafa;
+  --tag-purple:#9333ea;
+  --icon-bg:   #fafafa;
+  --icon-bd:   #e5e7eb;
+  --toggle-bg: #f3f4f6;
+  --toggle-ico:#6366f1;
+  --divider:   #f3f4f6;
+  --sh-color:  #d1d5db;
+}
+
+/* ─── Base ─── */
+body {
+  background: var(--bg);
+  color: var(--ink2);
+  font-family: 'Space Grotesk', sans-serif;
+  line-height: 1.6;
+  transition: background 0.35s var(--ease), color 0.35s var(--ease);
+  overflow-x: hidden;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+/* ─── Nav ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 0 40px;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--nav-bg);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border2);
+  transition: background 0.35s var(--ease), border-color 0.35s var(--ease);
+}
+
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+.nav-monogram {
+  width: 30px; height: 30px; border-radius: 7px;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: 0.65rem; color: #fff; letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+.nav-domain {
+  font-size: 0.82rem; font-weight: 500; color: var(--ink);
+  letter-spacing: -0.01em;
+  transition: color 0.35s var(--ease);
+}
+.nav-domain .tld { color: var(--accent); }
+
+.nav-links {
+  display: flex; gap: 28px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.72rem; font-weight: 400; color: var(--muted);
+  text-decoration: none; letter-spacing: 0.01em;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--ink); }
+
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-social {
+  display: flex; gap: 5px;
+}
+.nav-icon {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: var(--icon-bg); border: 1px solid var(--icon-bd);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.5rem;
+  color: var(--muted); text-decoration: none;
+  transition: color 0.15s, border-color 0.15s, background 0.35s var(--ease);
+}
+.nav-icon:hover { color: var(--accent); border-color: var(--accent-bd); }
+
+.theme-toggle {
+  width: 32px; height: 32px; border-radius: 7px;
+  background: var(--toggle-bg); border: 1px solid var(--border);
+  color: var(--toggle-ico); font-size: 0.85rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.35s var(--ease);
+  flex-shrink: 0;
+}
+.theme-toggle:hover { border-color: var(--accent-bd); }
+
+/* ─── Hero ─── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 100px 40px 80px;
+  position: relative; overflow: hidden;
+}
+
+.hero-parallax-bg {
+  position: absolute; inset: -20%;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 20%, rgba(99,102,241,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 60%, rgba(168,85,247,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 60% 10%, rgba(244,114,182,0.06) 0%, transparent 60%);
+  pointer-events: none;
+  will-change: transform;
+  transition: opacity 0.35s var(--ease);
+}
+
+[data-theme="light"] .hero-parallax-bg {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 20%, rgba(99,102,241,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 60%, rgba(168,85,247,0.04) 0%, transparent 60%);
+}
+
+.hero-content { position: relative; z-index: 1; max-width: 720px; }
+
+.hero-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); background: var(--accent-bg); border: 1px solid var(--accent-bd);
+  padding: 5px 12px; border-radius: 20px; margin-bottom: 28px;
+  opacity: 0; animation: fadeUp 0.7s 0.1s var(--ease) forwards;
+}
+.chip-dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:0.5;transform:scale(0.8);}
+}
+
+.hero-h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  margin-bottom: 10px;
+  opacity: 0; animation: fadeUp 0.7s 0.2s var(--ease) forwards;
+  transition: color 0.35s var(--ease);
+}
+.hero-h1 .grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  display: block; margin-top: 6px;
+}
+
+.hero-sub {
+  font-size: 1.05rem; font-weight: 300;
+  color: var(--muted); line-height: 1.7;
+  max-width: 480px; margin-bottom: 36px;
+  opacity: 0; animation: fadeUp 0.7s 0.35s var(--ease) forwards;
+  transition: color 0.35s var(--ease);
+}
+
+.hero-ctas {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.7s 0.45s var(--ease) forwards;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.82rem; font-weight: 500;
+  background: var(--accent2); color: #fff;
+  padding: 11px 22px; border-radius: 8px; border: none; cursor: pointer;
+  text-decoration: none; letter-spacing: 0.01em;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.82rem; font-weight: 400;
+  background: transparent; color: var(--muted);
+  padding: 11px 22px; border-radius: 8px;
+  border: 1px solid var(--border); cursor: pointer;
+  text-decoration: none; letter-spacing: 0.01em;
+  transition: color 0.15s, border-color 0.15s, background 0.35s var(--ease);
+}
+.btn-secondary:hover { color: var(--ink); border-color: var(--accent-bd); }
+
+.hero-scroll-hint {
+  position: absolute; bottom: 32px; left: 40px;
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted2);
+  opacity: 0; animation: fadeUp 0.7s 0.8s var(--ease) forwards;
+}
+.scroll-line {
+  width: 40px; height: 1px; background: var(--muted2);
+  transform-origin: left; animation: extendLine 1.2s 1s var(--ease) forwards;
+  transform: scaleX(0);
+}
+@keyframes extendLine { to { transform: scaleX(1); } }
+
+/* ─── Shared section styles ─── */
+.section {
+  padding: 80px 40px;
+  border-top: 1px solid var(--border2);
+}
+.section-head {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 40px;
+}
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--sh-color); white-space: nowrap;
+  transition: color 0.35s var(--ease);
+}
+.section-line { flex: 1; height: 1px; background: var(--divider); }
+.section-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; color: var(--sh-color);
+  transition: color 0.35s var(--ease);
+}
+.section-viewall {
+  font-size: 0.75rem; font-weight: 500;
+  color: var(--accent); text-decoration: none;
+  transition: opacity 0.15s;
+}
+.section-viewall:hover { opacity: 0.7; }
+
+/* reveal-on-scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 80ms; }
+.reveal-delay-2 { transition-delay: 160ms; }
+.reveal-delay-3 { transition-delay: 240ms; }
+.reveal-delay-4 { transition-delay: 320ms; }
+
+/* ─── Plugin cards ─── */
+.plugin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+}
+.plugin-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  border-radius: 10px; padding: 20px;
+  position: relative; overflow: hidden;
+  transition: background 0.35s var(--ease), border-color 0.15s, transform 0.15s;
+  cursor: pointer;
+}
+.plugin-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.5;
+}
+.plugin-card:hover {
+  border-color: var(--accent-bd);
+  transform: translateY(-2px);
+}
+.card-cat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px;
+}
+.card-name {
+  font-size: 1.05rem; font-weight: 600; color: var(--ink); margin-bottom: 6px;
+  transition: color 0.35s var(--ease);
+}
+.card-desc {
+  font-size: 0.82rem; color: var(--muted); line-height: 1.6;
+  margin-bottom: 16px; font-weight: 300;
+  transition: color 0.35s var(--ease);
+}
+.card-cmd {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+  color: var(--muted); background: var(--code-bg); border: 1px solid var(--code-bd);
+  border-radius: 5px; padding: 8px 12px; display: flex;
+  align-items: center; justify-content: space-between;
+  transition: background 0.35s var(--ease), border-color 0.35s var(--ease);
+}
+.cmd-copy {
+  font-size: 0.58rem; font-weight: 500; color: var(--accent);
+  cursor: pointer; opacity: 0.7; transition: opacity 0.15s;
+}
+.cmd-copy:hover { opacity: 1; }
+
+/* ─── Blog cards ─── */
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+.post-card {
+  background: var(--post-bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 22px;
+  text-decoration: none; color: inherit; display: block;
+  transition: background 0.35s var(--ease), border-color 0.15s, transform 0.15s;
+}
+.post-card:hover {
+  border-color: var(--accent-bd); transform: translateY(-2px);
+}
+.post-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--tag-purple); margin-bottom: 10px;
+  display: block;
+}
+.post-title {
+  font-size: 0.95rem; font-weight: 600; color: var(--ink);
+  line-height: 1.4; margin-bottom: 8px;
+  transition: color 0.35s var(--ease);
+}
+.post-excerpt {
+  font-size: 0.78rem; color: var(--muted); line-height: 1.6;
+  font-weight: 300; margin-bottom: 16px;
+  transition: color 0.35s var(--ease);
+}
+.post-meta {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.post-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; color: var(--sh-color);
+  transition: color 0.35s var(--ease);
+}
+.post-platform {
+  font-size: 0.65rem; color: var(--accent); font-weight: 500;
+}
+
+/* ─── Projects ─── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+.project-card {
+  background: var(--card-bg); border: 1px solid var(--card-bd);
+  border-radius: 10px; padding: 20px;
+  transition: background 0.35s var(--ease), border-color 0.15s, transform 0.15s;
+  cursor: pointer;
+}
+.project-card:hover { border-color: var(--accent-bd); transform: translateY(-2px); }
+.project-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+.project-name { font-size: 0.95rem; font-weight: 600; color: var(--ink); transition: color 0.35s; }
+.project-star {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+  color: var(--muted2); display: flex; align-items: center; gap: 3px;
+}
+.project-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.6; font-weight: 300; margin-bottom: 14px; transition: color 0.35s; }
+.project-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.project-tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+  color: var(--muted); background: var(--code-bg); border: 1px solid var(--code-bd);
+  padding: 2px 8px; border-radius: 3px;
+  transition: background 0.35s, border-color 0.35s;
+}
+
+/* ─── Social links ─── */
+.socials-row {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.social-card {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--card-bg); border: 1px solid var(--card-bd);
+  border-radius: 10px; padding: 14px 18px;
+  text-decoration: none; color: inherit; flex: 1; min-width: 160px;
+  transition: background 0.35s var(--ease), border-color 0.15s, transform 0.15s;
+}
+.social-card:hover { border-color: var(--accent-bd); transform: translateY(-2px); }
+.social-icon {
+  width: 32px; height: 32px; border-radius: 7px;
+  background: var(--accent-bg); border: 1px solid var(--accent-bd);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+  color: var(--accent); flex-shrink: 0;
+}
+.social-info { flex: 1; }
+.social-name { font-size: 0.8rem; font-weight: 600; color: var(--ink); transition: color 0.35s; }
+.social-handle { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--muted); }
+
+/* ─── Footer ─── */
+footer {
+  border-top: 1px solid var(--border2);
+  padding: 32px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; color: var(--muted2); letter-spacing: 0.08em;
+}
+.footer-brand span { color: var(--accent); }
+.footer-copy { font-size: 0.72rem; color: var(--muted2); }
+
+/* ─── Keyframes ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ─── Reduced motion ─── */
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;}
+  .hero-chip,.hero-h1,.hero-sub,.hero-ctas,.hero-scroll-hint{opacity:1;animation:none;}
+  .scroll-line{transform:none;animation:none;}
+  .chip-dot{animation:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <a class="nav-brand" href="#">
+    <div class="nav-monogram">JB</div>
+    <div class="nav-domain">joeblack<span class="tld">.nyc</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#plugins">Plugins</a></li>
+    <li><a href="#writing">Writing</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#connect">Connect</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-social">
+      <a class="nav-icon" href="#" title="GitHub">gh</a>
+      <a class="nav-icon" href="#" title="Twitter">tw</a>
+      <a class="nav-icon" href="#" title="Substack">sub</a>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" id="theme-btn">☀</button>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero" id="hero">
+  <div class="hero-parallax-bg" id="parallax-bg"></div>
+  <div class="hero-content">
+    <div class="hero-chip"><div class="chip-dot"></div>AI Tools · Claude Code · Open Source</div>
+    <h1 class="hero-h1">
+      Joe Black.
+      <span class="grad-text">Building for the<br/>agentic era.</span>
+    </h1>
+    <p class="hero-sub">I build Claude Code plugins, AI developer tools, and write about what I learn along the way. Based in New York. Currently obsessed with agentic workflows.</p>
+    <div class="hero-ctas">
+      <a class="btn-primary" href="#plugins">Browse Plugins →</a>
+      <a class="btn-secondary" href="#writing">Read the Blog</a>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- ── Plugins ── -->
+<section class="section" id="plugins">
+  <div class="section-head reveal">
+    <span class="section-label">Claude Code Plugins</span>
+    <div class="section-line"></div>
+    <span class="section-count">02</span>
+    <a class="section-viewall" href="#">View all →</a>
+  </div>
+  <div class="plugin-grid">
+    <div class="plugin-card reveal reveal-delay-1">
+      <div class="card-cat">Productivity</div>
+      <div class="card-name">lessons-learned</div>
+      <div class="card-desc">Automatic mistake capture and proactive lesson injection for AI coding agents. Mines conversation logs for mistake patterns and injects relevant warnings before the agent repeats them.</div>
+      <div class="card-cmd">
+        <span>claude plugin install lessons-learned</span>
+        <span class="cmd-copy">Copy</span>
+      </div>
+    </div>
+    <div class="plugin-card reveal reveal-delay-2">
+      <div class="card-cat">Execution</div>
+      <div class="card-name">mcp-exec</div>
+      <div class="card-desc">Sandboxed code execution MCP server — keep intermediate results out of the context window. Dramatically reduces noise and token usage during exploratory coding sessions.</div>
+      <div class="card-cmd">
+        <span>claude plugin install mcp-exec</span>
+        <span class="cmd-copy">Copy</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Writing ── -->
+<section class="section" id="writing">
+  <div class="section-head reveal">
+    <span class="section-label">Writing</span>
+    <div class="section-line"></div>
+    <a class="section-viewall" href="#">All posts →</a>
+  </div>
+  <div class="posts-grid">
+    <a class="post-card reveal reveal-delay-1" href="#">
+      <span class="post-tag">Claude Code</span>
+      <div class="post-title">How I built a plugin marketplace for Claude Code in a weekend</div>
+      <div class="post-excerpt">The ecosystem is wide open. Here's what I learned building the first community registry for Claude Code plugins.</div>
+      <div class="post-meta">
+        <span class="post-date">Apr 2026</span>
+        <span class="post-platform">Medium →</span>
+      </div>
+    </a>
+    <a class="post-card reveal reveal-delay-2" href="#">
+      <span class="post-tag">AI Agents</span>
+      <div class="post-title">Why your AI agent keeps making the same mistakes</div>
+      <div class="post-excerpt">Memory matters. The lessons-learned pattern and why every agentic workflow needs one.</div>
+      <div class="post-meta">
+        <span class="post-date">Mar 2026</span>
+        <span class="post-platform">Substack →</span>
+      </div>
+    </a>
+    <a class="post-card reveal reveal-delay-3" href="#">
+      <span class="post-tag">Dev Tools</span>
+      <div class="post-title">Sandboxed execution in agentic workflows: a deep dive</div>
+      <div class="post-excerpt">Why context window pollution is the silent killer of long agentic sessions, and how to fix it.</div>
+      <div class="post-meta">
+        <span class="post-date">Feb 2026</span>
+        <span class="post-platform">Medium →</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ── Projects ── -->
+<section class="section" id="projects">
+  <div class="section-head reveal">
+    <span class="section-label">Projects</span>
+    <div class="section-line"></div>
+    <a class="section-viewall" href="#">GitHub →</a>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card reveal reveal-delay-1">
+      <div class="project-header">
+        <div class="project-name">agent-marketplace</div>
+        <div class="project-star">★ 142</div>
+      </div>
+      <div class="project-desc">Plugin registry and catalog site for Claude Code. The missing package manager for AI coding agents.</div>
+      <div class="project-tags">
+        <span class="project-tag">claude-code</span>
+        <span class="project-tag">vite</span>
+        <span class="project-tag">json-schema</span>
+      </div>
+    </div>
+    <div class="project-card reveal reveal-delay-2">
+      <div class="project-header">
+        <div class="project-name">lessons-learned</div>
+        <div class="project-star">★ 89</div>
+      </div>
+      <div class="project-desc">Automatic mistake capture and lesson injection hooks for Claude Code agentic workflows.</div>
+      <div class="project-tags">
+        <span class="project-tag">claude-code</span>
+        <span class="project-tag">hooks</span>
+        <span class="project-tag">memory</span>
+      </div>
+    </div>
+    <div class="project-card reveal reveal-delay-3">
+      <div class="project-header">
+        <div class="project-name">mcp-exec</div>
+        <div class="project-star">★ 67</div>
+      </div>
+      <div class="project-desc">Sandboxed code execution MCP server for keeping intermediate results out of the context window.</div>
+      <div class="project-tags">
+        <span class="project-tag">mcp</span>
+        <span class="project-tag">sandbox</span>
+        <span class="project-tag">python</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Connect ── -->
+<section class="section" id="connect">
+  <div class="section-head reveal">
+    <span class="section-label">Connect</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="socials-row">
+    <a class="social-card reveal reveal-delay-1" href="#">
+      <div class="social-icon">gh</div>
+      <div class="social-info">
+        <div class="social-name">GitHub</div>
+        <div class="social-handle">@joeblackwaslike</div>
+      </div>
+    </a>
+    <a class="social-card reveal reveal-delay-2" href="#">
+      <div class="social-icon">tw</div>
+      <div class="social-info">
+        <div class="social-name">Twitter / X</div>
+        <div class="social-handle">@joeblacknyc</div>
+      </div>
+    </a>
+    <a class="social-card reveal reveal-delay-3" href="#">
+      <div class="social-icon">sub</div>
+      <div class="social-info">
+        <div class="social-name">Substack</div>
+        <div class="social-handle">joeblack.substack.com</div>
+      </div>
+    </a>
+    <a class="social-card reveal reveal-delay-4" href="#">
+      <div class="social-icon">med</div>
+      <div class="social-info">
+        <div class="social-name">Medium</div>
+        <div class="social-handle">@joeblacknyc</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-brand">joeblack<span>.nyc</span></div>
+  <div class="footer-copy">© 2026 Joe Black · New York</div>
+</footer>
+
+<script>
+// ── Theme toggle ──
+const btn = document.getElementById('theme-btn');
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  btn.textContent = next === 'dark' ? '☀' : '☾';
+}
+
+// Check system preference on load
+if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+  document.documentElement.setAttribute('data-theme', 'light');
+  btn.textContent = '☾';
+}
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+  if (!window.__manualTheme) {
+    document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    btn.textContent = e.matches ? '☀' : '☾';
+  }
+});
+
+// ── Parallax on scroll ──
+const parallaxBg = document.getElementById('parallax-bg');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  parallaxBg.style.transform = `translateY(${y * 0.35}px)`;
+}, { passive: true });
+
+// ── Reveal on scroll ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

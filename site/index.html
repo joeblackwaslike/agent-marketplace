@@ -3,77 +3,217 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="A curated collection of Claude Code plugins by Joe Black. Supercharge your AI coding agent." />
-    <meta property="og:title" content="Agent Marketplace — Claude Code Plugins" />
-    <meta property="og:description" content="The missing plugin registry for Claude Code." />
-    <title>Agent Marketplace — Claude Code Plugins</title>
+    <meta name="description" content="Joe Black — building for the agentic era. NYC-based developer, Claude Code plugins, writing, and projects." />
+    <meta property="og:title" content="joeblack.nyc" />
+    <meta property="og:description" content="Joe Black — building for the agentic era." />
+    <title>joeblack.nyc</title>
+
+    <!-- Theme: set before CSS to avoid flash -->
+    <!-- Sets data-theme before CSS renders — prevents any flash -->
+    <script>
+      (function () {
+        var t = localStorage.getItem('jb-theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Figtree:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./style.css" />
   </head>
+
   <body>
 
-    <header class="hero">
+    <!-- ── Nav ── -->
+    <nav class="nav" aria-label="Main navigation">
+      <a class="nav-wordmark" href="#top">joeblack.nyc</a>
+      <ul class="nav-links">
+        <li><a href="#plugins">Plugins</a></li>
+        <li><a href="#writing">Writing</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#connect">Connect</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a class="nav-icon" href="https://github.com/joeblackwaslike" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a class="nav-icon" href="https://twitter.com/joeblackwaslike" target="_blank" rel="noopener" aria-label="Twitter / X">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ── Hero ── -->
+    <section id="top" class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
       <div class="hero-inner">
-
-        <div class="hero-eyebrow">
-          <span class="hero-tag">Claude Code</span>
-          <span class="hero-rule"></span>
-          <span class="hero-stat"><span id="plugin-count">—</span>&thinsp;plugins</span>
+        <div class="jb-avatar" aria-hidden="true">JB</div>
+        <div class="hero-chip">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          NYC · Building for the agentic era
         </div>
+        <h1>Joe<br /><span class="grad-text">Black.</span></h1>
+        <p class="hero-sub">I build tools, plugins, and systems at the frontier of AI agents.<br />Currently obsessed with making Claude Code smarter.</p>
+        <div class="hero-ctas">
+          <a class="btn-primary" href="#plugins">Explore Plugins</a>
+          <a class="btn-ghost" href="#connect">Get in Touch</a>
+        </div>
+        <div class="scroll-hint" aria-hidden="true"><div class="scroll-line"></div></div>
+      </div>
+    </section>
 
-        <h1>Agent<br /><em>Marketplace.</em></h1>
-
-        <p class="hero-sub">The missing plugin registry for Claude Code —<br />battle-tested tools that make your agent smarter.</p>
-
-        <div class="install-block">
+    <!-- ── Plugins ── -->
+    <section id="plugins" class="hub-section">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <span class="section-label">Claude Code Plugins</span>
+          <h2>Built for the<br /><span class="grad-text">agentic stack.</span></h2>
+          <p class="section-desc">Battle-tested plugins that make your AI coding agent smarter.<br />Install the marketplace in one command.</p>
+        </div>
+        <div class="install-global reveal">
           <code id="install-cmd">claude plugin marketplace add joeblackwaslike/agent-marketplace</code>
-          <span class="cursor-blink" aria-hidden="true">█</span>
           <button id="hero-copy-btn" aria-label="Copy install command">Copy</button>
         </div>
-
-        <a
-          class="github-badge"
-          href="https://github.com/joeblackwaslike/agent-marketplace"
-          target="_blank"
-          rel="noopener"
-          aria-label="View on GitHub"
-        >
-          <img
-            src="https://img.shields.io/github/stars/joeblackwaslike/agent-marketplace?style=flat-square&color=d4380d&labelColor=1c1814&logo=github&logoColor=f9f6f1"
-            alt="GitHub Stars"
-            height="20"
-          />
-        </a>
-
-        <div class="hero-deco" aria-hidden="true">02</div>
-
+        <div class="plugin-filters" aria-label="Filter plugins">
+          <span class="filters-label">Filter</span>
+          <div id="filter-pills" role="group" aria-label="Category filters"></div>
+        </div>
+        <div id="plugin-grid" class="plugin-grid"></div>
       </div>
-    </header>
+    </section>
 
-    <div class="section-divider">
-      <span class="divider-label">Plugins</span>
-    </div>
+    <!-- ── Writing ── -->
+    <section id="writing" class="hub-section hub-section--alt">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <span class="section-label">Writing</span>
+          <h2>Notes from the<br /><span class="grad-text">frontier.</span></h2>
+        </div>
+        <div class="writing-list">
+          <article class="writing-card reveal">
+            <span class="writing-tag">Claude Code</span>
+            <h3 class="writing-title">
+              <a href="https://medium.com/@joeblackwaslike" target="_blank" rel="noopener">
+                Building the Agent Marketplace for Claude Code
+              </a>
+            </h3>
+            <p class="writing-meta">5 min read</p>
+          </article>
+          <article class="writing-card reveal">
+            <span class="writing-tag">AI Agents</span>
+            <h3 class="writing-title">
+              <a href="https://medium.com/@joeblackwaslike" target="_blank" rel="noopener">
+                Lessons Learned: Automating AI Mistake Capture
+              </a>
+            </h3>
+            <p class="writing-meta">8 min read</p>
+          </article>
+          <article class="writing-card reveal">
+            <span class="writing-tag">Stack</span>
+            <h3 class="writing-title">
+              <a href="https://medium.com/@joeblackwaslike" target="_blank" rel="noopener">
+                The Agentic Stack: What I Use in 2025
+              </a>
+            </h3>
+            <p class="writing-meta">6 min read</p>
+          </article>
+        </div>
+        <a class="btn-ghost btn-more reveal" href="https://medium.com/@joeblackwaslike" target="_blank" rel="noopener">All posts →</a>
+      </div>
+    </section>
 
-    <main>
-      <section class="filters" aria-label="Filter plugins">
-        <span class="filters-label">Filter</span>
-        <div id="filter-pills" role="group" aria-label="Category filters"></div>
-      </section>
-      <section class="catalog" aria-label="Plugin catalog">
-        <div id="plugin-grid"></div>
-      </section>
-    </main>
+    <!-- ── Projects ── -->
+    <section id="projects" class="hub-section">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <span class="section-label">Projects</span>
+          <h2>Things I've<br /><span class="grad-text">shipped.</span></h2>
+        </div>
+        <div class="projects-grid">
+          <article class="project-card reveal">
+            <div class="project-top">
+              <span class="project-icon">📦</span>
+              <div>
+                <h3 class="project-name">agent-marketplace</h3>
+                <span class="project-lang">JavaScript</span>
+              </div>
+            </div>
+            <p class="project-desc">The missing plugin registry for Claude Code. Supercharge your AI coding agent with battle-tested tools.</p>
+            <a class="project-link" href="https://github.com/joeblackwaslike/agent-marketplace" target="_blank" rel="noopener">View on GitHub →</a>
+          </article>
+          <article class="project-card reveal">
+            <div class="project-top">
+              <span class="project-icon">📚</span>
+              <div>
+                <h3 class="project-name">lessons-learned</h3>
+                <span class="project-lang">JavaScript</span>
+              </div>
+            </div>
+            <p class="project-desc">A Claude Code plugin that automatically captures and prevents mistakes from recurring across sessions.</p>
+            <a class="project-link" href="https://github.com/joeblackwaslike/lessons-learned" target="_blank" rel="noopener">View on GitHub →</a>
+          </article>
+          <article class="project-card reveal">
+            <div class="project-top">
+              <span class="project-icon">⚡</span>
+              <div>
+                <h3 class="project-name">mcp-exec</h3>
+                <span class="project-lang">Python</span>
+              </div>
+            </div>
+            <p class="project-desc">Sandboxed code execution MCP server for AI agents. Safe, fast, and composable by design.</p>
+            <a class="project-link" href="https://github.com/joeblackwaslike/mcp-exec" target="_blank" rel="noopener">View on GitHub →</a>
+          </article>
+        </div>
+      </div>
+    </section>
 
-    <footer>
-      <a href="https://github.com/joeblackwaslike/agent-marketplace">GitHub</a>
-      <span class="footer-dot" aria-hidden="true"></span>
-      <a href="https://github.com/joeblackwaslike/agent-marketplace/blob/main/CONTRIBUTING.md">Contributing</a>
-      <span class="footer-dot" aria-hidden="true"></span>
-      <a href="https://github.com/joeblackwaslike/agent-marketplace/blob/main/LICENSE">MIT License</a>
-      <span class="footer-dot" aria-hidden="true"></span>
-      <span class="footer-credit">by <a href="https://github.com/joeblackwaslike">Joe Black</a></span>
+    <!-- ── Connect ── -->
+    <section id="connect" class="hub-section hub-section--alt">
+      <div class="section-inner">
+        <div class="section-header section-header--centered reveal">
+          <span class="section-label">Connect</span>
+          <h2>Find me on the<br /><span class="grad-text">internet.</span></h2>
+        </div>
+        <div class="connect-grid">
+          <a class="connect-card reveal" href="https://github.com/joeblackwaslike" target="_blank" rel="noopener">
+            <svg class="connect-icon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            <span class="connect-name">GitHub</span>
+            <span class="connect-handle">@joeblackwaslike</span>
+          </a>
+          <a class="connect-card reveal" href="https://twitter.com/joeblackwaslike" target="_blank" rel="noopener">
+            <svg class="connect-icon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            <span class="connect-name">Twitter / X</span>
+            <span class="connect-handle">@joeblackwaslike</span>
+          </a>
+          <a class="connect-card reveal" href="https://substack.com/@joeblackwaslike" target="_blank" rel="noopener">
+            <svg class="connect-icon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+            <span class="connect-name">Substack</span>
+            <span class="connect-handle">joeblackwaslike</span>
+          </a>
+          <a class="connect-card reveal" href="https://medium.com/@joeblackwaslike" target="_blank" rel="noopener">
+            <svg class="connect-icon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+            <span class="connect-name">Medium</span>
+            <span class="connect-handle">@joeblackwaslike</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Footer ── -->
+    <footer class="site-footer">
+      <span class="footer-wordmark">joeblack.nyc</span>
+      <span class="footer-sep" aria-hidden="true">·</span>
+      <span>© Joe Black</span>
+      <span class="footer-sep" aria-hidden="true">·</span>
+      <span>New York</span>
+      <span class="footer-sep" aria-hidden="true">·</span>
+      <a href="https://github.com/joeblackwaslike/agent-marketplace/blob/main/LICENSE">MIT</a>
     </footer>
 
     <script type="module" src="./main.js"></script>

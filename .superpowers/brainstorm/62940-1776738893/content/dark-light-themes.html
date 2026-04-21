@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dark + Light Themes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0a0a0f;
+  color: #c8d0e0;
+  font-family: 'Space Grotesk', sans-serif;
+  padding: 40px 32px 80px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.page-header h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.page-header p { color: #555; font-size: 0.88rem; font-weight: 300; }
+
+/* ── Side-by-side layout ── */
+.split-view {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto 40px;
+}
+
+.theme-panel {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #2a2a3a;
+}
+
+.theme-label {
+  padding: 10px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #1e1e2e;
+}
+.theme-label .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.panel-dark .theme-label { background: #0d0d18; color: #6366f1; }
+.panel-dark .theme-label .dot { background: #6366f1; }
+.panel-light .theme-label { background: #e8eaf6; color: #4338ca; border-bottom-color: #d1d5e8; }
+.panel-light .theme-label .dot { background: #4338ca; }
+
+.mockup-frame {
+  width: 100%;
+  height: 480px;
+  overflow: hidden;
+}
+.mockup-inner {
+  width: 160%;
+  transform: scale(0.625);
+  transform-origin: top left;
+  height: 768px;
+}
+
+/* ════════════════════════════
+   DARK THEME (C refined)
+   ════════════════════════════ */
+.dark-site {
+  background: #060912;
+  color: #c8d0e0;
+  font-family: 'Inter', sans-serif;
+  min-height: 768px;
+  position: relative;
+  overflow: hidden;
+}
+.d-glow1 {
+  position: absolute;
+  top: -120px; left: 50%; transform: translateX(-50%);
+  width: 700px; height: 400px;
+  background: radial-gradient(ellipse, rgba(99,102,241,0.22) 0%, transparent 68%);
+  pointer-events: none;
+}
+.d-glow2 {
+  position: absolute;
+  top: 60px; right: -80px;
+  width: 350px; height: 350px;
+  background: radial-gradient(ellipse, rgba(168,85,247,0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+.d-nav {
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  position: relative;
+  z-index: 1;
+}
+.d-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.d-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+.d-logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #fff;
+}
+.d-logo-text span { color: #6366f1; }
+.d-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.d-nav-links a {
+  font-size: 0.7rem;
+  color: #475569;
+  text-decoration: none;
+  font-weight: 400;
+  transition: color 0.15s;
+}
+.d-nav-links a:hover { color: #94a3b8; }
+.d-social {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.d-social-icon {
+  width: 28px; height: 28px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem;
+  color: #475569;
+  font-family: 'JetBrains Mono', monospace;
+}
+.d-hero {
+  padding: 56px 40px 48px;
+  position: relative;
+  z-index: 1;
+}
+.d-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.d-eyebrow-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6366f1;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.2);
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+.d-eyebrow-dot { color: #1e293b; font-size: 0.5rem; }
+.d-eyebrow-stat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: #334155;
+  letter-spacing: 0.06em;
+}
+.d-h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 3.6rem;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: #fff;
+  margin-bottom: 18px;
+}
+.d-h1 .grad {
+  background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.d-h1 .dim { color: #1e293b; }
+.d-sub {
+  font-size: 0.88rem;
+  color: #475569;
+  font-weight: 300;
+  line-height: 1.7;
+  max-width: 420px;
+  margin-bottom: 28px;
+}
+.d-install {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 11px 16px;
+  backdrop-filter: blur(8px);
+}
+.d-install code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: #94a3b8;
+  letter-spacing: 0.01em;
+}
+.d-install-btn {
+  font-size: 0.6rem;
+  font-weight: 500;
+  background: rgba(99,102,241,0.12);
+  border: 1px solid rgba(99,102,241,0.25);
+  border-radius: 4px;
+  color: #818cf8;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+.d-divider {
+  margin: 0 40px;
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 24px;
+}
+.d-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 0 40px;
+}
+.d-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  padding: 18px;
+  position: relative;
+  overflow: hidden;
+}
+.d-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent);
+}
+.d-card-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6366f1;
+  margin-bottom: 8px;
+}
+.d-card-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 6px;
+}
+.d-card-desc {
+  font-size: 0.68rem;
+  color: #334155;
+  line-height: 1.6;
+  margin-bottom: 14px;
+  font-weight: 300;
+}
+.d-card-cmd {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: #475569;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 4px;
+  padding: 6px 10px;
+  display: block;
+}
+
+/* ════════════════════════════
+   LIGHT THEME (C mirrored)
+   ════════════════════════════ */
+.light-site {
+  background: #f8f9ff;
+  color: #1e2040;
+  font-family: 'Inter', sans-serif;
+  min-height: 768px;
+  position: relative;
+  overflow: hidden;
+}
+.l-glow1 {
+  position: absolute;
+  top: -100px; left: 50%; transform: translateX(-50%);
+  width: 700px; height: 400px;
+  background: radial-gradient(ellipse, rgba(99,102,241,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.l-glow2 {
+  position: absolute;
+  top: 80px; right: -60px;
+  width: 300px; height: 300px;
+  background: radial-gradient(ellipse, rgba(168,85,247,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.l-nav {
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(99,102,241,0.1);
+  position: relative;
+  z-index: 1;
+  background: rgba(248,249,255,0.8);
+  backdrop-filter: blur(8px);
+}
+.l-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.l-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #fff;
+}
+.l-logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #1e2040;
+}
+.l-logo-text span { color: #6366f1; }
+.l-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.l-nav-links a {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  text-decoration: none;
+}
+.l-social {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.l-social-icon {
+  width: 28px; height: 28px;
+  border: 1px solid #e0e4f4;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem;
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+  background: #fff;
+}
+.l-hero {
+  padding: 56px 40px 48px;
+  position: relative;
+  z-index: 1;
+}
+.l-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.l-eyebrow-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6366f1;
+  background: rgba(99,102,241,0.08);
+  border: 1px solid rgba(99,102,241,0.18);
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+.l-eyebrow-stat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: #cbd5e1;
+  letter-spacing: 0.06em;
+}
+.l-h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 3.6rem;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: #1e2040;
+  margin-bottom: 18px;
+}
+.l-h1 .grad {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.l-h1 .dim { color: #e2e8f0; }
+.l-sub {
+  font-size: 0.88rem;
+  color: #64748b;
+  font-weight: 300;
+  line-height: 1.7;
+  max-width: 420px;
+  margin-bottom: 28px;
+}
+.l-install {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #e0e4f4;
+  border-radius: 8px;
+  padding: 11px 16px;
+  box-shadow: 0 1px 6px rgba(99,102,241,0.06);
+}
+.l-install code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: #475569;
+}
+.l-install-btn {
+  font-size: 0.6rem;
+  font-weight: 500;
+  background: rgba(99,102,241,0.08);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 4px;
+  color: #6366f1;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+.l-divider {
+  margin: 0 40px;
+  border: none;
+  border-top: 1px solid rgba(99,102,241,0.08);
+  margin-bottom: 24px;
+}
+.l-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 0 40px;
+}
+.l-card {
+  background: #fff;
+  border: 1px solid #e8eaf6;
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 1px 4px rgba(99,102,241,0.06);
+  position: relative;
+  overflow: hidden;
+}
+.l-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  opacity: 0.4;
+}
+.l-card-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6366f1;
+  margin-bottom: 8px;
+}
+.l-card-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e2040;
+  margin-bottom: 6px;
+}
+.l-card-desc {
+  font-size: 0.68rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 14px;
+  font-weight: 300;
+}
+.l-card-cmd {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: #94a3b8;
+  background: #f8f9ff;
+  border: 1px solid #e8eaf6;
+  border-radius: 4px;
+  padding: 6px 10px;
+  display: block;
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Design C — Dark &amp; Light</h1>
+  <p>System preference switches automatically · both themes share the same indigo-violet palette</p>
+</div>
+
+<div class="split-view">
+
+  <!-- DARK PANEL -->
+  <div class="theme-panel panel-dark">
+    <div class="theme-label">
+      <div class="dot"></div>
+      Dark Mode (default / prefers-color-scheme: dark)
+    </div>
+    <div class="mockup-frame">
+      <div class="mockup-inner">
+        <div class="dark-site">
+          <div class="d-glow1"></div>
+          <div class="d-glow2"></div>
+          <nav class="d-nav">
+            <div class="d-logo">
+              <div class="d-avatar">JB</div>
+              <div class="d-logo-text">joe black<span> ·</span> plugins</div>
+            </div>
+            <div class="d-nav-links">
+              <a href="#">Plugins</a>
+              <a href="#">Writing</a>
+              <a href="#">About</a>
+            </div>
+            <div class="d-social">
+              <div class="d-social-icon">gh</div>
+              <div class="d-social-icon">tw</div>
+              <div class="d-social-icon">in</div>
+            </div>
+          </nav>
+          <div class="d-hero">
+            <div class="d-eyebrow">
+              <span class="d-eyebrow-tag">Claude Code</span>
+              <span class="d-eyebrow-dot">·</span>
+              <span class="d-eyebrow-stat">2 plugins</span>
+            </div>
+            <div class="d-h1">
+              Agent<br />
+              <span class="grad">Marketplace</span><span class="dim">.</span>
+            </div>
+            <div class="d-sub">The missing plugin registry for Claude Code — battle-tested tools, curated by Joe Black.</div>
+            <div class="d-install">
+              <code>claude plugin marketplace add joeblackwaslike/agent-marketplace</code>
+              <div class="d-install-btn">Copy</div>
+            </div>
+          </div>
+          <hr class="d-divider" />
+          <div class="d-grid">
+            <div class="d-card">
+              <div class="d-card-tag">Productivity</div>
+              <div class="d-card-name">lessons-learned</div>
+              <div class="d-card-desc">Automatic mistake capture and proactive lesson injection for AI coding agents.</div>
+              <code class="d-card-cmd">claude plugin install lessons-learned</code>
+            </div>
+            <div class="d-card">
+              <div class="d-card-tag">Execution</div>
+              <div class="d-card-name">mcp-exec</div>
+              <div class="d-card-desc">Sandboxed code execution MCP server — keep results out of context window.</div>
+              <code class="d-card-cmd">claude plugin install mcp-exec</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHT PANEL -->
+  <div class="theme-panel panel-light">
+    <div class="theme-label">
+      <div class="dot"></div>
+      Light Mode (prefers-color-scheme: light)
+    </div>
+    <div class="mockup-frame">
+      <div class="mockup-inner">
+        <div class="light-site">
+          <div class="l-glow1"></div>
+          <div class="l-glow2"></div>
+          <nav class="l-nav">
+            <div class="l-logo">
+              <div class="l-avatar">JB</div>
+              <div class="l-logo-text">joe black<span> ·</span> plugins</div>
+            </div>
+            <div class="l-nav-links">
+              <a href="#">Plugins</a>
+              <a href="#">Writing</a>
+              <a href="#">About</a>
+            </div>
+            <div class="l-social">
+              <div class="l-social-icon">gh</div>
+              <div class="l-social-icon">tw</div>
+              <div class="l-social-icon">in</div>
+            </div>
+          </nav>
+          <div class="l-hero">
+            <div class="l-eyebrow">
+              <span class="l-eyebrow-tag">Claude Code</span>
+              <span class="l-eyebrow-stat">2 plugins</span>
+            </div>
+            <div class="l-h1">
+              Agent<br />
+              <span class="grad">Marketplace</span><span class="dim">.</span>
+            </div>
+            <div class="l-sub">The missing plugin registry for Claude Code — battle-tested tools, curated by Joe Black.</div>
+            <div class="l-install">
+              <code>claude plugin marketplace add joeblackwaslike/agent-marketplace</code>
+              <div class="l-install-btn">Copy</div>
+            </div>
+          </div>
+          <hr class="l-divider" />
+          <div class="l-grid">
+            <div class="l-card">
+              <div class="l-card-tag">Productivity</div>
+              <div class="l-card-name">lessons-learned</div>
+              <div class="l-card-desc">Automatic mistake capture and proactive lesson injection for AI coding agents.</div>
+              <code class="l-card-cmd">claude plugin install lessons-learned</code>
+            </div>
+            <div class="l-card">
+              <div class="l-card-tag">Execution</div>
+              <div class="l-card-name">mcp-exec</div>
+              <div class="l-card-desc">Sandboxed code execution MCP server — keep results out of context window.</div>
+              <code class="l-card-cmd">claude plugin install mcp-exec</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
