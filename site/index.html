@@ -4,34 +4,61 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="A curated collection of Claude Code plugins by Joe Black. Supercharge your AI coding agent." />
+    <meta property="og:title" content="Agent Marketplace — Claude Code Plugins" />
+    <meta property="og:description" content="The missing plugin registry for Claude Code." />
     <title>Agent Marketplace — Claude Code Plugins</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Figtree:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+
     <header class="hero">
       <div class="hero-inner">
-        <h1>Agent Marketplace</h1>
-        <p class="tagline">Supercharge your AI coding agent with battle-tested Claude Code plugins.</p>
+
+        <div class="hero-eyebrow">
+          <span class="hero-tag">Claude Code</span>
+          <span class="hero-rule"></span>
+          <span class="hero-stat"><span id="plugin-count">—</span>&thinsp;plugins</span>
+        </div>
+
+        <h1>Agent<br /><em>Marketplace.</em></h1>
+
+        <p class="hero-sub">The missing plugin registry for Claude Code —<br />battle-tested tools that make your agent smarter.</p>
+
         <div class="install-block">
           <code id="install-cmd">claude plugin marketplace add joeblackwaslike/agent-marketplace</code>
+          <span class="cursor-blink" aria-hidden="true">█</span>
           <button id="hero-copy-btn" aria-label="Copy install command">Copy</button>
         </div>
+
         <a
           class="github-badge"
           href="https://github.com/joeblackwaslike/agent-marketplace"
           target="_blank"
           rel="noopener"
+          aria-label="View on GitHub"
         >
           <img
-            src="https://img.shields.io/github/stars/joeblackwaslike/agent-marketplace?style=social"
+            src="https://img.shields.io/github/stars/joeblackwaslike/agent-marketplace?style=flat-square&color=d4380d&labelColor=1c1814&logo=github&logoColor=f9f6f1"
             alt="GitHub Stars"
+            height="20"
           />
         </a>
+
+        <div class="hero-deco" aria-hidden="true">02</div>
+
       </div>
     </header>
 
+    <div class="section-divider">
+      <span class="divider-label">Plugins</span>
+    </div>
+
     <main>
       <section class="filters" aria-label="Filter plugins">
+        <span class="filters-label">Filter</span>
         <div id="filter-pills" role="group" aria-label="Category filters"></div>
       </section>
       <section class="catalog" aria-label="Plugin catalog">
@@ -41,8 +68,12 @@
 
     <footer>
       <a href="https://github.com/joeblackwaslike/agent-marketplace">GitHub</a>
+      <span class="footer-dot" aria-hidden="true"></span>
       <a href="https://github.com/joeblackwaslike/agent-marketplace/blob/main/CONTRIBUTING.md">Contributing</a>
+      <span class="footer-dot" aria-hidden="true"></span>
       <a href="https://github.com/joeblackwaslike/agent-marketplace/blob/main/LICENSE">MIT License</a>
+      <span class="footer-dot" aria-hidden="true"></span>
+      <span class="footer-credit">by <a href="https://github.com/joeblackwaslike">Joe Black</a></span>
     </footer>
 
     <script type="module" src="./main.js"></script>
