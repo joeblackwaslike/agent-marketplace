@@ -50,7 +50,7 @@
   --border-strong:   rgba(129, 140, 248, 0.35);
 
   --ink:             #f1f5f9;
-  --ink2:            #b0c2d4;  /* was #94a3b8 — bumped for readability */
+  --ink2:            #c4d2e4;  /* was #b0c2d4 — bumped again for readability */
   --ink3:            #8092a8;
 
   --accent:          #6366f1;
@@ -259,7 +259,7 @@ body::before {
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--ink2);
+  color: var(--ink3);
   border: 1px solid var(--border-strong);
   border-radius: 100px;
   padding: 6px 16px;
@@ -315,7 +315,7 @@ h3 {
 
 .hero-sub {
   font-size: 1.15rem;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--ink2);
   line-height: 1.72;
   margin-bottom: 44px;
@@ -424,7 +424,7 @@ h3 {
 .section-desc {
   color: var(--ink2);
   font-size: 1.1rem;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 1.75;
   margin-top: 20px;
   max-width: 540px;
