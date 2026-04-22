@@ -28,7 +28,7 @@
         "source": "url",
         "url": "https://github.com/joeblackwaslike/mcp-exec.git"
       },
-      "version": "0.1.0",
+      "version": "0.3.0",
       "category": "execution",
       "keywords": ["mcp", "sandbox", "execution", "tools"]
     }
