@@ -138,8 +138,8 @@ body::before {
 .nav-wordmark {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 1rem;
-  letter-spacing: -0.02em;
+  font-size: 0.875rem;
+  letter-spacing: -0.04em;
   text-decoration: none;
   background: var(--grad);
   -webkit-background-clip: text;
@@ -285,9 +285,9 @@ body::before {
 h1 {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(4.5rem, 12vw, 8rem);
+  font-size: clamp(3.8rem, 10vw, 6.5rem);
   line-height: 0.92;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.05em;
   color: var(--ink);
   margin-bottom: 32px;
   animation: fadeUp 0.6s 0.22s both;
@@ -297,9 +297,9 @@ h1 {
 h2 {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(2.8rem, 5.5vw, 4.5rem);
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
   line-height: 0.97;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
   color: var(--ink);
   margin-bottom: 20px;
 }
@@ -873,7 +873,7 @@ h3 {
   .hero-ctas { flex-direction: column; align-items: center; }
 
   .hub-section { padding: 72px 20px; }
-  h2 { font-size: clamp(2.2rem, 8vw, 3.2rem); }
+  h2 { font-size: clamp(2rem, 7vw, 2.8rem); }
 
   .plugin-grid, .projects-grid { grid-template-columns: 1fr; }
   .connect-grid { grid-template-columns: 1fr 1fr; }
