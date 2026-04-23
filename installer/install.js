@@ -10,7 +10,7 @@ import { homedir } from 'os';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO     = resolve(__dirname, '..');
-const PROJECTS = join(REPO, 'projects');
+const PROJECTS = join(REPO, 'nursery');
 const HOME     = homedir();
 
 // ── discover projects ───────────────────────────────────────────────────────

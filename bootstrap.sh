@@ -54,7 +54,7 @@ safe_link() {
   _green "linked: $dst"
 }
 
-for project_dir in "$REPO/projects"/*/; do
+for project_dir in "$REPO/nursery"/*/; do
   name="${project_dir%/}"
   name="${name##*/}"
   printf '\n── %s\n' "$name"
