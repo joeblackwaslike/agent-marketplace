@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  ai.openclaw.node.plist
+  Installed to: ~/Library/LaunchAgents/
+  install.sh substitutes __USER__, __TMPDIR__, __GATEWAY_TOKEN__, __OPENCLAW_VERSION__
+-->
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>ai.openclaw.node</string>
+
+    <key>Comment</key>
+    <string>OpenClaw Node Host (v__OPENCLAW_VERSION__)</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ThrottleInterval</key>
+    <integer>1</integer>
+    <key>Umask</key>
+    <integer>63</integer>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/opt/homebrew/bin/openclaw</string>
+      <string>node</string>
+      <string>run</string>
+      <string>--host</string>
+      <string>127.0.0.1</string>
+      <string>--port</string>
+      <string>18789</string>
+    </array>
+
+    <key>StandardOutPath</key>
+    <string>/Users/__USER__/.openclaw/logs/node.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/__USER__/.openclaw/logs/node.err.log</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>HOME</key>
+      <string>/Users/__USER__</string>
+      <key>TMPDIR</key>
+      <string>__TMPDIR__</string>
+      <key>NODE_EXTRA_CA_CERTS</key>
+      <string>/etc/ssl/cert.pem</string>
+      <key>NODE_USE_SYSTEM_CA</key>
+      <string>1</string>
+      <key>PATH</key>
+      <string>/opt/homebrew/bin:/Users/__USER__/Library/pnpm:/Users/__USER__/.local/bin:/Users/__USER__/bin:/usr/local/bin:/usr/bin:/bin</string>
+      <key>OPENCLAW_GATEWAY_TOKEN</key>
+      <string>__GATEWAY_TOKEN__</string>
+      <key>OPENCLAW_LAUNCHD_LABEL</key>
+      <string>ai.openclaw.node</string>
+      <key>OPENCLAW_SYSTEMD_UNIT</key>
+      <string>openclaw-node</string>
+      <key>OPENCLAW_WINDOWS_TASK_NAME</key>
+      <string>OpenClaw Node</string>
+      <key>OPENCLAW_TASK_SCRIPT_NAME</key>
+      <string>node.cmd</string>
+      <key>OPENCLAW_LOG_PREFIX</key>
+      <string>node</string>
+      <key>OPENCLAW_SERVICE_MARKER</key>
+      <string>openclaw</string>
+      <key>OPENCLAW_SERVICE_KIND</key>
+      <string>node</string>
+      <key>OPENCLAW_SERVICE_VERSION</key>
+      <string>__OPENCLAW_VERSION__</string>
+    </dict>
+  </dict>
+</plist>

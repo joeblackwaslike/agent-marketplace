@@ -1,0 +1,142 @@
+{
+  "meta": {
+    "_comment": "Managed by openclaw — lastTouchedVersion and lastTouchedAt are auto-updated"
+  },
+  "secrets": {
+    "providers": {
+      "default": {
+        "source": "env"
+      }
+    }
+  },
+  "auth": {
+    "profiles": {
+      "anthropic:default": {
+        "provider": "anthropic",
+        "mode": "token"
+      },
+      "anthropic:claude-YOU@gmail.com": {
+        "provider": "anthropic",
+        "mode": "token"
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "anthropic/claude-sonnet-4-6"
+      },
+      "models": {
+        "anthropic/claude-sonnet-4-6": {}
+      },
+      "workspace": "~/.openclaw/workspace",
+      "contextPruning": { "mode": "cache-ttl", "ttl": "1h" },
+      "compaction": { "mode": "safeguard" },
+      "heartbeat": { "every": "30m" },
+      "maxConcurrent": 4,
+      "subagents": { "maxConcurrent": 8 }
+    },
+    "list": [
+      { "id": "main" },
+      {
+        "id": "mac",
+        "name": "mac",
+        "workspace": "~/.openclaw/workspace-mac",
+        "agentDir": "~/.openclaw/agents/mac/agent"
+      }
+    ]
+  },
+  "tools": {
+    "profile": "messaging",
+    "web": {
+      "search": { "enabled": true },
+      "fetch": { "enabled": true }
+    }
+  },
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "boot-md": { "enabled": true },
+        "bootstrap-extra-files": { "enabled": true },
+        "command-logger": { "enabled": true },
+        "session-memory": { "enabled": true }
+      }
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "dmPolicy": "pairing",
+      "botToken": { "source": "env", "provider": "default", "id": "TELEGRAM_BOT_TOKEN" },
+      "groupPolicy": "allowlist",
+      "streaming": { "mode": "partial" }
+    },
+    "discord": {
+      "token": { "source": "env", "provider": "default", "id": "DISCORD_BOT_TOKEN" },
+      "enabled": true
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "YOUR_GATEWAY_TOKEN_HERE"
+    },
+    "tailscale": { "mode": "serve", "resetOnExit": false },
+    "nodes": {
+      "denyCommands": [
+        "camera.list",
+        "camera.snap",
+        "camera.clip",
+        "screen.record",
+        "contacts.add",
+        "contacts.update",
+        "contacts.upsert",
+        "calendar.add",
+        "reminders.add",
+        "sms.send",
+        "sms.search",
+        "location.get",
+        "location.request",
+        "canvas.eval"
+      ]
+    }
+  },
+  "skills": {
+    "install": { "nodeManager": "pnpm" },
+    "entries": {
+      "sag": { "apiKey": { "source": "env", "provider": "default", "id": "SAG_API_KEY" } },
+      "goplaces": { "apiKey": { "source": "env", "provider": "default", "id": "GOPLACES_API_KEY" } }
+    }
+  },
+  "plugins": {
+    "entries": {
+      "telegram": { "enabled": true },
+      "anthropic": { "enabled": true }
+    }
+  },
+  "models": {
+    "providers": {
+      "google": {
+        "apiKey": { "source": "env", "provider": "default", "id": "GOOGLE_API_KEY" },
+        "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
+        "models": []
+      }
+    }
+  }
+}

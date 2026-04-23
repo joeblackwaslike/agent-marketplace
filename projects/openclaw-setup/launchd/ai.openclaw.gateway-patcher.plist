@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- install.sh substitutes __USER__ -->
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>ai.openclaw.gateway-patcher</string>
+    <key>Comment</key>
+    <string>Repairs gateway plist if openclaw update clobbers ThrottleInterval or env vars</string>
+    <key>WatchPaths</key>
+    <array>
+      <string>/Users/__USER__/Library/LaunchAgents/ai.openclaw.gateway.plist</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/bash</string>
+      <string>/Users/__USER__/.openclaw/scripts/patch-gateway-plist.sh</string>
+    </array>
+    <key>StandardOutPath</key>
+    <string>/Users/__USER__/.openclaw/logs/plist-patcher.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/__USER__/.openclaw/logs/plist-patcher.log</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>HOME</key>
+      <string>/Users/__USER__</string>
+    </dict>
+  </dict>
+</plist>

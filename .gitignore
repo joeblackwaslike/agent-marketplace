@@ -1,6 +1,10 @@
 node_modules/
 site/dist/
 site/.vite/
+installer/node_modules/
+projects/**/.venv/
+projects/**/__pycache__/
+projects/**/*.egg-info/
 *.log
 .DS_Store
 .env

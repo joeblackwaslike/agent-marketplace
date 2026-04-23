@@ -1,0 +1,89 @@
+#!/usr/bin/env zsh
+# bootstrap.sh — entry point for setting up idea-nursery projects on a new machine.
+#
+# Launches the interactive Ink CLI installer if node is available.
+# Falls back to a dumb symlink-everything approach if not.
+#
+# Usage:
+#   ./bootstrap.sh          # interactive installer (recommended)
+#   ./bootstrap.sh --all    # non-interactive: install all projects silently
+
+set -euo pipefail
+
+REPO="$(cd "$(dirname "$0")" && pwd)"
+
+_green()  { printf '\033[32m✓\033[0m %s\n' "$*"; }
+_yellow() { printf '\033[33m~\033[0m %s\n' "$*"; }
+_red()    { printf '\033[31m✗\033[0m %s\n' "$*"; }
+
+# ── locate node ──────────────────────────────────────────────────────────────
+NODE=""
+for candidate in \
+  "$(command -v node 2>/dev/null)" \
+  "$HOME/.nvm/versions/node/v24.14.0/bin/node" \
+  "/opt/homebrew/bin/node" \
+  "/usr/local/bin/node"
+do
+  [ -x "$candidate" ] && NODE="$candidate" && break
+done
+
+# ── interactive CLI (preferred) ──────────────────────────────────────────────
+if [ -n "$NODE" ] && [ "${1:-}" != "--all" ]; then
+  INSTALLER="$REPO/installer"
+  if [ ! -d "$INSTALLER/node_modules" ]; then
+    _yellow "Installing CLI dependencies..."
+    (cd "$INSTALLER" && "$NODE" "$(dirname "$NODE")/npm" install --silent)
+  fi
+  exec "$NODE" "$INSTALLER/install.js"
+fi
+
+# ── fallback: install everything without interaction ─────────────────────────
+_yellow "Node not found or --all passed — running non-interactive fallback."
+
+safe_link() {
+  local src="$1" dst="$2"
+  mkdir -p "$(dirname "$dst")"
+  if [ -L "$dst" ]; then
+    [ "$(readlink "$dst")" = "$src" ] && { _yellow "already linked: $dst"; return 0; }
+    rm "$dst"
+  elif [ -e "$dst" ]; then
+    _red "SKIP: $dst is a real file — move it manually then re-run."
+    return 1
+  fi
+  ln -s "$src" "$dst"
+  _green "linked: $dst"
+}
+
+for project_dir in "$REPO/projects"/*/; do
+  name="${project_dir%/}"
+  name="${name##*/}"
+  printf '\n── %s\n' "$name"
+
+  [ -d "${project_dir}bin" ] && for f in "${project_dir}bin"/*; do
+    [ -f "$f" ] && { chmod +x "$f"; safe_link "$f" "/usr/local/bin/$(basename "$f")"; }
+  done
+
+  [ -d "${project_dir}zsh" ] && for f in "${project_dir}zsh"/*.zsh; do
+    [ -f "$f" ] || continue
+    fname="$(basename "$f")"
+    if [ "$fname" = "docker.plugin.zsh" ]; then
+      dst="$HOME/.oh-my-zsh/custom/plugins/docker/$fname"
+    else
+      dst="$HOME/.config/claude/$fname"
+    fi
+    safe_link "$f" "$dst"
+  done
+
+  [ -d "${project_dir}launchd" ] && for f in "${project_dir}launchd"/*.plist; do
+    [ -f "$f" ] || continue
+    dst="$HOME/Library/LaunchAgents/$(basename "$f")"
+    label="$(basename "$f" .plist)"
+    safe_link "$f" "$dst"
+    launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true
+    launchctl bootstrap "gui/$(id -u)" "$dst" 2>/dev/null \
+      && _green "loaded: $label" \
+      || _yellow "load failed: $label (may need relogin)"
+  done
+done
+
+printf '\ndone.\n'

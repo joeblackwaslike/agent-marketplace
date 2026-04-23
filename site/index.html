@@ -176,12 +176,12 @@
             <div class="project-top">
               <span class="project-icon">🧰</span>
               <div>
-                <h3 class="project-name">helpers</h3>
-                <span class="project-lang">Shell</span>
+                <h3 class="project-name">idea-nursery</h3>
+                <span class="project-lang">Shell · Python</span>
               </div>
             </div>
-            <p class="project-desc">Shell utilities, launchd units, and bin shims for macOS — including <code>cu</code>, a Claude Code account switcher.</p>
-            <a class="project-link" href="https://github.com/joeblackwaslike/helpers" target="_blank" rel="noopener">View on GitHub →</a>
+            <p class="project-desc">Monorepo nursery for nascent macOS tools and automations. Projects incubate here until they earn their own repo.</p>
+            <a class="project-link" href="https://github.com/joeblackwaslike/agent-marketplace/tree/main/projects" target="_blank" rel="noopener">View projects →</a>
           </article>
           <article class="project-card reveal">
             <div class="project-top">
@@ -284,6 +284,110 @@
             </div>
             <p class="project-desc">CouchDB 2.0 autodiscovery using Kubernetes. Automatically clusters nodes as pods come up.</p>
             <a class="project-link" href="https://github.com/joeblackwaslike/couchdiscover" target="_blank" rel="noopener">View on GitHub →</a>
+          </article>
+          <!-- Claude Code Plugins -->
+          <article class="project-card reveal">
+            <div class="project-top">
+              <span class="project-icon">🧠</span>
+              <div>
+                <h3 class="project-name">lessons-learned</h3>
+                <span class="project-lang">Claude Code Plugin</span>
+              </div>
+            </div>
+            <p class="project-desc">Automatic mistake capture and proactive lesson injection for AI coding agents. Mines conversation logs and injects warnings before an agent repeats a mistake.</p>
+            <a class="project-link" href="https://github.com/joeblackwaslike/lessons-learned" target="_blank" rel="noopener">View on GitHub →</a>
+          </article>
+          <article class="project-card reveal">
+            <div class="project-top">
+              <span class="project-icon">⚙️</span>
+              <div>
+                <h3 class="project-name">mcp-exec</h3>
+                <span class="project-lang">Claude Code Plugin</span>
+              </div>
+            </div>
+            <p class="project-desc">Sandboxed code execution MCP server — keeps intermediate results out of the context window so agents can run code without burning tokens.</p>
+            <a class="project-link" href="https://github.com/joeblackwaslike/mcp-exec" target="_blank" rel="noopener">View on GitHub →</a>
+          </article>
+        </div>
+
+        <!-- ── Nursery ── -->
+        <div class="nursery-header reveal">
+          <span class="section-label">Nursery</span>
+          <h3>Things I'm <span class="grad-text">hatching.</span></h3>
+          <p class="section-desc">Small tools that are worth versioning but don't yet justify a standalone repo. Each one has a tracking issue — click to follow along.</p>
+        </div>
+        <div class="projects-grid nursery-grid">
+          <article class="project-card nursery-card reveal">
+            <div class="project-top">
+              <span class="project-icon">🔀</span>
+              <div>
+                <h3 class="project-name">claude-switcher</h3>
+                <span class="project-lang">zsh</span>
+              </div>
+              <span class="nursery-badge">incubating</span>
+            </div>
+            <p class="project-desc">Switch Claude Code account profiles (<code>cu</code>) from the shell, or set the VS Code global default via <code>~/.claude/settings.json</code>.</p>
+            <a class="project-link" href="https://github.com/joeblackwaslike/agent-marketplace/issues/1" target="_blank" rel="noopener">Track issue →</a>
+          </article>
+          <article class="project-card nursery-card reveal">
+            <div class="project-top">
+              <span class="project-icon">🐋</span>
+              <div>
+                <h3 class="project-name">orb-autostop</h3>
+                <span class="project-lang">bash · launchd</span>
+              </div>
+              <span class="nursery-badge">incubating</span>
+            </div>
+            <p class="project-desc">Auto-stops OrbStack after 15 min idle and lazy-starts it on the first <code>docker</code> use via an oh-my-zsh plugin.</p>
+            <a class="project-link" href="https://github.com/joeblackwaslike/agent-marketplace/issues/2" target="_blank" rel="noopener">Track issue →</a>
+          </article>
+          <article class="project-card nursery-card reveal">
+            <div class="project-top">
+              <span class="project-icon">🩺</span>
+              <div>
+                <h3 class="project-name">pieces-babysitter</h3>
+                <span class="project-lang">Python · launchd</span>
+              </div>
+              <span class="nursery-badge">incubating</span>
+            </div>
+            <p class="project-desc">Watchdog for Pieces OS — restarts on crash and sends macOS notifications on state changes.</p>
+            <a class="project-link" href="https://github.com/joeblackwaslike/agent-marketplace/issues/3" target="_blank" rel="noopener">Track issue →</a>
+          </article>
+          <article class="project-card nursery-card reveal">
+            <div class="project-top">
+              <span class="project-icon">📊</span>
+              <div>
+                <h3 class="project-name">pieces-metrics</h3>
+                <span class="project-lang">Python · launchd</span>
+              </div>
+              <span class="nursery-badge">incubating</span>
+            </div>
+            <p class="project-desc">Collects Pieces OS runtime metrics (CPU, memory, uptime) into SQLite for local analysis.</p>
+            <a class="project-link" href="https://github.com/joeblackwaslike/agent-marketplace/issues/4" target="_blank" rel="noopener">Track issue →</a>
+          </article>
+          <article class="project-card nursery-card reveal">
+            <div class="project-top">
+              <span class="project-icon">📓</span>
+              <div>
+                <h3 class="project-name">obsidian-user-base</h3>
+                <span class="project-lang">Python · uv</span>
+              </div>
+              <span class="nursery-badge">incubating</span>
+            </div>
+            <p class="project-desc">Karpathy-style LLM-maintained wiki — watches Obsidian <code>Clippings/</code> and auto-updates <code>_wiki/</code> via Claude Code.</p>
+            <a class="project-link" href="https://github.com/joeblackwaslike/agent-marketplace/issues/5" target="_blank" rel="noopener">Track issue →</a>
+          </article>
+          <article class="project-card nursery-card reveal">
+            <div class="project-top">
+              <span class="project-icon">🔐</span>
+              <div>
+                <h3 class="project-name">openclaw-setup</h3>
+                <span class="project-lang">bash · launchd</span>
+              </div>
+              <span class="nursery-badge">incubating</span>
+            </div>
+            <p class="project-desc">One-command macOS installer for OpenClaw gateway + node host — secrets via 1Password, 6 launchd agents.</p>
+            <a class="project-link" href="https://github.com/joeblackwaslike/agent-marketplace/issues/6" target="_blank" rel="noopener">Track issue →</a>
           </article>
         </div>
       </div>

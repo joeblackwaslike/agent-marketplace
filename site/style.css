@@ -785,6 +785,54 @@ h3 {
 .project-link:hover { opacity: 0.7; }
 
 /* ─────────────────────────────────────────────────────────
+   NURSERY
+   ───────────────────────────────────────────────────────── */
+
+.nursery-header {
+  margin-top: 64px;
+  margin-bottom: 32px;
+  padding-top: 48px;
+  border-top: 1px solid var(--border);
+}
+
+.nursery-header h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 8px 0 12px;
+}
+
+.nursery-grid .project-card {
+  border-style: dashed;
+  opacity: 0.9;
+}
+
+.nursery-grid .project-card:hover {
+  opacity: 1;
+}
+
+.project-top {
+  flex-wrap: wrap;
+}
+
+.nursery-badge {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  background: color-mix(in srgb, var(--accent2) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent2) 30%, transparent);
+  border-radius: 20px;
+  padding: 3px 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────────────────
    CONNECT
    ───────────────────────────────────────────────────────── */
 

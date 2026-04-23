@@ -1,0 +1,41 @@
+vault := "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian Vault"
+wiki  := vault + "/_wiki"
+
+# Start the Clippings watcher (blocks; use launchd for background)
+watch:
+    uv run python src/watcher.py
+
+# Ingest a single note into _wiki/
+ingest file:
+    uv run python src/ingest.py "{{file}}"
+
+# Bootstrap _wiki/ from all existing vault notes (ordered: Clippings → Book Notes → Dev → rest)
+bootstrap:
+    uv run python src/ingest.py --bootstrap
+
+# Bootstrap dry-run — shows what would be ingested without calling claude
+bootstrap-dry:
+    uv run python src/ingest.py --bootstrap --dry-run
+
+# Install launchd agent so watcher starts at login
+install-launchd:
+    cp launchd/com.joeblack.wiki-watcher.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.joeblack.wiki-watcher.plist
+    @echo "Watcher installed and started."
+
+# Unload launchd agent
+unload-launchd:
+    launchctl unload ~/Library/LaunchAgents/com.joeblack.wiki-watcher.plist
+    @echo "Watcher unloaded."
+
+# Show launchd agent status
+status:
+    launchctl list | grep wiki-watcher || echo "Watcher not loaded"
+
+# Count current wiki articles
+wiki-stats:
+    @echo "Wiki articles: $(find '{{wiki}}' -name '*.md' 2>/dev/null | wc -l | tr -d ' ')"
+
+# Install Python deps
+setup:
+    uv sync

@@ -1,0 +1,15 @@
+# Never commit live secrets or generated env files
+**/.secrets.env
+**/op-service-account.env
+**/*.env
+!**/*.env.example
+
+# openclaw runtime state (lives in ~/.openclaw, not here)
+.openclaw/
+
+# macOS
+.DS_Store
+
+# Editor / IDE (not the agent symlinks — those are intentional)
+*.swp
+*~
