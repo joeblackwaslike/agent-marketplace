@@ -13,9 +13,10 @@
 #
 # Profiles live in ~/.config/claude/accounts/<profile>.env
 #
-# Switching a profile always writes the relevant vars into ~/.claude/settings.json
-# AND into VS Code Insiders' claudeCode.environmentVariables, so the extension and
-# any non-shell CC invocation picks it up immediately.
+# Switching a profile always writes the relevant vars into ~/.claude/settings.json,
+# VS Code Insiders' claudeCode.environmentVariables, AND into the macOS launchd
+# user session via launchctl setenv — so every GUI app (VS Code opened from Dock,
+# Spotlight, etc.) picks up the profile without needing to be launched from a shell.
 # For Vertex profiles, all Vertex env vars are written; OAuth keys are cleared.
 # For OAuth profiles, the token is written; Vertex env vars are cleared.
 
@@ -24,7 +25,7 @@ export CLAUDE_ACCOUNTS_DIR="${CLAUDE_ACCOUNTS_DIR:-$HOME/.config/claude/accounts
 _cu_settings="$HOME/.claude/settings.json"
 _cu_vscode_settings="$HOME/Library/Application Support/Code - Insiders/User/settings.json"
 
-# Keys owned by cu — managed in both settings.json and VS Code settings
+# Keys owned by cu — managed in settings.json, VS Code settings, and launchctl
 _CU_VERTEX_KEYS=(
   CLAUDE_CODE_USE_VERTEX
   ANTHROPIC_VERTEX_PROJECT_ID
@@ -68,7 +69,8 @@ _cu_persist_settings() {
 }
 
 # Write env vars into VS Code Insiders' claudeCode.environmentVariables.
-# Parses JSONC (strips // comments and trailing commas), modifies the array, writes valid JSON.
+# Parses JSONC (strips // comments, including inline, and trailing commas), modifies the
+# array, writes valid JSON back.
 # $1: JSON object of key→value to set
 # $2: JSON array of key names to clear first
 _cu_persist_vscode_env() {
@@ -79,7 +81,8 @@ _cu_persist_vscode_env() {
     const fs = require('fs');
     const path = process.env.VSCODE_PATH;
     let raw = fs.readFileSync(path, 'utf8');
-    raw = raw.split('\n').filter(l => !l.trim().startsWith('//')).join('\n');
+    // Strip // comments — handles both full-line and inline, preserving strings.
+    raw = raw.replace(/(\"(?:[^\"\\\\]|\\\\.)*\")|\/\/.*/g, (m, s) => s !== undefined ? s : '');
     raw = raw.replace(/,(\s*[}\]])/g, '\$1');
     const s = JSON.parse(raw);
     const clearKeys = JSON.parse(process.env.CLEAR_JSON);
@@ -91,7 +94,24 @@ _cu_persist_vscode_env() {
     }
     s['claudeCode.environmentVariables'] = envVars;
     fs.writeFileSync(path, JSON.stringify(s, null, 4));
-  " || { echo "cu: warning: could not update VS Code Insiders settings" >&2; return 1; }
+  " || { echo "cu: warning: could not update VS Code Insiders settings" >&2; }
+}
+
+# Inject env vars into the macOS launchd user session via launchctl setenv.
+# This makes the vars visible to every GUI app opened after this call — including
+# VS Code launched from Dock or Spotlight — without requiring a shell launch.
+# $1: JSON object of key→value to set
+# $2: JSON array of key names to clear first (unsetenv)
+_cu_persist_launchctl() {
+  local set_json="$1"
+  local clear_json="$2"
+  local key name value
+  while IFS= read -r key; do
+    launchctl unsetenv "$key" 2>/dev/null
+  done < <(printf '%s\n' "$clear_json" | jq -r '.[]')
+  while IFS=$'\t' read -r name value; do
+    [[ -n "$value" ]] && launchctl setenv "$name" "$value"
+  done < <(printf '%s\n' "$set_json" | jq -r 'to_entries[] | [.key, .value] | @tsv')
 }
 
 # Determine which profile is currently persisted in settings.json.
@@ -173,11 +193,26 @@ cu() {
       else
         echo "Persisted (settings.json): none"
       fi
+      local lc_token
+      lc_token=$(launchctl getenv CLAUDE_CODE_OAUTH_TOKEN 2>/dev/null)
+      local lc_vertex
+      lc_vertex=$(launchctl getenv CLAUDE_CODE_USE_VERTEX 2>/dev/null)
+      if [ "$lc_vertex" = "1" ]; then
+        echo "launchctl (GUI apps): vertex"
+      elif [ -n "$lc_token" ]; then
+        echo "launchctl (GUI apps): set (token present)"
+      else
+        echo "launchctl (GUI apps): none"
+      fi
       return 0
       ;;
     clear)
       _claude_use_clear_env
-      echo "Cleared Claude env vars from this shell."
+      local all_keys=("${_CU_VERTEX_KEYS[@]}" "${_CU_OAUTH_KEYS[@]}")
+      for k in "${all_keys[@]}"; do
+        launchctl unsetenv "$k" 2>/dev/null
+      done
+      echo "Cleared Claude env vars from this shell and launchctl."
       echo "Note: settings.json is unchanged — use 'cu <profile>' to switch the persisted profile."
       return 0
       ;;
@@ -216,7 +251,7 @@ cu() {
   while IFS= read -r line || [ -n "$line" ]; do
     case "$line" in ""|\#*) continue ;; esac
     if [[ "$line" =~ ^([A-Z_][A-Z0-9_]*)=\"?([^\"]*)\"?$ ]]; then
-      _cu_env["${match[1]}"]="${match[2]}"
+      _cu_env[${match[1]}]="${match[2]}"
     fi
   done < "$env_file"
 
@@ -254,6 +289,7 @@ cu() {
   fi
 
   _cu_persist_settings "$set_json" "$clear_json" || return 1
+  _cu_persist_launchctl "$set_json" "$clear_json"
   _cu_persist_vscode_env "$set_json" "$clear_json"
 
   echo "Loaded + persisted: $CLAUDE_ACCOUNT_LABEL"
