@@ -69,7 +69,11 @@ for project_dir in "$REPO/nursery"/*/; do
   printf '\n── %s\n' "$name"
 
   [ -d "${project_dir}bin" ] && for f in "${project_dir}bin"/*; do
-    [ -f "$f" ] && { chmod +x "$f"; safe_link "$f" "$BIN_DIR/$(basename "$f")"; }
+    [ -f "$f" ] || continue
+    chmod +x "$f"
+    safe_link "$f" "$BIN_DIR/$(basename "$f")"
+    # Also expose at ~/.local/bin/ — older plists hardcode that path.
+    [ "$BIN_DIR" = "$HOME/.local/bin" ] || safe_link "$f" "$HOME/.local/bin/$(basename "$f")"
   done
 
   [ -d "${project_dir}zsh" ] && for f in "${project_dir}zsh"/*.zsh; do
@@ -87,7 +91,21 @@ for project_dir in "$REPO/nursery"/*/; do
     [ -f "$f" ] || continue
     dst="$HOME/Library/LaunchAgents/$(basename "$f")"
     label="$(basename "$f" .plist)"
-    safe_link "$f" "$dst"
+    # Copy + substitute paths instead of symlink. Source plists hardcode
+    # /Users/joeblack/, the deprecated idea-nursery repo path, and an
+    # nvm-specific node bin dir — none of which are portable.
+    [ -L "$dst" ] && rm "$dst"
+    sed \
+      -e "s|/Users/joeblack/github/joeblackwaslike/idea-nursery/projects|$REPO/nursery|g" \
+      -e "s|/Users/joeblack/\\.nvm/versions/node/v[0-9.]*/bin|/opt/homebrew/bin|g" \
+      -e "s|/Users/joeblack|$HOME|g" \
+      "$f" > "$dst"
+    chmod 644 "$dst"
+    _green "rendered: $dst"
+    # Make sure log dirs the plist references exist
+    grep -oE "$HOME[^<]*\\.log" "$dst" 2>/dev/null | while read -r logfile; do
+      mkdir -p "$(dirname "$logfile")"
+    done
     launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true
     launchctl bootstrap "gui/$(id -u)" "$dst" 2>/dev/null \
       && _green "loaded: $label" \
