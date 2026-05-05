@@ -40,6 +40,15 @@ fi
 # ── fallback: install everything without interaction ─────────────────────────
 _yellow "Node not found or --all passed — running non-interactive fallback."
 
+# Pick a writable bin dir. /usr/local/bin is root-owned on Apple Silicon, so
+# fall back to ~/bin (which Joe's dotfiles add to PATH).
+BIN_DIR="/usr/local/bin"
+if [ ! -w "$BIN_DIR" ]; then
+  BIN_DIR="$HOME/bin"
+  mkdir -p "$BIN_DIR"
+  _yellow "/usr/local/bin not writable — using $BIN_DIR"
+fi
+
 safe_link() {
   local src="$1" dst="$2"
   mkdir -p "$(dirname "$dst")"
@@ -60,7 +69,7 @@ for project_dir in "$REPO/nursery"/*/; do
   printf '\n── %s\n' "$name"
 
   [ -d "${project_dir}bin" ] && for f in "${project_dir}bin"/*; do
-    [ -f "$f" ] && { chmod +x "$f"; safe_link "$f" "/usr/local/bin/$(basename "$f")"; }
+    [ -f "$f" ] && { chmod +x "$f"; safe_link "$f" "$BIN_DIR/$(basename "$f")"; }
   done
 
   [ -d "${project_dir}zsh" ] && for f in "${project_dir}zsh"/*.zsh; do
