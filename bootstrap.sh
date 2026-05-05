@@ -103,8 +103,13 @@ for project_dir in "$REPO/nursery"/*/; do
     chmod 644 "$dst"
     _green "rendered: $dst"
     # Make sure log dirs the plist references exist
-    grep -oE "$HOME[^<]*\\.log" "$dst" 2>/dev/null | while read -r logfile; do
-      mkdir -p "$(dirname "$logfile")"
+    awk -v home="$HOME" '
+      match($0, "<string>" home "[^<]*\\.log</string>") {
+        s = substr($0, RSTART, RLENGTH)
+        sub("</?string>", "", s); sub("</string>$", "", s)
+        print s
+      }' "$dst" 2>/dev/null | while read -r logfile; do
+      [ -n "$logfile" ] && mkdir -p "$(dirname "$logfile")"
     done
     launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true
     launchctl bootstrap "gui/$(id -u)" "$dst" 2>/dev/null \
