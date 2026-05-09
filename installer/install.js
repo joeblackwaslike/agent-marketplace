@@ -25,10 +25,13 @@ function discoverProjects() {
       const zshs = existsSync(join(dir, 'zsh'))
         ? readdirSync(join(dir, 'zsh')).filter(f => f.endsWith('.zsh'))
         : [];
+      const hss = existsSync(join(dir, 'hammerspoon'))
+        ? readdirSync(join(dir, 'hammerspoon')).filter(f => f.endsWith('.lua'))
+        : [];
       const plists = existsSync(join(dir, 'launchd'))
         ? readdirSync(join(dir, 'launchd')).filter(f => f.endsWith('.plist'))
         : [];
-      return { name, dir, bins, zshs, plists };
+      return { name, dir, bins, zshs, plists, hss };
     });
 }
 
@@ -83,7 +86,27 @@ function installProject(project) {
     }
   }
 
-  // launchd → ~/Library/LaunchAgents + bootstrap
+  // hammerspoon → ~/.hammerspoon/ + require in init.lua
+  for (const f of project.hss) {
+    const src     = join(project.dir, 'hammerspoon', f);
+    const dst     = join(HOME, '.hammerspoon', f);
+    const modName = f.replace(/\.lua$/, '');
+    const initLua = join(HOME, '.hammerspoon', 'init.lua');
+
+    results.push({ type: 'hammerspoon', ...safeLink(src, dst) });
+
+    // ensure init.lua requires the module
+    const marker = `require('${modName}')`;
+    try {
+      const existing = existsSync(initLua) ? readFileSync(initLua, 'utf8') : '';
+      if (!existing.includes(marker)) {
+        appendFileSync(initLua, `\n-- nursery: ${modName}\n${marker}\n`);
+        results.push({ type: 'hs-init', status: 'appended', dst: initLua });
+      }
+    } catch {}
+  }
+
+    // launchd → ~/Library/LaunchAgents + bootstrap
   for (const f of project.plists) {
     const src   = join(project.dir, 'launchd', f);
     const dst   = join(HOME, 'Library/LaunchAgents', f);
@@ -134,6 +157,7 @@ function CheckList({ items, cursor, selected }) {
                 item.bins.length    ? `${item.bins.length} bin`    : '',
                 item.zshs.length    ? `${item.zshs.length} zsh`    : '',
                 item.plists.length  ? `${item.plists.length} launchd` : '',
+                item.hss.length      ? `${item.hss.length} hammerspoon` : '',
               ].filter(Boolean).join('  ')}
             </Text>
           </Box>
