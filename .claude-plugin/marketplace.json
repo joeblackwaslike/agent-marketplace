@@ -17,7 +17,6 @@
         "source": "url",
         "url": "https://github.com/joeblackwaslike/lessons-learned.git"
       },
-      "version": "0.1.0",
       "category": "productivity",
       "keywords": [
         "lessons",
@@ -34,7 +33,6 @@
         "source": "url",
         "url": "https://github.com/joeblackwaslike/mcp-exec.git"
       },
-      "version": "0.3.0",
       "category": "execution",
       "keywords": [
         "mcp",
@@ -50,7 +48,6 @@
         "source": "url",
         "url": "https://github.com/joeblackwaslike/gstack.git"
       },
-      "version": "1.39.2",
       "category": "productivity",
       "keywords": [
         "gstack",
