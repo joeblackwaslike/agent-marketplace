@@ -19,18 +19,49 @@
       },
       "version": "0.1.0",
       "category": "productivity",
-      "keywords": ["lessons", "mistakes", "hooks", "memory", "injection"]
+      "keywords": [
+        "lessons",
+        "mistakes",
+        "hooks",
+        "memory",
+        "injection"
+      ]
     },
     {
       "name": "mcp-exec",
-      "description": "Sandboxed code execution MCP server — keep intermediate results out of the context window.",
+      "description": "Sandboxed code execution MCP server \u2014 keep intermediate results out of the context window.",
       "source": {
         "source": "url",
         "url": "https://github.com/joeblackwaslike/mcp-exec.git"
       },
       "version": "0.3.0",
       "category": "execution",
-      "keywords": ["mcp", "sandbox", "execution", "tools"]
+      "keywords": [
+        "mcp",
+        "sandbox",
+        "execution",
+        "tools"
+      ]
+    },
+    {
+      "name": "gstack",
+      "description": "Garry Tan's gstack AI workflow skills, packaged as a Claude Code plugin with gstack: namespace. 47 skills including ship, review, qa, browse, investigate, office-hours, and more. Fork of garrytan/gstack.",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/joeblackwaslike/gstack.git"
+      },
+      "version": "1.39.2",
+      "category": "productivity",
+      "keywords": [
+        "gstack",
+        "workflow",
+        "skills",
+        "ship",
+        "review",
+        "qa",
+        "browse",
+        "garrytan"
+      ]
     }
   ]
 }
