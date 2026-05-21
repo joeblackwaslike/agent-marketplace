@@ -61,6 +61,23 @@
       ]
     },
     {
+      "name": "agent-skills",
+      "description": "Joe Black's custom skills for Claude Code — agentic development, multi-provider plugin architecture, Claude Code plugin development, and best practices for working with Claude Code.",
+      "source": {
+        "source": "github",
+        "repo": "joeblackwaslike/agent-skills"
+      },
+      "category": "productivity",
+      "keywords": [
+        "skills",
+        "agent-development",
+        "plugin-development",
+        "agentic",
+        "multi-provider",
+        "claude-code"
+      ]
+    },
+    {
       "name": "anti-compact",
       "description": "Intercepts /compact and generates a structured session handoff instead of lossy compaction. Preserves critical decision context that would otherwise be lost during Claude Code's automatic context compaction.",
       "source": {
@@ -75,6 +92,25 @@
         "memory",
         "session",
         "hooks"
+      ]
+    },
+    {
+      "name": "memtree",
+      "description": "Tree/graph-based persistent context store with surgical recall. MCP server that captures code observations, bash output, and tool results, then exposes budget-bounded recall tools (read, grep, compose, search, neighbors) backed by SQLite with FTS5 and vector embeddings.",
+      "source": {
+        "source": "github",
+        "repo": "joeblackwaslike/memtree"
+      },
+      "category": "memory",
+      "keywords": [
+        "memory",
+        "context",
+        "mcp",
+        "recall",
+        "sqlite",
+        "embeddings",
+        "knowledge-graph",
+        "agent-memory"
       ]
     }
   ]
