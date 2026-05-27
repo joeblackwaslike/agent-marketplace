@@ -72,19 +72,36 @@
     <section id="plugins" class="hub-section">
       <div class="section-inner">
         <div class="section-header reveal">
-          <span class="section-label">Claude Code Plugins</span>
+          <span class="section-label">AI Agent Plugins</span>
           <h2>Built for the<br /><span class="grad-text">agentic stack.</span></h2>
-          <p class="section-desc">Battle-tested plugins that make your AI coding agent smarter.<br />Install the marketplace in one command.</p>
+          <p class="section-desc">Battle-tested plugins for Claude Code and Codex CLI.<br />Install the marketplace in one command.</p>
         </div>
-        <div class="install-global reveal">
-          <code id="install-cmd">claude plugin marketplace add joeblackwaslike/agent-marketplace</code>
-          <button id="hero-copy-btn" aria-label="Copy install command">Copy</button>
+        <div class="platform-tabs reveal" role="tablist" aria-label="Select platform">
+          <button class="platform-tab active" data-platform="claude" role="tab" aria-selected="true">Claude Code</button>
+          <button class="platform-tab" data-platform="codex" role="tab" aria-selected="false">Codex CLI</button>
         </div>
-        <div class="plugin-filters" aria-label="Filter plugins">
-          <span class="filters-label">Filter</span>
-          <div id="filter-pills" role="group" aria-label="Category filters"></div>
+        <div id="panel-claude" class="platform-panel">
+          <div class="install-global">
+            <code id="install-cmd-claude">claude plugin marketplace add joeblackwaslike/agent-marketplace</code>
+            <button class="install-copy-btn" data-target="install-cmd-claude" aria-label="Copy install command">Copy</button>
+          </div>
+          <div class="plugin-filters" aria-label="Filter plugins">
+            <span class="filters-label">Filter</span>
+            <div id="filter-pills-claude" class="filter-pills" role="group" aria-label="Category filters"></div>
+          </div>
+          <div id="plugin-grid-claude" class="plugin-grid"></div>
         </div>
-        <div id="plugin-grid" class="plugin-grid"></div>
+        <div id="panel-codex" class="platform-panel hidden">
+          <div class="install-global">
+            <code id="install-cmd-codex">codex plugin marketplace add joeblackwaslike/agent-marketplace</code>
+            <button class="install-copy-btn" data-target="install-cmd-codex" aria-label="Copy install command">Copy</button>
+          </div>
+          <div class="plugin-filters" aria-label="Filter plugins">
+            <span class="filters-label">Filter</span>
+            <div id="filter-pills-codex" class="filter-pills" role="group" aria-label="Category filters"></div>
+          </div>
+          <div id="plugin-grid-codex" class="plugin-grid"></div>
+        </div>
       </div>
     </section>
 

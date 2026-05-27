@@ -1,10 +1,10 @@
 # Agent Marketplace
 
-> The Claude Code plugin marketplace by [Joe Black](https://github.com/joeblackwaslike).
+> A plugin marketplace for Claude Code and Codex CLI, by [Joe Black](https://github.com/joeblackwaslike).
 
 **[Browse Plugins →](https://joeblackwaslike.github.io/agent-marketplace)**
 
-## Install
+## Claude Code
 
 Add this marketplace to Claude Code:
 
@@ -19,12 +19,40 @@ claude plugin install lessons-learned
 claude plugin install mcp-exec
 ```
 
-## Plugins
+### Claude Code Plugins
 
 | Plugin | Description | Category |
 |--------|-------------|----------|
 | [lessons-learned](https://github.com/joeblackwaslike/lessons-learned) | Automatic mistake capture and proactive lesson injection for AI coding agents | Productivity |
 | [mcp-exec](https://github.com/joeblackwaslike/mcp-exec) | Sandboxed code execution MCP server — keep intermediate results out of the context window | Execution |
+| [gstack](https://github.com/joeblackwaslike/gstack) | Garry Tan's 47-skill workflow suite (ship, review, qa, browse, and more) | Productivity |
+| [agent-skills](https://github.com/joeblackwaslike/agent-skills) | Joe Black's custom skills for agentic development and Claude Code plugin dev | Productivity |
+| [anti-compact](https://github.com/joeblackwaslike/anti-compact) | Structured session handoff instead of lossy context compaction | Productivity |
+| [memtree](https://github.com/joeblackwaslike/memtree) | Persistent SQLite graph store for codebase navigation and cross-session recall | Memory |
+
+## Codex CLI
+
+Add this marketplace to Codex CLI:
+
+```bash
+codex plugin marketplace add joeblackwaslike/agent-marketplace
+```
+
+Then install individual plugins:
+
+```bash
+codex plugin install mcp-exec
+codex plugin install memtree
+```
+
+### Codex CLI Plugins
+
+MCP-server plugins that work with any agent CLI supporting the Model Context Protocol.
+
+| Plugin | Description | Category |
+|--------|-------------|----------|
+| [mcp-exec](https://github.com/joeblackwaslike/mcp-exec) | Sandboxed code execution MCP server — keep intermediate results out of the context window | Execution |
+| [memtree](https://github.com/joeblackwaslike/memtree) | Persistent SQLite graph store for codebase navigation and cross-session recall | Memory |
 
 ## Nursery
 

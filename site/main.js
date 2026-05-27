@@ -4,6 +4,10 @@ const MARKETPLACE_URL =
   import.meta.env.VITE_MARKETPLACE_URL ||
   '/.claude-plugin/marketplace.json';
 
+const CODEX_MARKETPLACE_URL =
+  import.meta.env.VITE_CODEX_MARKETPLACE_URL ||
+  '/.codex-plugin/marketplace.json';
+
 // ── Theme ──────────────────────────────────────────────────────────────────
 
 function getStoredTheme() {
@@ -109,37 +113,18 @@ function attachCopyListeners(container) {
 
 // ── Plugins ────────────────────────────────────────────────────────────────
 
-async function initPlugins() {
-  const grid = document.getElementById('plugin-grid');
-  const filterContainer = document.getElementById('filter-pills');
-  const heroCopyBtn = document.getElementById('hero-copy-btn');
-  const installCmd = document.getElementById('install-cmd');
+async function fetchMarketplace(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
 
-  if (heroCopyBtn && installCmd) {
-    heroCopyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(installCmd.textContent.trim()).then(() => {
-        heroCopyBtn.textContent = 'Copied!';
-        setTimeout(() => { heroCopyBtn.textContent = 'Copy'; }, 2000);
-      });
-    });
-  }
-
+function initPlatformGrid(plugins, platform, gridId, pillsId) {
+  const grid = document.getElementById(gridId);
+  const filterContainer = document.getElementById(pillsId);
   if (!grid) return;
 
-  let plugins = [];
   let activeCategory = 'all';
-
-  try {
-    const res = await fetch(MARKETPLACE_URL);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    plugins = data.plugins;
-    const countEl = document.getElementById('plugin-count');
-    if (countEl) countEl.textContent = plugins.length;
-  } catch {
-    grid.innerHTML = '<p class="error">Failed to load plugins. Please refresh or check back later.</p>';
-    return;
-  }
 
   function render() {
     const categories = getCategories(plugins);
@@ -155,12 +140,67 @@ async function initPlugins() {
       });
     }
 
-    grid.innerHTML = filtered.map(renderPluginCard).join('');
+    grid.innerHTML = filtered.map(p => renderPluginCard(p, platform)).join('');
     attachCopyListeners(grid);
     observeCards(grid);
   }
 
   render();
+}
+
+async function initPlugins() {
+  // Wire install-command copy buttons
+  document.querySelectorAll('.install-copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.target);
+      if (!target) return;
+      navigator.clipboard.writeText(target.textContent.trim()).then(() => {
+        const prev = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = prev; }, 2000);
+      });
+    });
+  });
+
+  // Platform tab switching
+  document.querySelectorAll('.platform-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.platform-tab').forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+
+      const platform = tab.dataset.platform;
+      document.querySelectorAll('.platform-panel').forEach(panel => {
+        panel.classList.toggle('hidden', panel.id !== `panel-${platform}`);
+      });
+    });
+  });
+
+  // Fetch both marketplaces in parallel
+  const [claudeResult, codexResult] = await Promise.allSettled([
+    fetchMarketplace(MARKETPLACE_URL),
+    fetchMarketplace(CODEX_MARKETPLACE_URL),
+  ]);
+
+  if (claudeResult.status === 'fulfilled') {
+    const plugins = claudeResult.value.plugins;
+    initPlatformGrid(plugins, 'claude', 'plugin-grid-claude', 'filter-pills-claude');
+    const countEl = document.getElementById('plugin-count');
+    if (countEl) countEl.textContent = plugins.length;
+  } else {
+    const grid = document.getElementById('plugin-grid-claude');
+    if (grid) grid.innerHTML = '<p class="error">Failed to load plugins. Please refresh or check back later.</p>';
+  }
+
+  if (codexResult.status === 'fulfilled') {
+    initPlatformGrid(codexResult.value.plugins, 'codex', 'plugin-grid-codex', 'filter-pills-codex');
+  } else {
+    const grid = document.getElementById('plugin-grid-codex');
+    if (grid) grid.innerHTML = '<p class="error">Failed to load plugins. Please refresh or check back later.</p>';
+  }
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────

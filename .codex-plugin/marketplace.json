@@ -1,0 +1,48 @@
+{
+  "name": "agent-marketplace",
+  "metadata": {
+    "description": "A curated collection of Codex CLI plugins by Joe Black",
+    "version": "1.0.0",
+    "homepage": "https://joeblackwaslike.github.io/agent-marketplace"
+  },
+  "owner": {
+    "name": "Joe Black",
+    "github": "joeblackwaslike"
+  },
+  "plugins": [
+    {
+      "name": "mcp-exec",
+      "description": "Sandboxed code execution MCP server — keep intermediate results out of the context window.",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/joeblackwaslike/mcp-exec.git"
+      },
+      "category": "execution",
+      "keywords": [
+        "mcp",
+        "sandbox",
+        "execution",
+        "tools"
+      ]
+    },
+    {
+      "name": "memtree",
+      "description": "Persistent graph store for codebase and web navigation. Symbol-chunks files, stores nodes in a SQLite graph, and returns compact references. Enables recall across sessions without re-reading files via memtree_search, memtree_neighbors, and memtree_compose.",
+      "source": {
+        "source": "github",
+        "repo": "joeblackwaslike/memtree"
+      },
+      "category": "memory",
+      "keywords": [
+        "memory",
+        "context",
+        "mcp",
+        "recall",
+        "sqlite",
+        "embeddings",
+        "knowledge-graph",
+        "agent-memory"
+      ]
+    }
+  ]
+}

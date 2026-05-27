@@ -446,6 +446,40 @@ h3 {
    PLUGINS SECTION
    ───────────────────────────────────────────────────────── */
 
+/* Platform tabs (Claude Code / Codex CLI switcher) */
+.platform-tabs {
+  display: flex;
+  gap: 2px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px;
+  width: fit-content;
+  margin-bottom: 36px;
+}
+
+.platform-tab {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--ink2);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 7px 20px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.platform-tab:hover { color: var(--ink); }
+
+.platform-tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.platform-panel.hidden { display: none; }
+
 .install-global {
   display: inline-flex;
   align-items: center;
@@ -503,7 +537,7 @@ h3 {
   flex-shrink: 0;
 }
 
-#filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
 
 .pill {
   background: transparent;

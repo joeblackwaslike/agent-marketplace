@@ -96,7 +96,7 @@
     },
     {
       "name": "memtree",
-      "description": "Tree/graph-based persistent context store with surgical recall. MCP server that captures code observations, bash output, and tool results, then exposes budget-bounded recall tools (read, grep, compose, search, neighbors) backed by SQLite with FTS5 and vector embeddings.",
+      "description": "Persistent graph store for codebase and web navigation. Intercepts Read/Grep/Bash/WebFetch and redirects to memtree MCP tools that symbol-chunk files, store nodes in a SQLite graph, and return compact references. Enables recall across sessions without re-reading files via memtree_search, memtree_neighbors, and memtree_compose.",
       "source": {
         "source": "github",
         "repo": "joeblackwaslike/memtree"

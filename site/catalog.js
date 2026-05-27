@@ -7,12 +7,15 @@ export function applyFilter(plugins, category) {
   return plugins.filter(p => p.category === category);
 }
 
-export function renderPluginCard(plugin) {
-  const installCmd = `claude plugin install ${plugin.name}`;
-  const sourceUrl = plugin.source.url.replace(/\.git$/, '');
-  const keywords = plugin.keywords
+export function renderPluginCard(plugin, platform = 'claude') {
+  const cli = platform === 'codex' ? 'codex' : 'claude';
+  const installCmd = `${cli} plugin install ${plugin.name}`;
+  const rawUrl = plugin.source.url ?? `https://github.com/${plugin.source.repo}`;
+  const sourceUrl = rawUrl.replace(/\.git$/, '');
+  const keywords = (plugin.keywords ?? [])
     .map(k => `<span class="keyword">${k}</span>`)
     .join('');
+  const versionBadge = plugin.version ? `<span class="version">v${plugin.version}</span>` : '';
   return `<article class="plugin-card" data-category="${plugin.category}">
   <div class="card-top">
     <span class="card-category category-${plugin.category}">${plugin.category}</span>
@@ -26,7 +29,7 @@ export function renderPluginCard(plugin) {
       <button class="copy-btn" data-cmd="${installCmd}" aria-label="Copy">Copy</button>
     </div>
     <div class="card-meta">
-      <span class="version">v${plugin.version}</span>
+      ${versionBadge}
       <a href="${sourceUrl}" target="_blank" rel="noopener">Source →</a>
     </div>
   </div>
