@@ -1,5 +1,8 @@
 # Agent Marketplace
 
+[![Discord](https://img.shields.io/discord/1486035859747897414?logo=discord&label=Discord&color=5865F2)](https://discord.com/channels/1486035859747897414/1509515233595752538) [![Join Discord](https://img.shields.io/badge/Discord-Join%20Server-5865F2?logo=discord&logoColor=white)](https://discord.gg/Fjc9zYHZyV)
+
+
 > A plugin marketplace for Claude Code and Codex CLI, by [Joe Black](https://github.com/joeblackwaslike).
 
 **[Browse Plugins →](https://joeblackwaslike.github.io/agent-marketplace)**
