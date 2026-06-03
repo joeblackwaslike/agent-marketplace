@@ -112,6 +112,35 @@
         "knowledge-graph",
         "agent-memory"
       ]
+    },
+    {
+      "name": "personal-agent-skills",
+      "description": "Joe Black's private skills — stack preferences, marketplace publishing, Obsidian vault, Serena, Pi cluster, Upgraded Parts design system.",
+      "source": {
+        "source": "github",
+        "repo": "joeblackwaslike/personal-agent-skills"
+      },
+      "category": "productivity",
+      "keywords": ["skills", "private", "personal", "stack", "obsidian", "upgraded-parts"]
+    },
+    {
+      "name": "create-ts-project",
+      "description": "Scaffold and maintain production-ready TypeScript projects — the cookiecutter-uv equivalent for the TypeScript ecosystem. Includes /new and /update commands plus a skill covering interactive and agent-driven scaffold flows.",
+      "source": {
+        "source": "github",
+        "repo": "joeblackwaslike/create-ts-project"
+      },
+      "category": "productivity",
+      "keywords": [
+        "typescript",
+        "scaffold",
+        "cli",
+        "template",
+        "biome",
+        "eslint",
+        "vitest",
+        "docusaurus"
+      ]
     }
   ]
 }
