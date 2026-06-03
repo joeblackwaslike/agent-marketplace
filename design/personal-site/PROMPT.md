@@ -28,3 +28,5 @@ Build a single-page personal developer hub for Joe Black at joeblack.nyc.
 **Tech stack:** vanilla HTML/CSS/JS. Vite build. No framework. CSS custom properties for all tokens. `data-theme` attribute on `<html>` for theming.
 
 **Output:** `site/index.html`, `site/style.css`, `site/main.js`, `site/catalog.js`. Match the existing file structure.
+
+**Private repos must never appear in the marketplace catalogs or on the site.** Only include plugins whose GitHub repos are public. Current private repos to exclude: `personal-agent-skills`. Verify repo visibility before adding any new plugin entry.

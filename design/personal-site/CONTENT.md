@@ -30,6 +30,15 @@ Sticky top nav bar:
 
 ---
 
+## Standing rules — plugin visibility
+
+**Never list private repos in the marketplace catalogs or on the site.**
+Private repos can't be installed by anyone else, so advertising them is misleading.
+Current private repos that must stay off the public catalog: `personal-agent-skills`.
+Check repo visibility on GitHub before adding any new plugin.
+
+---
+
 ## Section 2 — Plugins (id: plugins)
 
 Section label: "AI Agent Plugins"
@@ -98,12 +107,7 @@ Each card contains:
    Keywords: memory, context, mcp, recall, sqlite, embeddings, knowledge-graph, agent-memory
    Source: github.com/joeblackwaslike/memtree
 
-7. **personal-agent-skills** — Category: productivity
-   Description: Joe Black's private skills — stack preferences, marketplace publishing, Obsidian vault, Serena, Pi cluster, Upgraded Parts design system.
-   Keywords: skills, private, personal, stack, obsidian, upgraded-parts
-   Source: github.com/joeblackwaslike/personal-agent-skills
-
-8. **create-ts-project** — Category: productivity
+7. **create-ts-project** — Category: productivity
    Description: Scaffold and maintain production-ready TypeScript projects — the cookiecutter-uv equivalent for the TypeScript ecosystem. Includes /new and /update commands plus a skill covering interactive and agent-driven scaffold flows.
    Keywords: typescript, scaffold, cli, template, biome, eslint, vitest, docusaurus
    Source: github.com/joeblackwaslike/create-ts-project
@@ -120,9 +124,6 @@ Each card contains:
    Description: Joe Black's custom skills for Codex CLI — agentic development, multi-provider plugin architecture, plugin development best practices, and working with AI coding agents.
    Keywords: skills, agent-development, plugin-development, agentic, multi-provider, codex
    Source: github.com/joeblackwaslike/agent-skills
-
-4. **personal-agent-skills** — Category: productivity
-   (same description as above)
 
 ---
 
