@@ -12,15 +12,14 @@
     <!-- Sets data-theme before CSS renders — prevents any flash -->
     <script>
       (function () {
-        var t = localStorage.getItem('jb-theme') ||
-          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        var t = localStorage.getItem('jb-theme') || 'dark';
         document.documentElement.dataset.theme = t;
       })();
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./style.css" />
   </head>
 
@@ -28,7 +27,7 @@
 
     <!-- ── Nav ── -->
     <nav class="nav" aria-label="Main navigation">
-      <a class="nav-wordmark" href="#top">joeblack.nyc</a>
+      <a class="nav-wordmark" href="#top">joeblack<span class="nyc">.nyc</span></a>
       <ul class="nav-links">
         <li><a href="#plugins">Plugins</a></li>
         <li><a href="#writing">Writing</a></li>
@@ -53,18 +52,16 @@
     <section id="top" class="hero">
       <div class="hero-bg" aria-hidden="true"></div>
       <div class="hero-inner">
-        <div class="jb-avatar" aria-hidden="true">JB</div>
         <div class="hero-chip">
           <span class="pulse-dot" aria-hidden="true"></span>
           NYC · Building for the agentic era
         </div>
-        <h1>Joe<br /><span class="grad-text">Black.</span></h1>
+        <h1>Joe<br /><span class="grad-text">Black<span class="nyc">.</span></span></h1>
         <p class="hero-sub">I build tools, plugins, and systems at the frontier of AI agents.<br />Currently obsessed with making Claude Code smarter.</p>
         <div class="hero-ctas">
           <a class="btn-primary" href="#plugins">Explore Plugins</a>
           <a class="btn-ghost" href="#connect">Get in Touch</a>
         </div>
-        <div class="scroll-hint" aria-hidden="true"><div class="scroll-line"></div></div>
       </div>
     </section>
 
@@ -73,7 +70,7 @@
       <div class="section-inner">
         <div class="section-header reveal">
           <span class="section-label">AI Agent Plugins</span>
-          <h2>Built for the<br /><span class="grad-text">agentic stack.</span></h2>
+          <h2>Built for the<br />agentic stack.</h2>
           <p class="section-desc">Battle-tested plugins for Claude Code and Codex CLI.<br />Install the marketplace in one command.</p>
         </div>
         <div class="platform-tabs reveal" role="tablist" aria-label="Select platform">
@@ -110,7 +107,7 @@
       <div class="section-inner">
         <div class="section-header reveal">
           <span class="section-label">Writing</span>
-          <h2>Notes from the<br /><span class="grad-text">frontier.</span></h2>
+          <h2>Notes from the<br />frontier.</h2>
         </div>
         <div class="writing-list">
           <article class="writing-card reveal">
@@ -150,7 +147,7 @@
       <div class="section-inner">
         <div class="section-header reveal">
           <span class="section-label">Projects</span>
-          <h2>Things I've<br /><span class="grad-text">shipped.</span></h2>
+          <h2>Things I've<br />shipped.</h2>
         </div>
         <div class="projects-grid">
           <!-- AI / Agentic -->
@@ -330,7 +327,7 @@
         <!-- ── Nursery ── -->
         <div class="nursery-header reveal">
           <span class="section-label">Nursery</span>
-          <h3>Things I'm <span class="grad-text">hatching.</span></h3>
+          <h3>Things I'm hatching.</h3>
           <p class="section-desc">Small tools that are worth versioning but don't yet justify a standalone repo. Each one has a tracking issue — click to follow along.</p>
         </div>
         <div class="projects-grid nursery-grid">
@@ -415,7 +412,7 @@
       <div class="section-inner">
         <div class="section-header section-header--centered reveal">
           <span class="section-label">Connect</span>
-          <h2>Find me on the<br /><span class="grad-text">internet.</span></h2>
+          <h2>Find me on the<br />internet.</h2>
         </div>
         <div class="connect-grid">
           <a class="connect-card reveal" href="https://github.com/joeblackwaslike" target="_blank" rel="noopener">

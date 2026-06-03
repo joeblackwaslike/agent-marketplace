@@ -35,23 +35,6 @@ function initTheme() {
   });
 }
 
-// ── Parallax ───────────────────────────────────────────────────────────────
-
-function initParallax() {
-  const heroBg = document.querySelector('.hero-bg');
-  if (!heroBg) return;
-  let ticking = false;
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        heroBg.style.transform = `translateY(${window.scrollY * 0.35}px)`;
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, { passive: true });
-}
-
 // ── Reveal on scroll ───────────────────────────────────────────────────────
 
 function initReveal() {
@@ -62,7 +45,7 @@ function initReveal() {
     entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+          entry.target.classList.add('in');
           observer.unobserve(entry.target);
         }
       });
@@ -83,7 +66,7 @@ function observeCards(grid) {
     entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+          entry.target.classList.add('in');
           observer.unobserve(entry.target);
         }
       });
@@ -207,7 +190,6 @@ async function initPlugins() {
 
 function init() {
   initTheme();
-  initParallax();
   initPlugins();
   // Defer reveal so elements are painted first
   requestAnimationFrame(() => {
