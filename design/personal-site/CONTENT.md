@@ -150,31 +150,44 @@ Section heading: "Things I've shipped."
 Grid of project cards, each with: icon, name, language/tech, description, GitHub link.
 
 **AI / Agentic**
-1. 📦 agent-marketplace — JavaScript — "The missing plugin registry for Claude Code and Codex CLI. Curated, battle-tested plugins installable in one command."
-2. 🤖 codex-review-bot — TypeScript — "GitHub App that triggers AI-powered PR reviews via OpenAI. Automated code review on every pull request."
-3. 🧠 lessons-learned — Claude Code Plugin — "Automatic mistake capture and proactive lesson injection for AI coding agents."
-4. ⚙️ mcp-exec — Claude Code & Codex Plugin — "Sandboxed code execution MCP server — keeps intermediate results out of the context window so agents can run code without burning tokens."
+1. 🤖 ai-review-bot — TypeScript — "GitHub App that runs AI-powered PR reviews on every pull request. Pluggable provider support — Claude, GPT, and more."
+2. 🏠 ai-listings — TypeScript · Next.js 15 — "AI-powered listing platform. Semantic search, enrichment, and structured data extraction for property listings."
+3. 🏗️ create-ts-project — TypeScript — "Scaffold and maintain production-ready TypeScript projects. Available as a Claude Code & Codex plugin."
+4. 🔬 agent-improvement — TypeScript — "Tooling for systematic AI agent improvement — captures failure modes, structures them as indexed lessons, and feeds them back into agent prompts."
+5. 🧠 lessons-learned — Claude Code Plugin — "Automatic mistake capture and proactive lesson injection for AI coding agents."
+6. ⚙️ mcp-exec — Claude Code & Codex Plugin — "Sandboxed code execution MCP server — keeps intermediate results out of the context window so agents can run code without burning tokens."
 
 **Full-Stack Apps**
-5. 🔍 jobsearch-tracker — TypeScript — "Full-featured job search dashboard — applications, interviews, companies, contacts, and documents. TanStack Start + Supabase."
+7. 🔍 jobsearch-tracker — TypeScript — "Full-featured job search dashboard — applications, interviews, companies, contacts, and documents. TanStack Start + Supabase."
 
 **Dev Tools / DX**
-6. 🧰 idea-nursery — Shell · Python — "Monorepo nursery for nascent macOS tools and automations. Projects incubate here until they earn their own repo."
-7. 🔌 ext-tool — Python — "Manage VS Code and Cursor extensions from a single TOML source of truth. Keep your editor setup reproducible."
-8. 📄 resume-builder — TeX — "Dynamic LaTeX resume pipeline driven by YAML conforming to the jsonresume schema. Data-first, version-controlled."
-9. 🍓 rpi-cluster-bootstrap — Shell — "Automated bootstrap scripts for a Raspberry Pi Kubernetes cluster. From bare metal to running nodes in one shot."
+8. 🧰 idea-nursery — Shell · Python — "Monorepo nursery for nascent macOS tools and automations. Projects incubate here until they earn their own repo."
+9. 🔌 ext-tool — Python — "Manage VS Code and Cursor extensions from a single TOML source of truth. Keep your editor setup reproducible."
+10. 📄 resume-builder — TeX — "Dynamic LaTeX resume pipeline driven by YAML conforming to the jsonresume schema. Data-first, version-controlled."
+11. 🍓 rpi-cluster-bootstrap — Shell — "Automated bootstrap scripts for a Raspberry Pi Kubernetes cluster. From bare metal to running nodes in one shot."
+12. 🔧 cc-vscode-ext — TypeScript — "VS Code extension for Claude Code — surface agent context, session state, and plugin status directly in the editor sidebar."
+13. 🐳 devcontainer — YAML · Shell — "Opinionated devcontainer for TypeScript and Python projects. Pre-installs Claude Code, Codex CLI, and the full agentic toolchain."
+14. ⏳ kubewait — Go — "Wait for Kubernetes resources to reach a target condition before continuing a deploy pipeline. Richer conditions than kubectl wait."
+15. 📝 tmpld — Go — "Minimal template daemon — watches Go templates and re-renders on config change. Useful for container init and secret injection."
 
 **Python Libraries**
-10. 🗄️ quart-sqlalchemy — Python · ⭐22 — "Async SQLAlchemy extension for ASGI frameworks (Quart, FastAPI). Modern async-first ORM integration."
-11. ₿ coinaddr — Python · ⭐20 — "Cryptocurrency address inspection and validation library. Supports Bitcoin, Ethereum, and more."
-12. 💰 pricing — Python · ⭐3 — "Pricing classes and tools with CLDR-backed locale-aware formatting and currency exchange support."
+16. 🗄️ quart-sqlalchemy — Python · ⭐22 — "Async SQLAlchemy extension for ASGI frameworks (Quart, FastAPI). Modern async-first ORM integration."
+17. ₿ coinaddr — Python · ⭐20 — "Cryptocurrency address inspection and validation library. Supports Bitcoin, Ethereum, and more."
+18. 💰 pricing — Python · ⭐3 — "Pricing classes and tools with CLDR-backed locale-aware formatting and currency exchange support."
+19. ₿ base58check — Python — "Fast Base58Check encoding and decoding for Bitcoin and compatible address formats. Zero-dependency, pure Python."
+20. 🐍 python-banshee — Python — "Lightweight message bus — pub/sub with typed channels, async-first, no external broker required."
+21. 💉 python-quart-injector — Python — "Dependency injection container for Quart — integrates injector with Quart's async request lifecycle."
+22. 🔗 quart-depends — Python — "FastAPI-style dependency injection for Quart. Declare dependencies as function parameters — async-native and composable."
 
 **Templates**
-13. 🍪 cookiecutter-uv — Python — "Production-ready Python project template using uv for fast, reproducible dependency management."
-14. 📊 cookiecutter-ds — Python — "Cookiecutter template for Python data science projects. Opinionated structure for reproducible research."
+23. 🍪 cookiecutter-uv — Python — "Production-ready Python project template using uv for fast, reproducible dependency management."
+24. 📊 cookiecutter-ds — Python — "Cookiecutter template for Python data science projects. Opinionated structure for reproducible research."
 
 **Infra**
-15. ☁️ couchdiscover — Python — "CouchDB 2.0 autodiscovery using Kubernetes. Automatically clusters nodes as pods come up."
+25. ☁️ couchdiscover — Python — "CouchDB 2.0 autodiscovery using Kubernetes. Automatically clusters nodes as pods come up."
+26. 🍎 mac-bootstrap — Shell — "Idempotent macOS setup script — Homebrew, dotfiles, dev tools, and system preferences in one shot."
+27. 🔊 homepod-update — Python — "CLI tool for triggering and tracking HomePod software updates via the HomeKit Accessory Protocol."
+28. 🖥️ overridehostname — Shell — "Override the hostname reported by a macOS or Linux node without a full reboot — useful for dynamic lab environments."
 
 ### Nursery sub-section
 
@@ -184,7 +197,7 @@ Description: "Small tools that are worth versioning but don't yet justify a stan
 Same grid, dashed card border, "incubating" badge, links to GitHub issues.
 
 1. 🔀 claude-switcher — zsh — "Switch Claude Code account profiles (cu) from the shell, or set the VS Code global default via ~/.claude/settings.json."
-2. 🐋 orb-autostop — bash · launchd — "Auto-stops OrbStack after 15 min idle and lazy-starts it on the first docker use via an oh-my-zsh plugin."
+2. 🐋 lazy-orbstack — bash · launchd — "Auto-stops OrbStack after 15 min idle and lazy-starts it on the first docker use via an oh-my-zsh plugin."
 3. 🩺 pieces-babysitter — Python · launchd — "Watchdog for Pieces OS — restarts on crash and sends macOS notifications on state changes."
 4. 📊 pieces-metrics — Python · launchd — "Collects Pieces OS runtime metrics (CPU, memory, uptime) into SQLite for local analysis."
 5. 📓 obsidian-user-base — Python · uv — "Karpathy-style LLM-maintained wiki — watches Obsidian Clippings/ and auto-updates _wiki/ via Claude Code."
