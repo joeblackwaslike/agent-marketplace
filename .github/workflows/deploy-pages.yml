@@ -35,6 +35,7 @@ jobs:
         working-directory: site
         env:
           VITE_MARKETPLACE_URL: https://raw.githubusercontent.com/joeblackwaslike/agent-marketplace/main/.claude-plugin/marketplace.json
+          VITE_CODEX_MARKETPLACE_URL: https://raw.githubusercontent.com/joeblackwaslike/agent-marketplace/main/.codex-plugin/marketplace.json
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
