@@ -23,6 +23,29 @@ _Add a brief overview of your project architecture_
 
 _Add your project-specific conventions here_
 
+## Private Content Submodule
+
+Use `private-content/` for private drafts, unreleased articles, content scripts, platform copy, metrics notes, and launch briefs. It is a git submodule backed by the private GitHub repo `git@github.com:joeblackwaslike/agent-marketplace-private-content.git`.
+
+When syncing this root repo, also sync the submodule:
+
+```bash
+git pull --rebase
+git submodule update --init --recursive
+git -C private-content pull --rebase
+```
+
+When publishing changes, push private content and the root repo separately:
+
+```bash
+git -C private-content status
+git -C private-content push
+git status
+git push
+```
+
+The root repo should track only `.gitmodules` and the `private-content` submodule pointer. Do not place private content in public folders, and do not add `private-content/` to the root `.gitignore`.
+
 
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:ca08a54f -->
 ## Beads Issue Tracker

@@ -1,0 +1,3 @@
+[submodule "private-content"]
+	path = private-content
+	url = git@github.com:joeblackwaslike/agent-marketplace-private-content.git

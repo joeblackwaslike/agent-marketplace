@@ -36,6 +36,29 @@ cp -rf source dest          # NOT: cp -r source dest
 - `apt-get` - use `-y` flag
 - `brew` - use `HOMEBREW_NO_AUTO_UPDATE=1` env var
 
+## Private Content Submodule
+
+Private drafts, unreleased articles, content scripts, platform copy, metrics notes, and launch briefs belong in `private-content/`, not in the public root repo. That directory is a git submodule backed by the private GitHub repo `git@github.com:joeblackwaslike/agent-marketplace-private-content.git`.
+
+When syncing this root repo, also sync the submodule:
+
+```bash
+git pull --rebase
+git submodule update --init --recursive
+git -C private-content pull --rebase
+```
+
+When pushing work that touches private content, push both repositories:
+
+```bash
+git -C private-content status
+git -C private-content push
+git status
+git push
+```
+
+The root repo tracks only the `private-content` submodule pointer and `.gitmodules`; do not copy private drafts into public directories or add `private-content/` to this repo's `.gitignore`.
+
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:ca08a54f -->
 ## Beads Issue Tracker
 
