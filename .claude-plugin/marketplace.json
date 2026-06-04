@@ -78,6 +78,23 @@
       ]
     },
     {
+      "name": "personal-agent-skills",
+      "description": "Joe Black's private skills — stack preferences, marketplace publishing, Obsidian vault, Serena code intelligence, Pi cluster operations, design systems, and AI brand/content workflows.",
+      "source": {
+        "source": "github",
+        "repo": "joeblackwaslike/personal-agent-skills"
+      },
+      "category": "productivity",
+      "keywords": [
+        "skills",
+        "design-system",
+        "stack-preferences",
+        "obsidian",
+        "content-strategy",
+        "personal"
+      ]
+    },
+    {
       "name": "anti-compact",
       "description": "Intercepts /compact and generates a structured session handoff instead of lossy compaction. Preserves critical decision context that would otherwise be lost during Claude Code's automatic context compaction.",
       "source": {
