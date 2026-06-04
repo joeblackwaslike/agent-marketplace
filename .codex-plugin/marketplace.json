@@ -44,7 +44,7 @@
     },
     {
       "name": "personal-agent-skills",
-      "description": "Joe Black's private skills — stack preferences, marketplace publishing, Obsidian vault, Serena code intelligence, Pi cluster operations, and design systems for Agent Marketplace and Upgraded.",
+      "description": "Joe Black's private skills — stack preferences, marketplace publishing, Obsidian vault, Serena code intelligence, Pi cluster operations, design systems, and AI brand/content workflows.",
       "source": {
         "source": "github",
         "repo": "joeblackwaslike/personal-agent-skills"
@@ -55,6 +55,7 @@
         "design-system",
         "stack-preferences",
         "obsidian",
+        "content-strategy",
         "personal"
       ]
     },
