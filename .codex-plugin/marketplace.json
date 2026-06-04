@@ -43,6 +43,22 @@
       ]
     },
     {
+      "name": "personal-agent-skills",
+      "description": "Joe Black's private skills — stack preferences, marketplace publishing, Obsidian vault, Serena code intelligence, Pi cluster operations, and design systems for Agent Marketplace and Upgraded.",
+      "source": {
+        "source": "github",
+        "repo": "joeblackwaslike/personal-agent-skills"
+      },
+      "category": "productivity",
+      "keywords": [
+        "skills",
+        "design-system",
+        "stack-preferences",
+        "obsidian",
+        "personal"
+      ]
+    },
+    {
       "name": "memtree",
       "description": "Persistent graph store for codebase and web navigation. Symbol-chunks files, stores nodes in a SQLite graph, and returns compact references. Enables recall across sessions without re-reading files via memtree_search, memtree_neighbors, and memtree_compose.",
       "source": {
