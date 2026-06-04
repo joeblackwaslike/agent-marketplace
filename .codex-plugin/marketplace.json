@@ -60,11 +60,11 @@
       ]
     },
     {
-      "name": "memtree",
-      "description": "Persistent graph store for codebase and web navigation. Symbol-chunks files, stores nodes in a SQLite graph, and returns compact references. Enables recall across sessions without re-reading files via memtree_search, memtree_neighbors, and memtree_compose.",
+      "name": "ctx-tree",
+      "description": "Persistent context graph for codebase and web navigation. Symbol-chunks files, stores nodes in a SQLite graph, and returns compact references — enabling recall across sessions without re-reading files.",
       "source": {
         "source": "github",
-        "repo": "joeblackwaslike/memtree"
+        "repo": "joeblackwaslike/ctx-tree"
       },
       "category": "memory",
       "keywords": [
@@ -76,6 +76,25 @@
         "embeddings",
         "knowledge-graph",
         "agent-memory"
+      ]
+    },
+    {
+      "name": "create-ts-project",
+      "description": "Scaffold and maintain production-ready TypeScript projects — the cookiecutter-uv equivalent for the TypeScript ecosystem. Includes /new and /update commands plus a skill covering interactive and agent-driven scaffold flows.",
+      "source": {
+        "source": "github",
+        "repo": "joeblackwaslike/create-ts-project"
+      },
+      "category": "productivity",
+      "keywords": [
+        "typescript",
+        "scaffold",
+        "cli",
+        "template",
+        "biome",
+        "eslint",
+        "vitest",
+        "docusaurus"
       ]
     }
   ]

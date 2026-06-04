@@ -112,11 +112,11 @@
       ]
     },
     {
-      "name": "memtree",
-      "description": "Persistent graph store for codebase and web navigation. Intercepts Read/Grep/Bash/WebFetch and redirects to memtree MCP tools that symbol-chunk files, store nodes in a SQLite graph, and return compact references. Enables recall across sessions without re-reading files via memtree_search, memtree_neighbors, and memtree_compose.",
+      "name": "ctx-tree",
+      "description": "Persistent context graph for codebase and web navigation. Symbol-chunks files, stores nodes in a SQLite graph, and returns compact references — enabling recall across sessions without re-reading files.",
       "source": {
         "source": "github",
-        "repo": "joeblackwaslike/memtree"
+        "repo": "joeblackwaslike/ctx-tree"
       },
       "category": "memory",
       "keywords": [
@@ -128,6 +128,23 @@
         "embeddings",
         "knowledge-graph",
         "agent-memory"
+      ]
+    },
+    {
+      "name": "ai-review-bot",
+      "description": "GitHub App that runs AI-powered PR reviews on every pull request. Pluggable provider support — Claude, GPT, and more. Configurable review depth, inline comments, and summary reports.",
+      "source": {
+        "source": "github",
+        "repo": "joeblackwaslike/ai-review-bot"
+      },
+      "category": "productivity",
+      "keywords": [
+        "github",
+        "pr-review",
+        "ai",
+        "bot",
+        "github-app",
+        "code-review"
       ]
     },
     {
