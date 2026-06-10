@@ -3,5 +3,6 @@
   "backend": "dolt",
   "dolt_mode": "server",
   "dolt_database": "agent_marketplace",
-  "project_id": "73ac057a-707a-4a39-aeb7-9d36816a3f4d"
+  "project_id": "73ac057a-707a-4a39-aeb7-9d36816a3f4d",
+  "global_dolt_database": "beads_global"
 }
