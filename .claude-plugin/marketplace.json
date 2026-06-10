@@ -148,11 +148,11 @@
       ]
     },
     {
-      "name": "create-ts-project",
+      "name": "spinup-ts",
       "description": "Scaffold and maintain production-ready TypeScript projects — the cookiecutter-uv equivalent for the TypeScript ecosystem. Includes /new and /update commands plus a skill covering interactive and agent-driven scaffold flows.",
       "source": {
         "source": "github",
-        "repo": "joeblackwaslike/create-ts-project"
+        "repo": "joeblackwaslike/spinup-ts"
       },
       "category": "productivity",
       "keywords": [
