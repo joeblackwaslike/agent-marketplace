@@ -79,6 +79,25 @@
       ]
     },
     {
+      "name": "spinup-py",
+      "description": "Scaffold and maintain production-ready Python projects — uv for dependency management, ruff + mypy for quality, pytest + tox-uv for testing, GitHub Actions CI, and Docusaurus docs. The cookiecutter for modern Python.",
+      "source": {
+        "source": "github",
+        "repo": "joeblackwaslike/spinup-py"
+      },
+      "category": "productivity",
+      "keywords": [
+        "python",
+        "scaffold",
+        "cli",
+        "template",
+        "uv",
+        "ruff",
+        "pytest",
+        "cookiecutter"
+      ]
+    },
+    {
       "name": "spinup-ts",
       "description": "Scaffold and maintain production-ready TypeScript projects — the cookiecutter-uv equivalent for the TypeScript ecosystem. Includes /new and /update commands plus a skill covering interactive and agent-driven scaffold flows.",
       "source": {
