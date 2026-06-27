@@ -31,6 +31,7 @@ claude plugin install mcp-exec
 | [gstack](https://github.com/joeblackwaslike/gstack) | Garry Tan's 47-skill workflow suite (ship, review, qa, browse, and more) | Productivity |
 | [agent-skills](https://github.com/joeblackwaslike/agent-skills) | Joe Black's custom skills for agentic development and Claude Code plugin dev | Productivity |
 | [anti-compact](https://github.com/joeblackwaslike/anti-compact) | Structured session handoff instead of lossy context compaction | Productivity |
+| [cc-recall](https://github.com/joeblackwaslike/cc-recall) | Make every session discoverable — indexes transcripts into a FTS5 sidecar with auto-capture hooks | Memory |
 | [memtree](https://github.com/joeblackwaslike/memtree) | Persistent SQLite graph store for codebase navigation and cross-session recall | Memory |
 
 ## Codex CLI

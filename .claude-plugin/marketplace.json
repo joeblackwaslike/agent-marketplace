@@ -184,6 +184,26 @@
         "vitest",
         "docusaurus"
       ]
+    },
+    {
+      "name": "cc-recall",
+      "version": "0.1.0",
+      "description": "Make every Claude Code session discoverable by what was done, asked, and questioned. Indexes transcripts into a sidecar SQLite store with heuristic and LLM-powered synthesis. Includes SessionEnd hook for forward capture and UserPromptSubmit hook for search reminders.",
+      "source": {
+        "source": "github",
+        "repo": "joeblackwaslike/cc-recall"
+      },
+      "category": "memory",
+      "keywords": [
+        "recall",
+        "sessions",
+        "transcripts",
+        "search",
+        "memory",
+        "indexing",
+        "discoverability",
+        "hooks"
+      ]
     }
   ]
 }
