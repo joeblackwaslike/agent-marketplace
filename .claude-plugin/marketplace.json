@@ -28,7 +28,7 @@
     },
     {
       "name": "mcp-exec",
-      "description": "Sandboxed code execution MCP server \u2014 keep intermediate results out of the context window.",
+      "description": "Reference implementation of Anthropic's Code execution with MCP — reuses Claude Code's own sandbox to keep intermediate tool output out of the context window on every workflow. Up to 99% fewer tokens.",
       "source": {
         "source": "url",
         "url": "https://github.com/joeblackwaslike/mcp-exec.git"
@@ -78,23 +78,6 @@
       ]
     },
     {
-      "name": "personal-agent-skills",
-      "description": "Joe Black's private skills — stack preferences, marketplace publishing, Obsidian vault, Serena code intelligence, Pi cluster operations, design systems, and AI brand/content workflows.",
-      "source": {
-        "source": "github",
-        "repo": "joeblackwaslike/personal-agent-skills"
-      },
-      "category": "productivity",
-      "keywords": [
-        "skills",
-        "design-system",
-        "stack-preferences",
-        "obsidian",
-        "content-strategy",
-        "personal"
-      ]
-    },
-    {
       "name": "anti-compact",
       "description": "Intercepts /compact and generates a structured session handoff instead of lossy compaction. Preserves critical decision context that would otherwise be lost during Claude Code's automatic context compaction.",
       "source": {
@@ -132,7 +115,7 @@
     },
     {
       "name": "ai-review-bot",
-      "description": "GitHub App that runs AI-powered PR reviews on every pull request. Pluggable provider support — Claude, GPT, and more. Configurable review depth, inline comments, and summary reports.",
+      "description": "Autonomous multi-agent PR reviewer — coordinates with other AI review bots to avoid duplication, runs 5+ specialized sub-agents, and self-improves through the full review → re-review → approve loop.",
       "source": {
         "source": "github",
         "repo": "joeblackwaslike/ai-review-bot"

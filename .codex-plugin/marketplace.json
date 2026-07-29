@@ -12,7 +12,7 @@
   "plugins": [
     {
       "name": "mcp-exec",
-      "description": "Sandboxed code execution MCP server — keep intermediate results out of the context window.",
+      "description": "Reference implementation of Anthropic's Code execution with MCP — reuses Claude Code's own sandbox to keep intermediate tool output out of the context window on every workflow. Up to 99% fewer tokens.",
       "source": {
         "source": "url",
         "url": "https://github.com/joeblackwaslike/mcp-exec.git"
@@ -40,23 +40,6 @@
         "agentic",
         "multi-provider",
         "codex"
-      ]
-    },
-    {
-      "name": "personal-agent-skills",
-      "description": "Joe Black's private skills — stack preferences, marketplace publishing, Obsidian vault, Serena code intelligence, Pi cluster operations, design systems, and AI brand/content workflows.",
-      "source": {
-        "source": "github",
-        "repo": "joeblackwaslike/personal-agent-skills"
-      },
-      "category": "productivity",
-      "keywords": [
-        "skills",
-        "design-system",
-        "stack-preferences",
-        "obsidian",
-        "content-strategy",
-        "personal"
       ]
     },
     {

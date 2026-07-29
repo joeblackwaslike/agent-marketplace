@@ -808,3 +808,42 @@ footer.site-footer {
   .connect-grid { grid-template-columns: 1fr; }
   .hero-ctas { flex-direction: column; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PROJECTS — filters, tags, stars, deep catalog (data-driven)
+   ═══════════════════════════════════════════════════════════════════════ */
+.project-filters { margin-bottom: 22px; }
+
+.project-head { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
+.project-stars {
+  font-family: var(--font-mono); font-size: 11px; font-weight: var(--w-medium);
+  color: var(--accent); background: var(--accent-soft);
+  border: 1px solid var(--accent-line); border-radius: var(--r-pill);
+  padding: 2px 8px; line-height: 1.4; white-space: nowrap; flex-shrink: 0;
+}
+.project-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.03em;
+  color: var(--fg-3); background: var(--surface-2);
+  border: 1px solid var(--line); border-radius: var(--r-pill);
+  padding: 2px 8px; line-height: 1.5; cursor: pointer;
+  transition: color var(--dur-fast), border-color var(--dur-fast), background var(--dur-fast);
+}
+.tag:hover { color: var(--accent); border-color: var(--accent-line); }
+.tag--domain { color: var(--fg-2); }
+.tag--plugin { color: var(--accent); border-color: var(--accent-line); background: var(--accent-soft); }
+
+.deep-catalog { margin-top: 26px; }
+.deep-toggle {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 13px; color: var(--fg-2);
+  background: var(--surface-1); border: 1px dashed var(--line-strong);
+  border-radius: var(--r-md); padding: 13px 18px; cursor: pointer;
+  transition: color var(--dur), border-color var(--dur);
+}
+.deep-toggle:hover { color: var(--accent); border-color: var(--accent-line); }
+.deep-toggle-label { flex: 1; text-align: left; }
+.deep-count { color: var(--fg-4); }
+.deep-chevron { transition: transform var(--dur); }
+.deep-catalog.open .deep-chevron { transform: rotate(180deg); }
+.deep-grid { margin-top: 16px; }

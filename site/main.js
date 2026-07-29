@@ -1,4 +1,8 @@
-import { getCategories, applyFilter, renderPluginCard, renderFilterPills } from './catalog.js';
+import {
+  getCategories, applyFilter, renderPluginCard, renderFilterPills,
+  renderProjectCard, renderDomainPills, projectMatches,
+} from './catalog.js';
+import { PROJECTS, allDomains } from './projects.js';
 
 const MARKETPLACE_URL =
   import.meta.env.VITE_MARKETPLACE_URL ||
@@ -186,11 +190,77 @@ async function initPlugins() {
   }
 }
 
+// ── Projects ───────────────────────────────────────────────────────────────
+
+function initProjects() {
+  const filtersEl = document.getElementById('project-filters');
+  const gridEl = document.getElementById('projects-grid');
+  const deepEl = document.getElementById('projects-grid-deep');
+  const deepWrap = document.querySelector('.deep-catalog');
+  const deepToggle = document.getElementById('deep-toggle');
+  const deepCount = document.getElementById('deep-count');
+  if (!gridEl) return;
+
+  const featured = PROJECTS.filter(p => p.tier === 'featured');
+  const deep = PROJECTS.filter(p => p.tier === 'deep');
+  const domains = allDomains(PROJECTS);
+  let filter = { kind: 'all' };
+  let deepOpen = false;
+
+  function paint(el, list) {
+    if (!el) return;
+    el.innerHTML = list.map(renderProjectCard).join('');
+    requestAnimationFrame(() => {
+      el.querySelectorAll('.project-card').forEach(c => c.classList.add('in'));
+    });
+  }
+
+  function setDeep(open) {
+    deepOpen = open;
+    if (deepEl) deepEl.hidden = !open;
+    if (deepToggle) deepToggle.setAttribute('aria-expanded', String(open));
+    if (deepWrap) deepWrap.classList.toggle('open', open);
+  }
+
+  function render() {
+    if (filtersEl) filtersEl.innerHTML = renderDomainPills(domains, filter);
+    const f = featured.filter(p => projectMatches(p, filter));
+    const d = deep.filter(p => projectMatches(p, filter));
+    paint(gridEl, f);
+    paint(deepEl, d);
+    if (deepCount) deepCount.textContent = `(${d.length})`;
+    if (deepWrap) deepWrap.hidden = d.length === 0;
+    setDeep(filter.kind !== 'all' ? d.length > 0 : deepOpen);
+  }
+
+  function applyFacet(kind, value) {
+    filter = kind === 'all' ? { kind: 'all' } : { kind, value };
+    render();
+  }
+
+  filtersEl?.addEventListener('click', e => {
+    const btn = e.target.closest('[data-kind]');
+    if (btn) applyFacet(btn.dataset.kind, btn.dataset.value);
+  });
+
+  [gridEl, deepEl].forEach(g => g?.addEventListener('click', e => {
+    const tag = e.target.closest('.tag[data-kind]');
+    if (!tag) return;
+    e.preventDefault();
+    applyFacet(tag.dataset.kind, tag.dataset.value);
+  }));
+
+  deepToggle?.addEventListener('click', () => setDeep(!deepOpen));
+
+  render();
+}
+
 // ── Init ───────────────────────────────────────────────────────────────────
 
 function init() {
   initTheme();
   initPlugins();
+  initProjects();
   // Defer reveal so elements are painted first
   requestAnimationFrame(() => {
     setTimeout(initReveal, 100);
