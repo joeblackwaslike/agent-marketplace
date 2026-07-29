@@ -56,3 +56,5 @@
 sync.remote: "git+https://github.com/joeblackwaslike/agent-marketplace.git"
 # Use the shared Dolt server (port 3308) for all projects (prevents per-project drift).
 dolt.shared-server: true
+
+export.auto: true

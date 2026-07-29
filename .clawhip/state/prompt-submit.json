@@ -1,0 +1,8 @@
+{
+  "observed_at": "2026-07-29T21:45:10.776Z",
+  "provider": "claude-code",
+  "event_name": "UserPromptSubmit",
+  "session_id": "78fe12c5-1c32-4d59-8ec5-6e257d4e6bd9",
+  "turn_id": null,
+  "prompt_summary": "You are indexing a Claude Code session transcript so it can be found later by what\nwas DONE, ASKED, and QUESTIONED. Read the digest and reply with ONLY a JSON object\n(no prose, no code fences) of this…"
+}

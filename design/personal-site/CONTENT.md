@@ -107,10 +107,10 @@ Each card contains:
    Keywords: memory, context, mcp, recall, sqlite, embeddings, knowledge-graph, agent-memory
    Source: github.com/joeblackwaslike/memtree
 
-7. **create-ts-project** — Category: productivity
+7. **spinup-ts** — Category: productivity
    Description: Scaffold and maintain production-ready TypeScript projects — the cookiecutter-uv equivalent for the TypeScript ecosystem. Includes /new and /update commands plus a skill covering interactive and agent-driven scaffold flows.
    Keywords: typescript, scaffold, cli, template, biome, eslint, vitest, docusaurus
-   Source: github.com/joeblackwaslike/create-ts-project
+   Source: github.com/joeblackwaslike/spinup-ts
 
 ### Codex CLI plugins (4)
 
@@ -152,7 +152,7 @@ Grid of project cards, each with: icon, name, language/tech, description, GitHub
 **AI / Agentic**
 1. 🤖 ai-review-bot — TypeScript — "GitHub App that runs AI-powered PR reviews on every pull request. Pluggable provider support — Claude, GPT, and more."
 2. 🏠 ai-listings — TypeScript · Next.js 15 — "AI-powered listing platform. Semantic search, enrichment, and structured data extraction for property listings."
-3. 🏗️ create-ts-project — TypeScript — "Scaffold and maintain production-ready TypeScript projects. Available as a Claude Code & Codex plugin."
+3. 🏗️ spinup-ts — TypeScript — "Scaffold and maintain production-ready TypeScript projects. Available as a Claude Code & Codex plugin."
 4. 🔬 agent-improvement — TypeScript — "Tooling for systematic AI agent improvement — captures failure modes, structures them as indexed lessons, and feeds them back into agent prompts."
 5. 🧠 lessons-learned — Claude Code Plugin — "Automatic mistake capture and proactive lesson injection for AI coding agents."
 6. ⚙️ mcp-exec — Claude Code & Codex Plugin — "Sandboxed code execution MCP server — keeps intermediate results out of the context window so agents can run code without burning tokens."
