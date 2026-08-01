@@ -1,11 +1,13 @@
 # Agent Marketplace
 
-[![Discord](https://img.shields.io/discord/1486035859747897414?logo=discord&label=Discord&color=5865F2)](https://discord.com/channels/1486035859747897414/1509515233595752538) [![Join Discord](https://img.shields.io/badge/Discord-Join%20Server-5865F2?logo=discord&logoColor=white)](https://discord.gg/Fjc9zYHZyV)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Plugins](https://img.shields.io/badge/plugins-10-blue)](#claude-code-plugins)
+[![Discord](https://img.shields.io/discord/1486035859747897414?logo=discord&label=Discord&color=5865F2)](https://discord.gg/Fjc9zYHZyV)
 
 
 > A plugin marketplace for Claude Code and Codex CLI, by [Joe Black](https://github.com/joeblackwaslike).
 
-**[Browse Plugins →](https://joeblackwaslike.github.io/agent-marketplace)**
+**[Browse Plugins →](https://ai.joeblack.nyc/)**
 
 ## Claude Code
 
@@ -31,8 +33,11 @@ claude plugin install mcp-exec
 | [gstack](https://github.com/joeblackwaslike/gstack) | Garry Tan's 47-skill workflow suite (ship, review, qa, browse, and more) | Productivity |
 | [agent-skills](https://github.com/joeblackwaslike/agent-skills) | Joe Black's custom skills for agentic development and Claude Code plugin dev | Productivity |
 | [anti-compact](https://github.com/joeblackwaslike/anti-compact) | Structured session handoff instead of lossy context compaction | Productivity |
+| [ai-review-bot](https://github.com/joeblackwaslike/ai-review-bot) | Autonomous multi-agent PR reviewer — coordinates with other review bots, runs 5+ sub-agents, self-improves | Productivity |
+| [spinup-py](https://github.com/joeblackwaslike/spinup-py) | Scaffold and maintain production-ready Python projects — uv, ruff, mypy, pytest, CI, docs | Productivity |
+| [spinup-ts](https://github.com/joeblackwaslike/spinup-ts) | Scaffold and maintain production-ready TypeScript projects — the same treatment for the TS ecosystem | Productivity |
 | [cc-recall](https://github.com/joeblackwaslike/cc-recall) | Make every session discoverable — indexes transcripts into a FTS5 sidecar with auto-capture hooks | Memory |
-| [memtree](https://github.com/joeblackwaslike/memtree) | Persistent SQLite graph store for codebase navigation and cross-session recall | Memory |
+| [ctx-tree](https://github.com/joeblackwaslike/ctx-tree) | Persistent context graph — symbol-chunks files and returns compact references instead of full payloads | Memory |
 
 ## Codex CLI
 
@@ -46,7 +51,7 @@ Then install individual plugins:
 
 ```bash
 codex plugin install mcp-exec
-codex plugin install memtree
+codex plugin install ctx-tree
 ```
 
 ### Codex CLI Plugins
@@ -56,7 +61,7 @@ MCP-server plugins that work with any agent CLI supporting the Model Context Pro
 | Plugin | Description | Category |
 |--------|-------------|----------|
 | [mcp-exec](https://github.com/joeblackwaslike/mcp-exec) | Sandboxed code execution MCP server — keep intermediate results out of the context window | Execution |
-| [memtree](https://github.com/joeblackwaslike/memtree) | Persistent SQLite graph store for codebase navigation and cross-session recall | Memory |
+| [ctx-tree](https://github.com/joeblackwaslike/ctx-tree) | Persistent context graph — symbol-chunks files and returns compact references instead of full payloads | Memory |
 
 ## Nursery
 
