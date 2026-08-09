@@ -141,8 +141,11 @@ articles before getting around to running it — is safe: it only ever acts on g
 ## Error Handling
 
 - **No ready articles / no gaps** — `sync` reports "nothing to do" and exits 0.
-- **Claude API failure** — fail loudly with a retry prompt; never publish an empty or placeholder
-  caption.
+- **Claude API failure** — fail loudly (aborts the run rather than publishing an empty or
+  placeholder caption); no interactive retry prompt in v1 — re-running `sync` is the retry
+  mechanism, since the pipeline is idempotent and only ever acts on genuinely missing gaps. An
+  in-run retry prompt was considered during implementation and deferred as unnecessary complexity
+  for a personal, single-operator tool where re-running the command is just as fast.
 - **dev.to API failure** — fail loudly, leave `syndication.devto.status` as `pending`; safe to retry
   on the next run.
 - **Clipboard unavailable** (headless/SSH) — catch and print the text instead, so the run is still
