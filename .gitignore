@@ -22,3 +22,6 @@ nursery/**/*.egg-info/
 .beads-credential-key
 
 docs/_backlog.md
+
+# Git worktrees
+.worktrees/
