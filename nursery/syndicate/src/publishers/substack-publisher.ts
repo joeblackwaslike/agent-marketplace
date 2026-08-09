@@ -6,8 +6,9 @@ export function createSubstackPublisher(promptForUrl: UrlPrompt): Publisher {
   return {
     platform: 'substack',
     async publish(input: PublishInput): Promise<PublishResult> {
-      console.log(`Paste "${input.articleTitle}" into a new Substack post and publish it.`);
-      const url = await promptForUrl('Paste the resulting Substack URL:');
+      const url = await promptForUrl(
+        `Paste "${input.articleTitle}" into a new Substack post, publish it, then paste the resulting URL:`,
+      );
       return { status: 'synced', url };
     },
   };
