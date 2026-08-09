@@ -20,6 +20,7 @@ export default tseslint.config(
       },
     },
     rules: {
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/no-misused-promises': [
         'error',
@@ -48,6 +49,7 @@ export default tseslint.config(
       'sonarjs/no-duplicate-string': ['error', { threshold: 3 }],
       'max-lines-per-function': [
         'warn',
+        // biome-ignore lint/style/useNamingConvention: `IIFEs` is ESLint's own rule-option key
         { max: 80, skipBlankLines: true, skipComments: true, IIFEs: true },
       ],
       'max-lines': ['warn', { max: 400, skipBlankLines: true, skipComments: true }],
