@@ -1,0 +1,45 @@
+export type DevtoPublishInput = {
+  title: string;
+  bodyMarkdown: string;
+  canonicalUrl: string;
+  tags: string[];
+};
+
+export type DevtoPostClient = {
+  createArticle: (input: DevtoPublishInput) => Promise<{ url: string }>;
+};
+
+export async function publishToDevto(
+  client: DevtoPostClient,
+  input: DevtoPublishInput,
+): Promise<string> {
+  const result = await client.createArticle(input);
+  return result.url;
+}
+
+export function createDevtoPostClient(apiKey: string): DevtoPostClient {
+  return {
+    async createArticle(input) {
+      const response = await fetch('https://dev.to/api/articles', {
+        method: 'POST',
+        headers: { 'api-key': apiKey, 'content-type': 'application/json' },
+        body: JSON.stringify({
+          article: {
+            title: input.title,
+            // biome-ignore lint/style/useNamingConvention: dev.to API request field
+            body_markdown: input.bodyMarkdown,
+            published: true,
+            // biome-ignore lint/style/useNamingConvention: dev.to API request field
+            canonical_url: input.canonicalUrl,
+            tags: input.tags,
+          },
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`dev.to publish failed: ${response.status}`);
+      }
+      const data = (await response.json()) as { url: string };
+      return { url: data.url };
+    },
+  };
+}
