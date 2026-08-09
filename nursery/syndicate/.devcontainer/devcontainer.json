@@ -1,0 +1,106 @@
+{
+  "name": "syndicate",
+  "image": "ghcr.io/joeblackwaslike/devcontainer:latest",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "enableNonRootDocker": "true",
+      "moby": false
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Anthropic.claude-code",
+        "alefragnani.Bookmarks",
+        "antfu.browse-lite",
+        "biomejs.biome",
+        "christian-kohler.npm-intellisense",
+        "DavidAnson.vscode-markdownlint",
+        "dbaeumer.vscode-eslint",
+        "denoland.vscode-deno",
+        "donjayamanne.githistory",
+        "EditorConfig.EditorConfig",
+        "esbenp.prettier-vscode",
+        "github.vscode-github-actions",
+        "GitHub.vscode-pull-request-github",
+        "golang.go",
+        "Jacano.vscode-pnpm",
+        "mhutchie.git-graph",
+        "ms-azuretools.vscode-containers",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-vscode.makefile-tools",
+        "ms-vscode.vscode-typescript-next",
+        "ms-vscode-remote.remote-containers",
+        "oven.bun-vscode",
+        "reduckted.vscode-gitweblinks",
+        "remcohaszing.schemastore",
+        "rust-lang.rust-analyzer",
+        "sst-dev.opencode",
+        "Supabase.vscode-supabase-extension",
+        "tamasfe.even-better-toml",
+        "bradlc.vscode-tailwindcss",
+        "antfu.vite",
+        "bierner.markdown-checkbox",
+        "bierner.markdown-emoji",
+        "bierner.markdown-preview-github-styles",
+        "wilsonsio.color-vision",
+        "yoavbls.pretty-ts-errors"
+      ]
+    }
+  },
+  "mounts": [
+    // Claude Code config (writable — Claude writes sessions, memory, cache)
+    "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached",
+    // OpenAI Codex CLI
+    "source=${localEnv:HOME}/.cpdex,target=/home/vscode/.codex,type=bind,consistency=cached",
+    // Skills + agents (read-only — managed in ~/.agents on host)
+    "source=${localEnv:HOME}/.agents,target=/home/vscode/.agents,type=bind,readonly,consistency=cached",
+    // Shell / git identity (read-only)
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,readonly,consistency=cached",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,readonly,consistency=cached",
+    // GitHub CLI auth (read-only)
+    "source=${localEnv:HOME}/.config/gh,target=/home/vscode/.config/gh,type=bind,readonly,consistency=cached",
+    // Local repos (read-only) — makes MCP server paths from settings.json resolve
+    // via the /Users/joe → /home/vscode symlink added in the Dockerfile
+    "source=${localEnv:HOME}/github/joeblackwaslike,target=/home/vscode/github/joeblackwaslike,type=bind,readonly,consistency=cached",
+    // opencode (read-only — managed on host)
+    "source=${localEnv:HOME}/.config/opencode,target=/home/vscode/.config/opencode,type=bind,readonly,consistency=cached",
+    "source=${localEnv:HOME}/.local/share/opencode,target=/home/vscode/.local/share/opencode,type=bind,readonly,consistency=cached",
+    // Gemini CLI (writable — writes session history, settings, state)
+    "source=${localEnv:HOME}/.gemini,target=/home/vscode/.gemini,type=bind,consistency=cached",
+    // openclaw identity + workspace (writable — writes credentials, logs, workspace state)
+    "source=${localEnv:HOME}/.openclaw,target=/home/vscode/.openclaw,type=bind,consistency=cached",
+    // Docker socket (OrbStack on macOS)
+    "source=${localEnv:HOME}/.orbstack/run/docker.sock,target=/var/run/docker.sock,type=bind,consistency=cached"
+  ],
+  "remoteEnv": {
+    // Anthropic / Claude
+    "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}",
+    "ANTHROPIC_MODEL": "${localEnv:ANTHROPIC_MODEL}",
+    "ANTHROPIC_SMALL_FAST_MODEL": "${localEnv:ANTHROPIC_SMALL_FAST_MODEL}",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "ENABLE_EXPERIMENTAL_MCP_CLI": "true",
+    // OpenAI / Codex
+    "OPENAI_API_KEY": "${localEnv:OPENAI_API_KEY}",
+    "OPENAI_ORG_ID": "${localEnv:OPENAI_ORG_ID}",
+    // 1Password CLI — no mountable socket on this host; use service account token instead.
+    // Generate one at https://developer.1password.com/docs/service-accounts/
+    // then export OP_SERVICE_ACCOUNT_TOKEN in your shell before opening the container.
+    "OP_SERVICE_ACCOUNT_TOKEN": "${localEnv:OP_SERVICE_ACCOUNT_TOKEN}",
+    // MCP server API keys
+    "CONTEXT7_API_KEY": "${localEnv:CONTEXT7_API_KEY}",
+    "EXA_API_KEY": "${localEnv:EXA_API_KEY}",
+    "TAVILY_API_KEY": "${localEnv:TAVILY_API_KEY}",
+    "FIRECRAWL_API_KEY": "${localEnv:FIRECRAWL_API_KEY}",
+    "PERPLEXITY_API_KEY": "${localEnv:PERPLEXITY_API_KEY}",
+    "BRAVE_API_KEY": "${localEnv:BRAVE_API_KEY}",
+    "REF_API_KEY": "${localEnv:REF_API_KEY}",
+    // opencode
+    "OPENCODE_AGENT_SKILLS_SUPERPOWERS_MODE": "true"
+  },
+  "postCreateCommand": "/usr/local/share/devcontainer/scripts/setup.sh",
+  "postAttachCommand": "/usr/local/share/devcontainer/scripts/discover-deps.sh"
+}

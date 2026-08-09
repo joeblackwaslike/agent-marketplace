@@ -1,0 +1,25 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.DS_Store
+.env
+.env.local
+.env.*.local
+.cache/
+.turbo/
+
+# Docusaurus generated files
+docs/api/
+.docusaurus/
+build/
+
+# Personal scratchpad (not for version control)
+docs/backlog.md
+docs/handoff.md
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key
+.beads/proxieddb/

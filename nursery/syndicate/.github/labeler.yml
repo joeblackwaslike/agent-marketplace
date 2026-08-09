@@ -1,0 +1,17 @@
+docs:
+  - docs/**
+  - '**/*.md'
+
+ci:
+  - .github/**
+
+tests:
+  - src/**/*.test.ts
+  - src/**/*.spec.ts
+
+dependencies:
+  - package.json
+  - pnpm-lock.yaml
+
+source:
+  - src/**

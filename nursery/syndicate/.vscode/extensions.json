@@ -1,0 +1,19 @@
+{
+  "recommendations": [
+    "Anthropic.claude-code",
+    "biomejs.biome",
+    "christian-kohler.npm-intellisense",
+    "DavidAnson.vscode-markdownlint",
+    "dbaeumer.vscode-eslint",
+    "EditorConfig.EditorConfig",
+    "github.vscode-github-actions",
+    "GitHub.vscode-pull-request-github",
+    "Jacano.vscode-pnpm",
+    "mhutchie.git-graph",
+    "ms-azuretools.vscode-containers",
+    "ms-vscode-remote.remote-containers",
+    "ms-vscode.vscode-typescript-next",
+    "remcohaszing.schemastore",
+    "yoavbls.pretty-ts-errors"
+  ]
+}

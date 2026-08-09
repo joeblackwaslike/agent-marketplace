@@ -1,0 +1,88 @@
+{
+  "name": "syndicate",
+  "version": "0.1.0",
+  "description": "",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "lint": "biome ci . && eslint . --max-warnings=0",
+    "lint:fix": "biome check --write . && eslint --fix .",
+    "format": "biome format --write .",
+    "typecheck": "tsc --noEmit",
+    "check": "pnpm typecheck && pnpm lint",
+    "commit": "cz",
+    "depcheck": "depcheck",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^3.0.0",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "depcheck": "^1.4.7",
+    "eslint": "^9.28.0",
+    "eslint-plugin-import-x": "^4.12.2",
+    "eslint-plugin-no-secrets": "^1.1.2",
+    "eslint-plugin-sonarjs": "^3.0.2",
+    "eslint-plugin-unicorn": "^56.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "vitest": "^3.0.0"
+  },
+  "author": "Joe Black <me@joeblack.nyc>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-handle/syndicate.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["@biomejs/biome", "core-js", "esbuild", "unrs-resolver"]
+  },
+  "depcheck": {
+    "ignores": ["react", "react-dom", "@docusaurus/types"]
+  },
+  "packageManager": "pnpm@11.0.8",
+  "lint-staged": {
+    "*.{ts,js,json,md}": [
+      "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+    ],
+    "*.ts": ["eslint --fix --max-warnings=0 --no-warn-ignored"]
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.36",
+    "@inquirer/prompts": "^8.5.2",
+    "ai": "^7.0.58",
+    "clipboardy": "^5.3.2",
+    "commander": "^15.0.0",
+    "fast-glob": "^3.3.3",
+    "gray-matter": "^4.0.3",
+    "zod": "^4.4.3"
+  }
+}
