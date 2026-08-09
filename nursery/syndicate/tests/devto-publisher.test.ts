@@ -1,5 +1,9 @@
-import { describe, expect, it, vi } from 'vitest';
-import { type DevtoPostClient, publishToDevto } from '../src/devto-publisher.js';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import {
+  type DevtoPostClient,
+  createDevtoPostClient,
+  publishToDevto,
+} from '../src/devto-publisher.js';
 
 describe('publishToDevto', () => {
   it('passes canonical_url, tags, and markdown body through to the client', async () => {
@@ -20,5 +24,68 @@ describe('publishToDevto', () => {
       canonicalUrl: 'https://sub.example.com/p/new',
       tags: ['ai', 'agents'],
     });
+  });
+});
+
+describe('createDevtoPostClient', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('POSTs the article payload and parses the URL from a successful response', async () => {
+    const fetchMock = vi.fn(async () => Response.json({ url: 'https://dev.to/joe/new' }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const client = createDevtoPostClient('secret-key');
+    const result = await client.createArticle({
+      title: 'New Post',
+      bodyMarkdown: '# body',
+      canonicalUrl: 'https://sub.example.com/p/new',
+      tags: ['ai', 'agents'],
+    });
+
+    expect(result).toEqual({ url: 'https://dev.to/joe/new' });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    expect(url).toBe('https://dev.to/api/articles');
+    expect(init.method).toBe('POST');
+    expect((init.headers as Record<string, string>)['api-key']).toBe('secret-key');
+    const body = JSON.parse(init.body as string) as {
+      article: Record<string, unknown>;
+    };
+    expect(body.article.title).toBe('New Post');
+    expect(body.article.body_markdown).toBe('# body');
+    expect(body.article.canonical_url).toBe('https://sub.example.com/p/new');
+    expect(body.article.tags).toEqual(['ai', 'agents']);
+  });
+
+  it('throws an error that includes the response body when the publish request fails', async () => {
+    const fetchMock = vi.fn(
+      async () =>
+        new Response('{"error":"title is required","status":422}', {
+          status: 422,
+          statusText: 'Unprocessable Entity',
+        }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const client = createDevtoPostClient('secret-key');
+
+    await expect(
+      client.createArticle({
+        title: '',
+        bodyMarkdown: '# body',
+        canonicalUrl: 'https://sub.example.com/p/new',
+        tags: [],
+      }),
+    ).rejects.toThrow(/422/);
+    await expect(
+      client.createArticle({
+        title: '',
+        bodyMarkdown: '# body',
+        canonicalUrl: 'https://sub.example.com/p/new',
+        tags: [],
+      }),
+    ).rejects.toThrow(/title is required/);
   });
 });

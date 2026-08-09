@@ -17,6 +17,14 @@ export async function publishToDevto(
   return result.url;
 }
 
+async function readErrorDetail(response: Response): Promise<string> {
+  try {
+    return await response.text();
+  } catch {
+    return '';
+  }
+}
+
 export function createDevtoPostClient(apiKey: string): DevtoPostClient {
   return {
     async createArticle(input) {
@@ -36,7 +44,9 @@ export function createDevtoPostClient(apiKey: string): DevtoPostClient {
         }),
       });
       if (!response.ok) {
-        throw new Error(`dev.to publish failed: ${response.status}`);
+        const detail = await readErrorDetail(response);
+        const suffix = detail ? ` — ${detail}` : '';
+        throw new Error(`dev.to publish failed: ${response.status}${suffix}`);
       }
       const data = (await response.json()) as { url: string };
       return { url: data.url };

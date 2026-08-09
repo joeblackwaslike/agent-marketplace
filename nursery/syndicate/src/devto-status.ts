@@ -17,14 +17,29 @@ export async function isArticleOnDevto(
   return match ? match.url : null;
 }
 
+const DEVTO_MAX_PER_PAGE = 1000;
+
+async function readErrorDetail(response: Response): Promise<string> {
+  try {
+    return await response.text();
+  } catch {
+    return '';
+  }
+}
+
 export function createDevtoClient(apiKey: string): DevtoClient {
   return {
     async listMyArticles() {
-      const response = await fetch('https://dev.to/api/articles/me', {
-        headers: { 'api-key': apiKey },
-      });
+      const response = await fetch(
+        `https://dev.to/api/articles/me?per_page=${DEVTO_MAX_PER_PAGE}`,
+        {
+          headers: { 'api-key': apiKey },
+        },
+      );
       if (!response.ok) {
-        throw new Error(`dev.to API error: ${response.status}`);
+        const detail = await readErrorDetail(response);
+        const suffix = detail ? ` — ${detail}` : '';
+        throw new Error(`dev.to API error: ${response.status}${suffix}`);
       }
       return (await response.json()) as DevtoArticleSummary[];
     },
