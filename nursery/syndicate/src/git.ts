@@ -16,6 +16,6 @@ export async function commitAndPush(
   gitExec: GitExec = runGit,
 ): Promise<void> {
   await gitExec(['add', ...paths], cwd);
-  await gitExec(['commit', '-m', message], cwd);
+  await gitExec(['commit', '-m', message, '--', ...paths], cwd);
   await gitExec(['push'], cwd);
 }

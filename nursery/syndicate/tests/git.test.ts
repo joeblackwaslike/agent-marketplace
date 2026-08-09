@@ -10,7 +10,11 @@ describe('commitAndPush', () => {
 
     await commitAndPush(['a.md', 'b.html'], 'chore: sync', '/repo', gitExec);
 
-    expect(calls).toEqual([['add', 'a.md', 'b.html'], ['commit', '-m', 'chore: sync'], ['push']]);
+    expect(calls).toEqual([
+      ['add', 'a.md', 'b.html'],
+      ['commit', '-m', 'chore: sync', '--', 'a.md', 'b.html'],
+      ['push'],
+    ]);
     expect(gitExec).toHaveBeenCalledTimes(3);
   });
 });

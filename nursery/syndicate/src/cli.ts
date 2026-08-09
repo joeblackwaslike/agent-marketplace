@@ -80,9 +80,17 @@ export async function runSync(repoRoot: string): Promise<void> {
   const changedFiles: string[] = [];
 
   for (const article of articles) {
-    const changed = await syncSingleArticle(article, context);
-    if (changed) {
-      changedFiles.push(article.filePath, siteIndexPath);
+    try {
+      const changed = await syncSingleArticle(article, context);
+      if (changed) {
+        changedFiles.push(article.filePath, siteIndexPath);
+      }
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new Error(
+        `Failed syncing "${article.filePath}": ${detail}. Earlier articles in this run may have local changes not yet committed/pushed — check git status.`,
+        { cause: error },
+      );
     }
   }
 
