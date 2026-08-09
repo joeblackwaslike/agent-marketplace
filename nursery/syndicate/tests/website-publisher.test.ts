@@ -32,6 +32,20 @@ describe('insertWritingCard', () => {
     expect(result).toContain('&lt;tags&gt;');
   });
 
+  it('HTML-escapes quotes and apostrophes, including a quote-injection attempt in url', () => {
+    const result = insertWritingCard(BASE_HTML, {
+      tag: 'AI Agents',
+      title: 'It\'s a "great" post',
+      url: 'https://sub.example.com/p/x?a="onclick="alert(1)',
+      readTime: 1,
+    });
+
+    expect(result).toContain('&quot;');
+    expect(result).toContain('&#39;');
+    expect(result).not.toContain('"onclick="alert(1)');
+    expect(result).toContain('href="https://sub.example.com/p/x?a=&quot;onclick=&quot;alert(1)"');
+  });
+
   it('throws when the writing-list marker is missing', () => {
     expect(() =>
       insertWritingCard('<div>no marker</div>', {
