@@ -4,7 +4,7 @@ import { pathToFileURL } from 'node:url';
 import { input } from '@inquirer/prompts';
 import { Command } from 'commander';
 import { type EditPrompt, createInquirerEditPrompt } from './approve.js';
-import { loadConfig } from './config.js';
+import { loadConfig, loadDotEnv } from './config.js';
 import { type DevtoPostClient, createDevtoPostClient } from './devto-publisher.js';
 import { type DevtoClient, createDevtoClient, isArticleOnDevto } from './devto-status.js';
 import { type DraftModel, createClaudeDraftModel } from './draft.js';
@@ -180,6 +180,8 @@ function isMainModule(): boolean {
 }
 
 async function main(): Promise<void> {
+  loadDotEnv();
+
   const program = new Command();
 
   program
