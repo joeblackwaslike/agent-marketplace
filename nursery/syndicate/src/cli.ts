@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { realpathSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { input } from '@inquirer/prompts';
 import { Command } from 'commander';
@@ -174,7 +175,8 @@ export async function runBaseline(repoRoot: string, filePath: string): Promise<v
 
 function isMainModule(): boolean {
   const entryPoint = process.argv[1];
-  return entryPoint !== undefined && import.meta.url === pathToFileURL(entryPoint).href;
+  if (entryPoint === undefined) return false;
+  return import.meta.url === pathToFileURL(realpathSync(entryPoint)).href;
 }
 
 async function main(): Promise<void> {
