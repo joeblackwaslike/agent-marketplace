@@ -13,7 +13,9 @@ export function createClipboardPublisher(
     async publish(input: PublishInput): Promise<PublishResult> {
       const text = input.caption ?? input.articleUrl;
       await clipboardWrite(text);
-      await confirm(`Paste into ${platform} now, then press Enter to confirm.`);
+      await confirm(
+        `Copied to clipboard — paste into ${platform} now, then press Enter to confirm:\n\n${text}\n`,
+      );
       return { status: 'synced' };
     },
   };

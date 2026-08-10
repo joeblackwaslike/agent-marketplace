@@ -15,6 +15,7 @@ describe('createClipboardPublisher', () => {
 
     expect(clipboardWrite).toHaveBeenCalledWith('One sharp line.');
     expect(confirm).toHaveBeenCalledOnce();
+    expect(confirm).toHaveBeenCalledWith(expect.stringContaining('One sharp line.'));
     expect(result).toEqual({ status: 'synced' });
   });
 

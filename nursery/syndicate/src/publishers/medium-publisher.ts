@@ -10,7 +10,7 @@ export function createMediumPublisher(
     async publish(input: PublishInput): Promise<PublishResult> {
       await clipboardWrite(input.articleUrl);
       await confirm(
-        'Paste this URL into medium.com/p/import, publish, then press Enter to confirm.',
+        `Copied to clipboard — paste this URL into medium.com/p/import, publish, then press Enter to confirm:\n\n${input.articleUrl}\n`,
       );
       return { status: 'synced' };
     },

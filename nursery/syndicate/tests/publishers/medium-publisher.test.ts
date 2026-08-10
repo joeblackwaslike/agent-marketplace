@@ -15,6 +15,7 @@ describe('createMediumPublisher', () => {
 
     expect(clipboardWrite).toHaveBeenCalledWith('https://sub.example.com/p/x');
     expect(confirm).toHaveBeenCalledOnce();
+    expect(confirm).toHaveBeenCalledWith(expect.stringContaining('https://sub.example.com/p/x'));
     expect(result).toEqual({ status: 'synced' });
   });
 });
