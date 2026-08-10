@@ -5,7 +5,8 @@ describe('createMediumPublisher', () => {
   it('always copies the article URL, even if a caption is present, and confirms', async () => {
     const clipboardWrite = vi.fn(async () => {});
     const confirm = vi.fn(async () => {});
-    const publisher = createMediumPublisher(clipboardWrite, confirm);
+    const formatLink = vi.fn((url: string) => url);
+    const publisher = createMediumPublisher(clipboardWrite, confirm, formatLink);
 
     const result = await publisher.publish({
       articleTitle: 'T',
@@ -14,6 +15,7 @@ describe('createMediumPublisher', () => {
     });
 
     expect(clipboardWrite).toHaveBeenCalledWith('https://sub.example.com/p/x');
+    expect(formatLink).toHaveBeenCalledWith('https://sub.example.com/p/x');
     expect(confirm).toHaveBeenCalledOnce();
     expect(confirm).toHaveBeenCalledWith(expect.stringContaining('https://sub.example.com/p/x'));
     expect(result).toEqual({ status: 'synced' });

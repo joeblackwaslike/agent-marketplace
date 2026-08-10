@@ -19,6 +19,7 @@ import type { Publisher } from './publishers/publisher.js';
 import { createSubstackPublisher } from './publishers/substack-publisher.js';
 import { scanReadyArticles } from './scan.js';
 import { syncArticle } from './sync-article.js';
+import { terminalLink } from './terminal-link.js';
 import type { Article, PlatformKey } from './types.js';
 import { isArticleOnWebsite } from './website-status.js';
 
@@ -43,7 +44,7 @@ async function confirm(message: string): Promise<void> {
 function createManualPublishers(): ManualPublishers {
   return {
     substack: createSubstackPublisher((message) => input({ message })),
-    medium: createMediumPublisher(defaultClipboardWrite, confirm),
+    medium: createMediumPublisher(defaultClipboardWrite, confirm, terminalLink),
     x: createClipboardPublisher('x', defaultClipboardWrite, confirm),
     linkedin: createClipboardPublisher('linkedin', defaultClipboardWrite, confirm),
     facebook: createClipboardPublisher('facebook', defaultClipboardWrite, confirm),
