@@ -11,7 +11,7 @@
 ## Commands
 
 ```sh
-pnpm dev             # watch-run src/index.ts (tsx)
+pnpm dev             # run src/cli.ts (tsx); pass CLI args after --, e.g. pnpm dev -- sync
 pnpm build           # compile TypeScript -> dist/
 pnpm test            # run tests (vitest)
 pnpm test:coverage   # tests with coverage

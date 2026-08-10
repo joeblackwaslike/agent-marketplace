@@ -1,62 +1,77 @@
 # syndicate
 
-> 
+A personal CLI that syndicates flat-markdown articles from `private-content/drafts/articles/`
+to Substack, dev.to, the personal website's writing index, Medium, X, LinkedIn, and Facebook.
+It reads each article's frontmatter to see which platforms it's already synced to, drafts
+captions for the social platforms with Claude, and walks you through publishing to whatever's
+missing — then commits and pushes the resulting frontmatter/site-index changes to git.
 
-[![npm version](https://img.shields.io/npm/v/syndicate?color=blue)](https://npmjs.com/package/syndicate)
-[![CI](https://github.com/your-handle/syndicate/actions/workflows/ci.yml/badge.svg)](https://github.com/your-handle/syndicate/actions/workflows/ci.yml)
-[![Coverage](https://codecov.io/gh/your-handle/syndicate/graph/badge.svg)](https://codecov.io/gh/your-handle/syndicate)
-[![Docs](https://img.shields.io/badge/docs-online-informational)](https://your-handle.github.io/syndicate)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Node](https://img.shields.io/node/v/syndicate)](https://nodejs.org)
+## Configuration
 
-## What is syndicate?
+Configuration is read from environment variables (see `src/config.ts`):
 
-Replace this paragraph with a 2–3 sentence description. What does it do? Who is it for?
-Why should someone choose it over alternatives?
+| Variable | Required | Description |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | yes | Used to draft X/LinkedIn/Facebook captions via Claude |
+| `DEVTO_API_KEY` | yes | Used to check dev.to sync status and publish new posts |
+| `ARTICLES_DIR` | no | Defaults to `private-content/drafts/articles` |
+| `SITE_INDEX_PATH` | no | Defaults to `site/index.html` |
 
-## Features
+## Usage
 
-| | Feature | Description |
-|---|---------|-------------|
-| ⚡ | **Fast** | Replace with a real performance claim |
-| 🔒 | **Type-safe** | Full TypeScript with strict types |
-| 🧪 | **Well tested** | Comprehensive test suite with coverage |
-| 📦 | **Lightweight** | Minimal dependencies |
-
-## Installation
+Build once, then run the CLI directly:
 
 ```bash
-# pnpm
-pnpm add syndicate
-
-# npm
-npm install syndicate
-
-# bun
-bun add syndicate
+pnpm build
+node dist/cli.js sync
+node dist/cli.js baseline <file>
 ```
 
-## Quick Start
+Or link it so the `syndicate` command is on your `PATH` (`npm link` / `pnpm link --global`
+from this directory), after which:
 
-```typescript
-import { yourExport } from 'syndicate';
-
-// Replace with the simplest possible working example
-const result = yourExport({ input: 'value' });
+```bash
+syndicate sync
+syndicate baseline <file>
 ```
 
-## Documentation
+To run from source without building (useful during development):
 
-Full documentation at **[your-handle.github.io/syndicate](https://your-handle.github.io/syndicate)**
+```bash
+pnpm exec tsx src/cli.ts sync
+pnpm exec tsx src/cli.ts baseline <file>
+```
 
-- [Getting Started](https://your-handle.github.io/syndicate/getting-started)
-- [User Guide](https://your-handle.github.io/syndicate/user-guide/)
-- [API Reference](https://your-handle.github.io/syndicate/api)
+### `sync`
 
-## Contributing
+Scans `ARTICLES_DIR` for articles with `status: ready` in frontmatter, computes which
+platforms each one is still missing, and syncs the gaps — interactively for manual platforms
+(Substack, Medium, X, LinkedIn, Facebook), automatically for dev.to and the website index.
 
-See [CONTRIBUTING](https://your-handle.github.io/syndicate/contributing) for development setup and PR guidelines.
+**A brand-new article takes two runs to fully propagate.** Substack is the canonical source —
+every other platform's post links back to it — so the first `sync` run only publishes to
+Substack (nothing downstream can happen until that URL exists). Run `sync` again afterward to
+pick up dev.to, the website card, and the social captions now that the canonical URL is set.
 
-## License
+If an article fails partway through a run, whatever succeeded before the failure is still
+committed and pushed (tagged `(partial run)` in the commit message) before the error is
+re-thrown, so already-synced platforms are never left stranded uncommitted.
 
-[MIT](LICENSE) © 2026 [Joe Black](https://github.com/your-handle)
+### `baseline <file>`
+
+For an article that was already published by hand before this tool existed: walks through
+each platform, asks whether it's already synced, and records that in frontmatter — without
+publishing anything. Use this once per pre-existing article to bring its frontmatter in line
+with reality before `sync` starts managing it.
+
+## Development
+
+```bash
+pnpm install       # installs deps, wires up git hooks
+pnpm dev           # tsx src/cli.ts (pass CLI args after --, e.g. pnpm dev -- sync)
+pnpm build         # compile to dist/
+pnpm test          # vitest
+pnpm check         # typecheck + lint
+```
+
+See `AGENTS.md` for full tooling/conventions and `CONTRIBUTING.md` for PR guidelines.
