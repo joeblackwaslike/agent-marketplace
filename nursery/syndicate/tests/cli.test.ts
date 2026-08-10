@@ -54,15 +54,14 @@ describe('runSyncArticles', () => {
     const commitAndPush = vi.fn(async () => {});
     const deps: RunSyncArticlesDeps = { syncOne, commitAndPush };
 
-    await runSyncArticles([article1, article2], makeContext(), '/repo', deps);
+    await runSyncArticles([article1, article2], makeContext(), deps);
 
     expect(commitAndPush).toHaveBeenCalledOnce();
-    const [paths, message, cwd] = commitAndPush.mock.calls[0] as [string[], string, string];
+    const [paths, message] = commitAndPush.mock.calls[0] as [string[], string];
     expect(new Set(paths)).toEqual(
       new Set(['/articles/one.md', '/articles/two.md', SITE_INDEX_PATH]),
     );
     expect(message).toBe('chore(syndicate): sync articles');
-    expect(cwd).toBe('/repo');
   });
 
   it('does not call commitAndPush when no articles have gaps', async () => {
@@ -72,7 +71,7 @@ describe('runSyncArticles', () => {
     const commitAndPush = vi.fn(async () => {});
     const deps: RunSyncArticlesDeps = { syncOne, commitAndPush };
 
-    await runSyncArticles([article1, article2], makeContext(), '/repo', deps);
+    await runSyncArticles([article1, article2], makeContext(), deps);
 
     expect(commitAndPush).not.toHaveBeenCalled();
   });
@@ -89,15 +88,14 @@ describe('runSyncArticles', () => {
     const commitAndPush = vi.fn(async () => {});
     const deps: RunSyncArticlesDeps = { syncOne, commitAndPush };
 
-    await expect(
-      runSyncArticles([article1, article2], makeContext(), '/repo', deps),
-    ).rejects.toThrow(/Failed syncing "\/articles\/two\.md": network blip/);
+    await expect(runSyncArticles([article1, article2], makeContext(), deps)).rejects.toThrow(
+      /Failed syncing "\/articles\/two\.md": network blip/,
+    );
 
     expect(commitAndPush).toHaveBeenCalledOnce();
-    const [paths, message, cwd] = commitAndPush.mock.calls[0] as [string[], string, string];
+    const [paths, message] = commitAndPush.mock.calls[0] as [string[], string];
     expect(new Set(paths)).toEqual(new Set(['/articles/one.md', SITE_INDEX_PATH]));
     expect(message).toBe('chore(syndicate): sync articles (partial run)');
-    expect(cwd).toBe('/repo');
   });
 
   it('preserves the git-status reminder and original error as cause when an article throws', async () => {
@@ -111,7 +109,7 @@ describe('runSyncArticles', () => {
 
     let caught: unknown;
     try {
-      await runSyncArticles([article1], makeContext(), '/repo', deps);
+      await runSyncArticles([article1], makeContext(), deps);
     } catch (error) {
       caught = error;
     }

@@ -9,7 +9,7 @@ import { type DevtoPostClient, createDevtoPostClient } from './devto-publisher.j
 import { type DevtoClient, createDevtoClient, isArticleOnDevto } from './devto-status.js';
 import { type DraftModel, createClaudeDraftModel } from './draft.js';
 import { readArticle, writeArticleFrontmatter } from './frontmatter.js';
-import { commitAndPush } from './git.js';
+import { commitAndPushByRepo, resolveRepoRoot } from './git.js';
 import {
   createClipboardPublisher,
   defaultClipboardWrite,
@@ -70,27 +70,27 @@ export async function syncSingleArticle(article: Article, context: SyncContext):
 
 export type RunSyncArticlesDeps = {
   syncOne: (article: Article, context: SyncContext) => Promise<boolean>;
-  commitAndPush: (paths: string[], message: string, cwd: string) => Promise<void>;
+  commitAndPush: (paths: string[], message: string) => Promise<void>;
 };
 
 async function commitPartialProgress(
   changedFiles: string[],
-  repoRoot: string,
   deps: RunSyncArticlesDeps,
 ): Promise<void> {
   if (changedFiles.length === 0) return;
   const uniquePaths = [...new Set(changedFiles)];
-  await deps.commitAndPush(uniquePaths, 'chore(syndicate): sync articles (partial run)', repoRoot);
+  await deps.commitAndPush(uniquePaths, 'chore(syndicate): sync articles (partial run)');
 }
 
 /**
  * Runs the per-article sync loop and commits whatever succeeded — including when a later
- * article throws, so already-completed work is never stranded uncommitted on disk.
+ * article throws, so already-completed work is never stranded uncommitted on disk. Commits are
+ * routed per-repo (see `commitAndPushByRepo`), since an article's file and the website file can
+ * live in different git repositories (e.g. a `private-content` submodule).
  */
 export async function runSyncArticles(
   articles: Article[],
   context: SyncContext,
-  repoRoot: string,
   deps: RunSyncArticlesDeps,
 ): Promise<void> {
   const changedFiles: string[] = [];
@@ -111,7 +111,7 @@ export async function runSyncArticles(
       }
     }
   } catch (error) {
-    await commitPartialProgress(changedFiles, repoRoot, deps);
+    await commitPartialProgress(changedFiles, deps);
     throw error;
   }
 
@@ -121,7 +121,7 @@ export async function runSyncArticles(
   }
 
   const uniquePaths = [...new Set(changedFiles)];
-  await deps.commitAndPush(uniquePaths, 'chore(syndicate): sync articles', repoRoot);
+  await deps.commitAndPush(uniquePaths, 'chore(syndicate): sync articles');
   console.log(`Synced. Updated: ${uniquePaths.join(', ')}`);
 }
 
@@ -141,9 +141,9 @@ export async function runSync(repoRoot: string): Promise<void> {
 
   const articles = await scanReadyArticles(articlesDir);
 
-  await runSyncArticles(articles, context, repoRoot, {
+  await runSyncArticles(articles, context, {
     syncOne: syncSingleArticle,
-    commitAndPush,
+    commitAndPush: commitAndPushByRepo,
   });
 }
 
@@ -161,7 +161,7 @@ async function baselinePlatform(article: Article, platform: PlatformKey): Promis
   article.frontmatter.syndication[platform] = { status: 'synced', url: resolvedUrl };
 }
 
-export async function runBaseline(repoRoot: string, filePath: string): Promise<void> {
+export async function runBaseline(filePath: string): Promise<void> {
   const article = await readArticle(filePath);
 
   const platforms = Object.keys(article.frontmatter.syndication) as PlatformKey[];
@@ -170,7 +170,7 @@ export async function runBaseline(repoRoot: string, filePath: string): Promise<v
   }
 
   await writeArticleFrontmatter(article);
-  await commitAndPush([filePath], 'chore(syndicate): baseline existing article', repoRoot);
+  await commitAndPushByRepo([filePath], 'chore(syndicate): baseline existing article');
 }
 
 function isMainModule(): boolean {
@@ -188,14 +188,14 @@ async function main(): Promise<void> {
     .command('sync')
     .description('Sync all ready articles to any platform missing them')
     .action(async () => {
-      await runSync(process.cwd());
+      await runSync(resolveRepoRoot());
     });
 
   program
     .command('baseline <file>')
     .description("Mark an already-published article's existing sync status without publishing")
     .action(async (file: string) => {
-      await runBaseline(process.cwd(), file);
+      await runBaseline(file);
     });
 
   await program.parseAsync(process.argv);
