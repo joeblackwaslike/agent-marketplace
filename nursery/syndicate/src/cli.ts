@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+import { pathToFileURL } from 'node:url';
 import { input } from '@inquirer/prompts';
 import { Command } from 'commander';
 import { type EditPrompt, createInquirerEditPrompt } from './approve.js';
@@ -19,9 +21,12 @@ import { syncArticle } from './sync-article.js';
 import type { Article, PlatformKey } from './types.js';
 import { isArticleOnWebsite } from './website-status.js';
 
-type ManualPublishers = Record<'substack' | 'medium' | 'x' | 'linkedin' | 'facebook', Publisher>;
+export type ManualPublishers = Record<
+  'substack' | 'medium' | 'x' | 'linkedin' | 'facebook',
+  Publisher
+>;
 
-type SyncContext = {
+export type SyncContext = {
   siteIndexPath: string;
   devtoClient: DevtoClient;
   devtoPostClient: DevtoPostClient;
@@ -44,7 +49,7 @@ function createManualPublishers(): ManualPublishers {
   };
 }
 
-async function syncSingleArticle(article: Article, context: SyncContext): Promise<boolean> {
+export async function syncSingleArticle(article: Article, context: SyncContext): Promise<boolean> {
   const canonicalUrl = article.frontmatter.syndication.substack.url;
   const website = canonicalUrl
     ? await isArticleOnWebsite(context.siteIndexPath, canonicalUrl)
@@ -62,6 +67,63 @@ async function syncSingleArticle(article: Article, context: SyncContext): Promis
   });
 }
 
+export type RunSyncArticlesDeps = {
+  syncOne: (article: Article, context: SyncContext) => Promise<boolean>;
+  commitAndPush: (paths: string[], message: string, cwd: string) => Promise<void>;
+};
+
+async function commitPartialProgress(
+  changedFiles: string[],
+  repoRoot: string,
+  deps: RunSyncArticlesDeps,
+): Promise<void> {
+  if (changedFiles.length === 0) return;
+  const uniquePaths = [...new Set(changedFiles)];
+  await deps.commitAndPush(uniquePaths, 'chore(syndicate): sync articles (partial run)', repoRoot);
+}
+
+/**
+ * Runs the per-article sync loop and commits whatever succeeded — including when a later
+ * article throws, so already-completed work is never stranded uncommitted on disk.
+ */
+export async function runSyncArticles(
+  articles: Article[],
+  context: SyncContext,
+  repoRoot: string,
+  deps: RunSyncArticlesDeps,
+): Promise<void> {
+  const changedFiles: string[] = [];
+
+  try {
+    for (const article of articles) {
+      try {
+        const changed = await deps.syncOne(article, context);
+        if (changed) {
+          changedFiles.push(article.filePath, context.siteIndexPath);
+        }
+      } catch (error) {
+        const detail = error instanceof Error ? error.message : String(error);
+        throw new Error(
+          `Failed syncing "${article.filePath}": ${detail}. Earlier articles in this run may have local changes not yet committed/pushed — check git status.`,
+          { cause: error },
+        );
+      }
+    }
+  } catch (error) {
+    await commitPartialProgress(changedFiles, repoRoot, deps);
+    throw error;
+  }
+
+  if (changedFiles.length === 0) {
+    console.log('Nothing to do.');
+    return;
+  }
+
+  const uniquePaths = [...new Set(changedFiles)];
+  await deps.commitAndPush(uniquePaths, 'chore(syndicate): sync articles', repoRoot);
+  console.log(`Synced. Updated: ${uniquePaths.join(', ')}`);
+}
+
 export async function runSync(repoRoot: string): Promise<void> {
   const config = loadConfig();
   const articlesDir = `${repoRoot}/${config.ARTICLES_DIR}`;
@@ -77,31 +139,11 @@ export async function runSync(repoRoot: string): Promise<void> {
   };
 
   const articles = await scanReadyArticles(articlesDir);
-  const changedFiles: string[] = [];
 
-  for (const article of articles) {
-    try {
-      const changed = await syncSingleArticle(article, context);
-      if (changed) {
-        changedFiles.push(article.filePath, siteIndexPath);
-      }
-    } catch (error) {
-      const detail = error instanceof Error ? error.message : String(error);
-      throw new Error(
-        `Failed syncing "${article.filePath}": ${detail}. Earlier articles in this run may have local changes not yet committed/pushed — check git status.`,
-        { cause: error },
-      );
-    }
-  }
-
-  if (changedFiles.length === 0) {
-    console.log('Nothing to do.');
-    return;
-  }
-
-  const uniquePaths = [...new Set(changedFiles)];
-  await commitAndPush(uniquePaths, 'chore(syndicate): sync articles', repoRoot);
-  console.log(`Synced. Updated: ${uniquePaths.join(', ')}`);
+  await runSyncArticles(articles, context, repoRoot, {
+    syncOne: syncSingleArticle,
+    commitAndPush,
+  });
 }
 
 async function baselinePlatform(article: Article, platform: PlatformKey): Promise<void> {
@@ -130,25 +172,38 @@ export async function runBaseline(repoRoot: string, filePath: string): Promise<v
   await commitAndPush([filePath], 'chore(syndicate): baseline existing article', repoRoot);
 }
 
-const program = new Command();
+function isMainModule(): boolean {
+  const entryPoint = process.argv[1];
+  return entryPoint !== undefined && import.meta.url === pathToFileURL(entryPoint).href;
+}
 
-program
-  .command('sync')
-  .description('Sync all ready articles to any platform missing them')
-  .action(async () => {
-    await runSync(process.cwd());
-  });
+async function main(): Promise<void> {
+  const program = new Command();
 
-program
-  .command('baseline <file>')
-  .description("Mark an already-published article's existing sync status without publishing")
-  .action(async (file: string) => {
-    await runBaseline(process.cwd(), file);
-  });
+  program
+    .command('sync')
+    .description('Sync all ready articles to any platform missing them')
+    .action(async () => {
+      await runSync(process.cwd());
+    });
 
-try {
+  program
+    .command('baseline <file>')
+    .description("Mark an already-published article's existing sync status without publishing")
+    .action(async (file: string) => {
+      await runBaseline(process.cwd(), file);
+    });
+
   await program.parseAsync(process.argv);
-} catch (error: unknown) {
-  console.error(error instanceof Error ? error.message : error);
-  process.exitCode = 1;
+}
+
+// Only run the CLI when this file is the process entry point — importing it (e.g. from tests)
+// must not trigger commander's argv parsing or exit the process.
+if (isMainModule()) {
+  try {
+    await main();
+  } catch (error: unknown) {
+    console.error(error instanceof Error ? error.message : error);
+    process.exitCode = 1;
+  }
 }
