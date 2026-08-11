@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { computeGaps } from '../src/diff.js';
 import type { Article } from '../src/types.js';
 
-function makeArticle(overrides: Partial<Article['frontmatter']['syndication']>): Article {
+function makeArticle(overrides: Partial<Article['frontmatter']['syndication']> = {}): Article {
   return {
-    filePath: '/tmp/a.md',
+    filePath: '/tmp/article.md',
     content: 'body',
     frontmatter: {
       title: 'T',
@@ -28,62 +28,51 @@ function makeArticle(overrides: Partial<Article['frontmatter']['syndication']>):
 }
 
 describe('computeGaps', () => {
-  it("returns only ['substack'] when substack is not yet synced, regardless of others", () => {
-    const article = makeArticle({ x: { status: 'synced' } });
-    expect(computeGaps(article, { website: true, devtoUrl: 'https://dev.to/x' })).toEqual([
-      'substack',
-    ]);
+  it('returns only website when the website is not yet live, regardless of other statuses', () => {
+    const article = makeArticle({ substack: { status: 'synced', url: 'https://sub.example.com/p/x' } });
+
+    const gaps = computeGaps(article, { website: false, devtoUrl: null });
+
+    expect(gaps).toEqual(['website']);
   });
 
-  it('returns remaining gaps in fixed order once substack is synced', () => {
+  it('returns downstream gaps once the website is live', () => {
+    const article = makeArticle();
+
+    const gaps = computeGaps(article, { website: true, devtoUrl: null });
+
+    expect(gaps).toEqual(['substack', 'medium', 'devto', 'x', 'linkedin', 'facebook']);
+  });
+
+  it('excludes platforms already synced or live', () => {
     const article = makeArticle({
       substack: { status: 'synced', url: 'https://sub.example.com/p/x' },
-      x: { status: 'synced' },
-      facebook: { status: 'synced' },
+      medium: { status: 'synced', url: null },
+      x: { status: 'synced', url: null },
     });
-    expect(computeGaps(article, { website: false, devtoUrl: null })).toEqual([
-      'medium',
-      'devto',
-      'website',
-      'linkedin',
-    ]);
+
+    const gaps = computeGaps(article, {
+      website: true,
+      devtoUrl: 'https://dev.to/joe/x',
+    });
+
+    expect(gaps).toEqual(['linkedin', 'facebook']);
   });
 
-  it('returns an empty array when everything is synced', () => {
-    const synced = { status: 'synced' as const };
-    const article = makeArticle({
-      substack: { ...synced, url: 'https://sub.example.com/p/x' },
-      medium: synced,
-      x: synced,
-      linkedin: synced,
-      facebook: synced,
-    });
-    expect(computeGaps(article, { website: true, devtoUrl: 'https://dev.to/x' })).toEqual([]);
-  });
-
-  it('gates on substack even when every other platform is already marked synced', () => {
-    const synced = { status: 'synced' as const };
-    const article = makeArticle({
-      substack: { status: 'pending', url: null },
-      medium: synced,
-      devto: synced,
-      x: synced,
-      linkedin: synced,
-      facebook: synced,
-    });
-    expect(computeGaps(article, { website: true, devtoUrl: 'https://dev.to/x' })).toEqual([
-      'substack',
-    ]);
-  });
-
-  it('treats live website/devto truth independently of frontmatter for those two platforms', () => {
+  it('returns an empty array when everything is synced or live', () => {
     const article = makeArticle({
       substack: { status: 'synced', url: 'https://sub.example.com/p/x' },
-      medium: { status: 'synced' },
-      x: { status: 'synced' },
-      linkedin: { status: 'synced' },
-      facebook: { status: 'synced' },
+      medium: { status: 'synced', url: null },
+      x: { status: 'synced', url: null },
+      linkedin: { status: 'synced', url: null },
+      facebook: { status: 'synced', url: null },
     });
-    expect(computeGaps(article, { website: false, devtoUrl: null })).toEqual(['devto', 'website']);
+
+    const gaps = computeGaps(article, {
+      website: true,
+      devtoUrl: 'https://dev.to/joe/x',
+    });
+
+    expect(gaps).toEqual([]);
   });
 });

@@ -5,14 +5,13 @@ export type LiveStatus = {
   devtoUrl: string | null;
 };
 
-const DOWNSTREAM_ORDER: PlatformKey[] = ['medium', 'devto', 'website', 'x', 'linkedin', 'facebook'];
+const DOWNSTREAM_ORDER: PlatformKey[] = ['substack', 'medium', 'devto', 'x', 'linkedin', 'facebook'];
 
 function isPlatformLive(
   platform: PlatformKey,
   syndication: Article['frontmatter']['syndication'],
   live: LiveStatus,
 ): boolean {
-  if (platform === 'website') return live.website;
   if (platform === 'devto') return live.devtoUrl !== null;
   return syndication[platform].status === 'synced';
 }
@@ -20,8 +19,8 @@ function isPlatformLive(
 export function computeGaps(article: Article, live: LiveStatus): PlatformKey[] {
   const { syndication } = article.frontmatter;
 
-  if (syndication.substack.status !== 'synced') {
-    return ['substack'];
+  if (!live.website) {
+    return ['website'];
   }
 
   return DOWNSTREAM_ORDER.filter((platform) => !isPlatformLive(platform, syndication, live));
