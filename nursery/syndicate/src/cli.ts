@@ -197,18 +197,20 @@ async function baselinePlatform(article: Article, platform: PlatformKey): Promis
   });
   if (!isSynced.toLowerCase().startsWith('y')) return;
 
-  const url =
-    platform === 'website'
-      ? undefined
-      : await input({ message: `URL for ${platform} (blank if none):` });
-  const resolvedUrl = url && url.length > 0 ? url : null;
+  const url = await input({ message: `URL for ${platform} (blank if none):` });
+  const resolvedUrl = url.length > 0 ? url : null;
   article.frontmatter.syndication[platform] = { status: 'synced', url: resolvedUrl };
 }
 
 export async function runBaseline(filePath: string): Promise<void> {
   const article = await readArticle(filePath);
 
-  const platforms = Object.keys(article.frontmatter.syndication) as PlatformKey[];
+  // website's "baseline" state is authoritatively the filesystem (whether the page file
+  // exists — see isArticleOnWebsite/computeGaps), not something an operator can assert, so
+  // it's excluded from this prompt loop.
+  const platforms = (Object.keys(article.frontmatter.syndication) as PlatformKey[]).filter(
+    (platform) => platform !== 'website',
+  );
   for (const platform of platforms) {
     await baselinePlatform(article, platform);
   }

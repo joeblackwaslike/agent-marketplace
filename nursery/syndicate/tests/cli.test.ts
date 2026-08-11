@@ -1,7 +1,27 @@
-import { describe, expect, it, vi } from 'vitest';
+import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('@inquirer/prompts', () => ({
+  input: vi.fn(),
+}));
+vi.mock('../src/git.js', () => ({
+  commitAndPushByRepo: vi.fn(async () => {}),
+  resolveRepoRoot: vi.fn(),
+}));
+
+import { input } from '@inquirer/prompts';
 import type { RunSyncArticlesDeps, SyncContext } from '../src/cli.js';
-import { runSyncArticles } from '../src/cli.js';
+import { runBaseline, runSyncArticles, syncSingleArticle } from '../src/cli.js';
+import type { DevtoArticleSummary } from '../src/devto-status.js';
+import { commitAndPushByRepo } from '../src/git.js';
 import type { Article } from '../src/types.js';
+
+function makeDevtoArticle(canonicalUrl: string | null, url: string): DevtoArticleSummary {
+  // biome-ignore lint/style/useNamingConvention: dev.to API response field
+  return { canonical_url: canonicalUrl, url };
+}
 
 const SITE_INDEX_PATH = '/fake/site/index.html';
 
@@ -120,5 +140,166 @@ describe('runSyncArticles', () => {
     expect(error.message).toContain('check git status');
     expect(error.cause).toBe(originalError);
     expect(commitAndPush).not.toHaveBeenCalled();
+  });
+});
+
+describe('syncSingleArticle', () => {
+  let siteDir: string;
+  let siteIndexPath: string;
+  let articleFilePath: string;
+
+  beforeEach(async () => {
+    siteDir = await mkdtemp(join(tmpdir(), 'syndicate-cli-site-'));
+    siteIndexPath = join(siteDir, 'index.html');
+    await writeFile(siteIndexPath, '<div class="writing-list"></div>', 'utf8');
+    await mkdir(join(siteDir, 'writing', 'alpha-post'), { recursive: true });
+    await writeFile(join(siteDir, 'writing', 'alpha-post', 'index.html'), '<html></html>', 'utf8');
+
+    const articlesDir = await mkdtemp(join(tmpdir(), 'syndicate-cli-article-'));
+    articleFilePath = join(articlesDir, 'alpha-post.md');
+  });
+
+  function makeArticle(): Article {
+    return {
+      filePath: articleFilePath,
+      content: 'The article body.',
+      frontmatter: {
+        title: 'Alpha Post',
+        slug: 'alpha-post',
+        status: 'ready',
+        tags: ['ai'],
+        description: '',
+        publishedAt: null,
+        syndication: {
+          // Deliberately different from website.url below — a stand-in for the pre-fix
+          // code, which read this field as the canonical URL / website lookup key.
+          substack: { status: 'synced', url: 'https://sub.example.com/p/decoy' },
+          medium: { status: 'synced', url: null },
+          devto: { status: 'pending', url: null },
+          website: { status: 'synced', url: 'https://joeblack.nyc/writing/alpha-post/' },
+          x: { status: 'synced', url: null },
+          linkedin: { status: 'synced', url: null },
+          facebook: { status: 'synced', url: null },
+        },
+      },
+    };
+  }
+
+  function makeContext(devtoArticles: DevtoArticleSummary[]): {
+    context: SyncContext;
+    listMyArticles: ReturnType<typeof vi.fn>;
+    createArticle: ReturnType<typeof vi.fn>;
+  } {
+    const listMyArticles = vi.fn(async () => devtoArticles);
+    const createArticle = vi.fn(async () => ({ url: 'https://dev.to/joe/alpha-post' }));
+    const context: SyncContext = {
+      siteIndexPath,
+      siteBaseUrl: 'https://joeblack.nyc',
+      devtoClient: { listMyArticles },
+      devtoPostClient: { createArticle },
+      draftModel: { generate: vi.fn() },
+      editPrompt: vi.fn(),
+      manualPublishers: {
+        substack: { platform: 'substack', publish: vi.fn() },
+        medium: { platform: 'medium', publish: vi.fn() },
+        x: { platform: 'x', publish: vi.fn() },
+        linkedin: { platform: 'linkedin', publish: vi.fn() },
+        facebook: { platform: 'facebook', publish: vi.fn() },
+      },
+    };
+    return { context, listMyArticles, createArticle };
+  }
+
+  it('checks website liveness against the article slug, not a URL', async () => {
+    const article = makeArticle();
+    // dev.to already has a matching canonical URL for the *website* URL, so — once the
+    // website-liveness check is also correct — there is nothing left to sync at all.
+    const { context } = makeContext([
+      makeDevtoArticle('https://joeblack.nyc/writing/alpha-post/', 'https://dev.to/existing'),
+    ]);
+
+    const changed = await syncSingleArticle(article, context);
+
+    // The pre-fix code passed `syndication.substack.url` (a decoy here, not matching any
+    // directory under site/writing/) as the *slug* to isArticleOnWebsite, so it would
+    // wrongly conclude the page didn't exist, re-run syncWebsite, and set publishedAt.
+    expect(changed).toBe(false);
+    expect(article.frontmatter.publishedAt).toBeNull();
+    expect(article.frontmatter.syndication.website).toEqual({
+      status: 'synced',
+      url: 'https://joeblack.nyc/writing/alpha-post/',
+    });
+  });
+
+  it('compares against syndication.website.url, not syndication.substack.url, when checking dev.to', async () => {
+    const article = makeArticle();
+    // dev.to's canonical URL matches the *substack* decoy, not the website URL. The pre-fix
+    // code compared against substack.url and would have found this a match; the fix compares
+    // against website.url and must NOT match, forcing an actual dev.to publish.
+    const { context, createArticle } = makeContext([
+      makeDevtoArticle('https://sub.example.com/p/decoy', 'https://dev.to/wrong-match'),
+    ]);
+
+    const changed = await syncSingleArticle(article, context);
+
+    expect(changed).toBe(true);
+    expect(createArticle).toHaveBeenCalledOnce();
+    expect(createArticle).toHaveBeenCalledWith(
+      expect.objectContaining({ canonicalUrl: 'https://joeblack.nyc/writing/alpha-post/' }),
+    );
+    expect(article.frontmatter.syndication.devto).toEqual({
+      status: 'synced',
+      url: 'https://dev.to/joe/alpha-post',
+    });
+  });
+});
+
+describe('runBaseline', () => {
+  let filePath: string;
+
+  const fixture = `---
+title: Existing Post
+slug: existing-post
+status: ready
+tags: [testing]
+description: A test.
+publishedAt: null
+syndication:
+  substack: { status: pending, url: null }
+  medium: { status: pending, url: null }
+  devto: { status: pending, url: null }
+  website: { status: pending }
+  x: { status: pending }
+  linkedin: { status: pending }
+  facebook: { status: pending }
+---
+
+Body.
+`;
+
+  beforeEach(async () => {
+    vi.mocked(input).mockReset();
+    vi.mocked(input).mockResolvedValue('n');
+    vi.mocked(commitAndPushByRepo).mockClear();
+
+    const dir = await mkdtemp(join(tmpdir(), 'syndicate-cli-baseline-'));
+    filePath = join(dir, 'existing-post.md');
+    await writeFile(filePath, fixture, 'utf8');
+  });
+
+  it('never prompts for website status', async () => {
+    await runBaseline(filePath);
+
+    const prompted = vi.mocked(input).mock.calls.map(([opts]) => opts.message);
+    expect(prompted.some((message) => message.includes('website'))).toBe(false);
+  });
+
+  it('still prompts for every other platform', async () => {
+    await runBaseline(filePath);
+
+    const prompted = vi.mocked(input).mock.calls.map(([opts]) => opts.message);
+    for (const platform of ['substack', 'medium', 'devto', 'x', 'linkedin', 'facebook']) {
+      expect(prompted.some((message) => message.includes(platform))).toBe(true);
+    }
   });
 });
