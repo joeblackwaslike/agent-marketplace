@@ -1,9 +1,16 @@
 import { existsSync } from 'node:fs';
+import { config as loadEnvConfig } from 'dotenv';
 import { z } from 'zod';
 
+/**
+ * Loads `path` into `process.env`, overriding any value already set in the shell. Node's native
+ * `process.loadEnvFile` cannot do this — it silently skips keys that already exist, which means a
+ * stray default `ANTHROPIC_API_KEY` (or similar) already present in the shell would silently win
+ * over this project's own `.env`. A project's own `.env` must be authoritative for that project.
+ */
 export function loadDotEnv(path = '.env'): void {
   if (existsSync(path)) {
-    process.loadEnvFile(path);
+    loadEnvConfig({ path, override: true, quiet: true });
   }
 }
 

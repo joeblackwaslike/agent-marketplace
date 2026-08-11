@@ -39,4 +39,15 @@ describe('loadDotEnv', () => {
     expect(() => loadDotEnv('/nonexistent/path/.env')).not.toThrow();
     expect(process.env.SYNDICATE_TEST_VAR).toBeUndefined();
   });
+
+  it('overrides a value already set in the shell environment — a project .env must win', async () => {
+    const dir = await mkdtemp(join(tmpdir(), 'syndicate-dotenv-override-'));
+    const envPath = join(dir, '.env');
+    await writeFile(envPath, 'SYNDICATE_TEST_VAR=from-dotenv\n', 'utf8');
+
+    process.env.SYNDICATE_TEST_VAR = 'from-shell';
+    loadDotEnv(envPath);
+
+    expect(process.env.SYNDICATE_TEST_VAR).toBe('from-dotenv');
+  });
 });
