@@ -1,6 +1,7 @@
 export type PublishInput = {
   articleTitle: string;
   articleUrl: string;
+  articleContent?: string;
   caption?: string;
 };
 

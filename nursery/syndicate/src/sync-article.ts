@@ -1,4 +1,5 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 import { type EditPrompt, approveCaption } from './approve.js';
 import { type DevtoPostClient, publishToDevto } from './devto-publisher.js';
 import { type LiveStatus, computeGaps } from './diff.js';
@@ -6,7 +7,7 @@ import { type Draft, type DraftModel, draftCaptions } from './draft.js';
 import type { Publisher } from './publishers/publisher.js';
 import { estimateReadTime } from './read-time.js';
 import type { Article, PlatformKey } from './types.js';
-import { insertWritingCard } from './website-publisher.js';
+import { insertWritingCard, renderArticlePage } from './website-publisher.js';
 
 type ManualPlatform = 'substack' | 'medium' | 'x' | 'linkedin' | 'facebook';
 type CaptionPlatform = 'x' | 'linkedin' | 'facebook';
@@ -24,6 +25,7 @@ export type SyncArticleDeps = {
   draftModel: DraftModel;
   editPrompt: EditPrompt;
   siteIndexPath: string;
+  siteBaseUrl: string;
   /** Called after every individual platform action, so a Ctrl+C mid-article loses nothing already confirmed. */
   persistFrontmatter: (article: Article) => Promise<void>;
   manualPublishers: Record<ManualPlatform, Publisher>;
@@ -33,17 +35,30 @@ async function syncWebsite(
   article: Article,
   deps: SyncArticleDeps,
   draft: Draft | null,
-  canonicalUrl: string,
 ): Promise<void> {
+  const { slug } = article.frontmatter;
+  const tag = draft?.website.tag ?? 'Writing';
+  article.frontmatter.publishedAt = new Date().toISOString();
+
+  const pageHtml = renderArticlePage(article, deps.siteBaseUrl, tag);
+  const pagePath = path.join(path.dirname(deps.siteIndexPath), 'writing', slug, 'index.html');
+  await mkdir(path.dirname(pagePath), { recursive: true });
+  await writeFile(pagePath, pageHtml, 'utf8');
+
   const html = await readFile(deps.siteIndexPath, 'utf8');
   const updated = insertWritingCard(html, {
-    tag: draft?.website.tag ?? 'Writing',
+    slug,
+    tag,
     title: article.frontmatter.title,
-    url: canonicalUrl,
+    url: `/writing/${slug}/`,
     readTime: estimateReadTime(article.content),
   });
   await writeFile(deps.siteIndexPath, updated, 'utf8');
-  article.frontmatter.syndication.website = { status: SYNCED_STATUS };
+
+  article.frontmatter.syndication.website = {
+    status: SYNCED_STATUS,
+    url: `${deps.siteBaseUrl}/writing/${slug}/`,
+  };
 }
 
 async function syncDevto(
@@ -82,13 +97,11 @@ async function syncManualPlatform(
   const result = await publisher.publish({
     articleTitle: article.frontmatter.title,
     articleUrl: canonicalUrl,
+    ...(platform === 'substack' ? { articleContent: article.content } : {}),
     ...(caption === undefined ? {} : { caption }),
   });
 
   article.frontmatter.syndication[platform] = { status: SYNCED_STATUS, url: result.url ?? null };
-  if (platform === 'substack') {
-    article.frontmatter.publishedAt = new Date().toISOString();
-  }
 }
 
 async function syncPlatform(
@@ -99,7 +112,7 @@ async function syncPlatform(
   canonicalUrl: string,
 ): Promise<void> {
   if (platform === 'website') {
-    await syncWebsite(article, deps, draft, canonicalUrl);
+    await syncWebsite(article, deps, draft);
     return;
   }
   if (platform === 'devto') {
@@ -113,8 +126,9 @@ export async function syncArticle(article: Article, deps: SyncArticleDeps): Prom
   const gaps = computeGaps(article, deps.live);
   if (gaps.length === 0) return false;
 
-  const canonicalUrl = article.frontmatter.syndication.substack.url ?? '';
-  const needsDraft = gaps.some((platform) => isCaptionPlatform(platform));
+  const canonicalUrl = article.frontmatter.syndication.website.url ?? '';
+  const needsDraft =
+    gaps.some((platform) => isCaptionPlatform(platform)) || gaps.includes('website');
   const draft = needsDraft
     ? await draftCaptions(deps.draftModel, article.content, canonicalUrl)
     : null;
