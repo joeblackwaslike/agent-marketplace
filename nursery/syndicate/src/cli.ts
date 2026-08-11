@@ -67,7 +67,7 @@ function createManualPublishers(config: Config): ManualPublishers {
       substackNewPostUrl,
       terminalLink,
     ),
-    medium: createMediumPublisher(defaultClipboardWrite, confirm, terminalLink),
+    medium: createMediumPublisher((message) => input({ message }), terminalLink),
     x: createClipboardPublisher(
       'x',
       defaultClipboardWrite,

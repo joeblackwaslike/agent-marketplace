@@ -1,21 +1,25 @@
-import type { ClipboardWriter, ConfirmPrompt } from './clipboard-publisher.js';
 import type { LinkFormatter, PublishInput, PublishResult, Publisher } from './publisher.js';
 
-const MEDIUM_IMPORT_URL = 'https://medium.com/p/import';
+export type UrlPrompt = (message: string) => Promise<string>;
 
+const MEDIUM_NEW_STORY_URL = 'https://medium.com/new-story';
+
+/**
+ * Medium's medium.com/p/import feature strips headings, links, and other formatting from the
+ * source article, so this stays a manual step: link to a fresh story draft, let the human
+ * publish it there (pasting rendered content, not raw markdown), then record the resulting URL.
+ */
 export function createMediumPublisher(
-  clipboardWrite: ClipboardWriter,
-  confirm: ConfirmPrompt,
+  promptForUrl: UrlPrompt,
   formatLink: LinkFormatter,
 ): Publisher {
   return {
     platform: 'medium',
     async publish(input: PublishInput): Promise<PublishResult> {
-      await clipboardWrite(input.articleUrl);
-      await confirm(
-        `Copied to clipboard — go to ${formatLink(MEDIUM_IMPORT_URL, 'medium.com/p/import')} and paste this URL, publish, then press Enter to confirm:\n\n${input.articleUrl}\n`,
+      const url = await promptForUrl(
+        `Go to ${formatLink(MEDIUM_NEW_STORY_URL, 'medium.com/new-story')} and publish "${input.articleTitle}" there (paste the rendered content, not the raw markdown), then paste the resulting URL:`,
       );
-      return { status: 'synced' };
+      return { status: 'synced', url };
     },
   };
 }

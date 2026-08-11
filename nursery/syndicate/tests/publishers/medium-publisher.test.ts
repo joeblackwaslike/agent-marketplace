@@ -2,11 +2,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { createMediumPublisher } from '../../src/publishers/medium-publisher.js';
 
 describe('createMediumPublisher', () => {
-  it('always copies the article URL, even if a caption is present, and confirms', async () => {
-    const clipboardWrite = vi.fn(async () => {});
-    const confirm = vi.fn(async () => {});
+  it('links to a new Medium story, prompts for the resulting URL, and returns it', async () => {
+    const promptForUrl = vi.fn(async () => 'https://medium.com/@joe/new-story-abc123');
     const formatLink = vi.fn((url: string) => url);
-    const publisher = createMediumPublisher(clipboardWrite, confirm, formatLink);
+    const publisher = createMediumPublisher(promptForUrl, formatLink);
 
     const result = await publisher.publish({
       articleTitle: 'T',
@@ -14,14 +13,12 @@ describe('createMediumPublisher', () => {
       caption: 'should be ignored',
     });
 
-    // The article URL is what's on the clipboard to paste — it doesn't need to be clickable,
-    // clicking it just reopens the Substack post. The thing that needs to be clickable is the
-    // destination you navigate TO: Medium's import page.
-    expect(clipboardWrite).toHaveBeenCalledWith('https://sub.example.com/p/x');
-    expect(formatLink).toHaveBeenCalledWith('https://medium.com/p/import', expect.any(String));
-    expect(confirm).toHaveBeenCalledOnce();
-    const [message] = confirm.mock.calls[0] as [string];
-    expect(message).toContain('https://sub.example.com/p/x');
-    expect(result).toEqual({ status: 'synced' });
+    // Medium's URL-import feature (medium.com/p/import) strips headings, links, and other
+    // formatting from the source article, so publishing there has to stay a manual step —
+    // this only links to a fresh story draft and records the URL once you're done.
+    expect(formatLink).toHaveBeenCalledWith('https://medium.com/new-story', expect.any(String));
+    expect(promptForUrl).toHaveBeenCalledOnce();
+    expect(promptForUrl).toHaveBeenCalledWith(expect.stringContaining('T'));
+    expect(result).toEqual({ status: 'synced', url: 'https://medium.com/@joe/new-story-abc123' });
   });
 });
