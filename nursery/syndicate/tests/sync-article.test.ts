@@ -92,9 +92,11 @@ describe('syncArticle', () => {
       'utf8',
     );
     expect(pageHtml).toContain('New Post');
+    expect(pageHtml).toContain('AI Agents');
 
     const html = await readFile(siteIndexPath, 'utf8');
     expect(html).toContain('href="/writing/new-post/"');
+    expect(html).toContain('AI Agents');
   });
 
   it('publishes downstream platforms with the website URL as canonical, once the website is live', async () => {

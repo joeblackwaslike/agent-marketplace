@@ -39,6 +39,18 @@ async function syncWebsite(
   const { slug } = article.frontmatter;
   const tag = draft?.website.tag ?? 'Writing';
   article.frontmatter.publishedAt = new Date().toISOString();
+  article.frontmatter.syndication.website = {
+    status: SYNCED_STATUS,
+    url: `${deps.siteBaseUrl}/writing/${slug}/`,
+  };
+
+  // Persist before writing the page file: once the page file exists, the
+  // website gap becomes permanently non-retriable (see website-status.ts /
+  // diff.ts), so the URL it guards must already be durable before that
+  // happens. Otherwise a crash between the file write and the outer loop's
+  // persistFrontmatter call would silently and permanently blank
+  // canonicalUrl for every downstream platform.
+  await deps.persistFrontmatter(article);
 
   const pageHtml = renderArticlePage(article, deps.siteBaseUrl, tag);
   const pagePath = path.join(path.dirname(deps.siteIndexPath), 'writing', slug, 'index.html');
@@ -54,11 +66,6 @@ async function syncWebsite(
     readTime: estimateReadTime(article.content),
   });
   await writeFile(deps.siteIndexPath, updated, 'utf8');
-
-  article.frontmatter.syndication.website = {
-    status: SYNCED_STATUS,
-    url: `${deps.siteBaseUrl}/writing/${slug}/`,
-  };
 }
 
 async function syncDevto(
