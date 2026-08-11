@@ -31,6 +31,7 @@ export type ManualPublishers = Record<
 
 export type SyncContext = {
   siteIndexPath: string;
+  siteBaseUrl: string;
   devtoClient: DevtoClient;
   devtoPostClient: DevtoPostClient;
   draftModel: DraftModel;
@@ -63,6 +64,7 @@ function createManualPublishers(config: Config): ManualPublishers {
 
   return {
     substack: createSubstackPublisher(
+      defaultClipboardWrite,
       (message) => input({ message }),
       substackNewPostUrl,
       terminalLink,
@@ -93,10 +95,8 @@ function createManualPublishers(config: Config): ManualPublishers {
 }
 
 export async function syncSingleArticle(article: Article, context: SyncContext): Promise<boolean> {
-  const canonicalUrl = article.frontmatter.syndication.substack.url;
-  const website = canonicalUrl
-    ? await isArticleOnWebsite(context.siteIndexPath, canonicalUrl)
-    : false;
+  const website = await isArticleOnWebsite(context.siteIndexPath, article.frontmatter.slug);
+  const canonicalUrl = article.frontmatter.syndication.website.url;
   const devtoUrl = canonicalUrl ? await isArticleOnDevto(context.devtoClient, canonicalUrl) : null;
 
   return syncArticle(article, {
@@ -105,6 +105,7 @@ export async function syncSingleArticle(article: Article, context: SyncContext):
     draftModel: context.draftModel,
     editPrompt: context.editPrompt,
     siteIndexPath: context.siteIndexPath,
+    siteBaseUrl: context.siteBaseUrl,
     persistFrontmatter: writeArticleFrontmatter,
     manualPublishers: context.manualPublishers,
   });
@@ -174,6 +175,7 @@ export async function runSync(repoRoot: string): Promise<void> {
 
   const context: SyncContext = {
     siteIndexPath,
+    siteBaseUrl: config.SITE_BASE_URL,
     devtoClient: createDevtoClient(config.DEVTO_API_KEY),
     devtoPostClient: createDevtoPostClient(config.DEVTO_API_KEY),
     draftModel: createClaudeDraftModel(),

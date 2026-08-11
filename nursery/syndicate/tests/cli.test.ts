@@ -32,6 +32,7 @@ function makeArticle(filePath: string, title: string): Article {
 function makeContext(): SyncContext {
   return {
     siteIndexPath: SITE_INDEX_PATH,
+    siteBaseUrl: 'https://joeblack.nyc',
     devtoClient: { listMyArticles: vi.fn() },
     devtoPostClient: { createArticle: vi.fn() },
     draftModel: { generate: vi.fn() },
