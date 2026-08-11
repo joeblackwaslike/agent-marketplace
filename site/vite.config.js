@@ -10,7 +10,9 @@ const articleEntries = existsSync(writingDir)
   ? Object.fromEntries(
       readdirSync(writingDir, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
-        .map((entry) => [`writing-${entry.name}`, resolve(writingDir, entry.name, 'index.html')]),
+        .map((entry) => [entry.name, resolve(writingDir, entry.name, 'index.html')])
+        .filter(([, indexPath]) => existsSync(indexPath))
+        .map(([name, indexPath]) => [`writing-${name}`, indexPath]),
     )
   : {};
 
