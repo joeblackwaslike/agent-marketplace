@@ -1,9 +1,12 @@
-import { readFile } from 'node:fs/promises';
+import { access } from 'node:fs/promises';
+import path from 'node:path';
 
-export async function isArticleOnWebsite(
-  siteIndexPath: string,
-  articleUrl: string,
-): Promise<boolean> {
-  const html = await readFile(siteIndexPath, 'utf8');
-  return html.includes(`href="${articleUrl}"`);
+export async function isArticleOnWebsite(siteIndexPath: string, slug: string): Promise<boolean> {
+  const pagePath = path.join(path.dirname(siteIndexPath), 'writing', slug, 'index.html');
+  try {
+    await access(pagePath);
+    return true;
+  } catch {
+    return false;
+  }
 }
