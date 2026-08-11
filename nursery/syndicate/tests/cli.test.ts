@@ -299,7 +299,11 @@ Body.
 
     const prompted = vi.mocked(input).mock.calls.map(([opts]) => opts.message);
     for (const platform of ['substack', 'medium', 'devto', 'x', 'linkedin', 'facebook']) {
-      expect(prompted.some((message) => message.includes(platform))).toBe(true);
+      // Anchor on the fixed template text around the platform name, not the platform name
+      // alone — "Existing Post" (the fixture title) contains a literal "x", so a bare
+      // `.includes(platform)` check for platform "x" would be satisfied by ANY prompted
+      // message, proving nothing about whether "x" itself was actually prompted.
+      expect(prompted.some((message) => message.includes(`on ${platform}?`))).toBe(true);
     }
   });
 });
