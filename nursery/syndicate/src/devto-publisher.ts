@@ -25,6 +25,11 @@ async function readErrorDetail(response: Response): Promise<string> {
   }
 }
 
+/** dev.to rejects tags containing hyphens or other non-alphanumeric characters. */
+function sanitizeDevtoTag(tag: string): string {
+  return tag.replaceAll(/[^a-zA-Z0-9]/g, '');
+}
+
 export function createDevtoPostClient(apiKey: string): DevtoPostClient {
   return {
     async createArticle(input) {
@@ -39,7 +44,7 @@ export function createDevtoPostClient(apiKey: string): DevtoPostClient {
             published: true,
             // biome-ignore lint/style/useNamingConvention: dev.to API request field
             canonical_url: input.canonicalUrl,
-            tags: input.tags,
+            tags: input.tags.map((tag) => sanitizeDevtoTag(tag)),
           },
         }),
       });
