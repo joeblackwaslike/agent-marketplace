@@ -855,7 +855,7 @@ footer.site-footer {
   padding: var(--s-9) 0 var(--s-8);
 }
 .article-inner {
-  max-width: 720px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 0 32px;
 }
@@ -870,7 +870,7 @@ footer.site-footer {
 .article-title {
   font-family: var(--font-display);
   font-weight: var(--w-semi);
-  font-size: var(--t-h1);
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
   line-height: var(--lh-tight);
   letter-spacing: var(--track-tight);
   margin-top: var(--s-3);
@@ -888,21 +888,32 @@ footer.site-footer {
   line-height: var(--lh-body);
   color: var(--fg-2);
 }
+/* The deck/subtitle line articles conventionally open with (an H2 directly under the H1) —
+   styled distinctly from body section headings so it reads as a subtitle, not a section. */
+.article-body > h2:first-child {
+  font-family: var(--font-body);
+  font-weight: var(--w-regular);
+  font-size: 1.3rem;
+  line-height: var(--lh-snug);
+  color: var(--fg-3);
+  margin-top: 0;
+  margin-bottom: var(--s-6);
+}
 .article-body h2 {
   font-family: var(--font-display);
   font-weight: var(--w-semi);
-  font-size: var(--t-h2);
+  font-size: clamp(1.5rem, 2.8vw, 1.85rem);
   line-height: var(--lh-snug);
   color: var(--fg-1);
-  margin-top: var(--s-8);
+  margin-top: var(--s-6);
   margin-bottom: var(--s-4);
 }
 .article-body h3 {
   font-family: var(--font-display);
   font-weight: var(--w-semi);
-  font-size: var(--t-h3);
+  font-size: 1.3rem;
   color: var(--fg-1);
-  margin-top: var(--s-7);
+  margin-top: var(--s-5);
   margin-bottom: var(--s-3);
 }
 .article-body p { margin-bottom: var(--s-5); }

@@ -17,6 +17,16 @@ function escapeRegExp(value: string): string {
   return value.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }
 
+/**
+ * Article content conventionally opens with a `# Title` line matching the frontmatter title
+ * (a Substack/Medium export habit) — the page already renders that title from frontmatter as
+ * `.article-title`, so leaving it in the markdown body doubles it up. Only ever strips a
+ * genuine level-1 heading (a lone `#`, not `##`) at the very start of the content.
+ */
+function stripLeadingTitle(content: string): string {
+  return content.replace(/^\s*#[ \t][^\n]*\n+/, '');
+}
+
 export type WritingCardEntry = {
   slug: string;
   tag: string;
@@ -114,7 +124,7 @@ export function renderArticlePage(article: Article, siteBaseUrl: string, tag: st
   const { title, description, slug, publishedAt } = article.frontmatter;
   const canonicalUrl = `${siteBaseUrl}/writing/${slug}/`;
   const readTime = estimateReadTime(article.content);
-  const bodyHtml = marked.parse(article.content, { async: false });
+  const bodyHtml = marked.parse(stripLeadingTitle(article.content), { async: false });
   const metaLine = [formatPublishedLabel(publishedAt), `${readTime} min read`]
     .filter(Boolean)
     .join(' · ');

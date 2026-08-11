@@ -110,7 +110,8 @@ describe('insertWritingCard', () => {
 function makeArticle(): Article {
   return {
     filePath: '/tmp/article.md',
-    content: '# Heading\n\nA [link](https://example.com) and some *text*.\n',
+    content:
+      '# My Article\n\n## A subtitle deck\n\nA [link](https://example.com) and some *text*.\n\n## Second Section\n\nMore body text.\n',
     frontmatter: {
       title: 'My Article',
       slug: 'my-article',
@@ -133,13 +134,27 @@ function makeArticle(): Article {
 }
 
 describe('renderArticlePage', () => {
-  it('renders the article markdown into the page body', () => {
+  it('strips the leading title heading and renders the rest of the markdown into the page body', () => {
     const html = renderArticlePage(makeArticle(), 'https://joeblack.nyc', 'AI Agents');
 
     expect(html).toContain('<h1 class="article-title">My Article</h1>');
-    expect(html).toContain('<h1>Heading</h1>');
+    expect(html).not.toContain('<h1>My Article</h1>');
+    expect(html).toContain('<h2>A subtitle deck</h2>');
+    expect(html).toContain('<h2>Second Section</h2>');
     expect(html).toContain('<a href="https://example.com">link</a>');
     expect(html).toContain('<em>text</em>');
+  });
+
+  it('strips only the leading title heading, not a heading later in the body', () => {
+    const article = makeArticle();
+    article.content = '# My Article\n\nBody text.\n\n# Not a title\n\nMore text.\n';
+
+    const html = renderArticlePage(article, 'https://joeblack.nyc', 'AI Agents');
+
+    const h1Count = (html.match(/<h1[ >]/g) ?? []).length;
+    expect(h1Count).toBe(2);
+    expect(html).toContain('<h1 class="article-title">My Article</h1>');
+    expect(html).toContain('<h1>Not a title</h1>');
   });
 
   it('includes a canonical link and OG tags built from frontmatter', () => {
