@@ -47,7 +47,7 @@ describe('createSubstackPublisher', () => {
     });
 
     expect(clipboardWrite).toHaveBeenCalledWith(
-      '\n\n---\n\nOriginally published at https://joeblack.nyc/writing/new-post/',
+      'Originally published at https://joeblack.nyc/writing/new-post/',
     );
   });
 });

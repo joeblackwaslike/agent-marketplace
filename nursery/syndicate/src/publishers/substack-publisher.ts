@@ -5,9 +5,7 @@ export type UrlPrompt = (message: string) => Promise<string>;
 
 function buildClipboardText(input: PublishInput): string {
   const backlink = `Originally published at ${input.articleUrl}`;
-  return input.articleContent
-    ? `${input.articleContent}\n\n---\n\n${backlink}`
-    : `\n\n---\n\n${backlink}`;
+  return [input.articleContent, backlink].filter(Boolean).join('\n\n---\n\n');
 }
 
 export function createSubstackPublisher(
