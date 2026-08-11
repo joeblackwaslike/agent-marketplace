@@ -58,9 +58,6 @@
       "path": "cz-conventional-changelog"
     }
   },
-  "pnpm": {
-    "onlyBuiltDependencies": ["@biomejs/biome", "core-js", "esbuild", "unrs-resolver"]
-  },
   "depcheck": {
     "ignores": ["react", "react-dom", "@docusaurus/types"]
   },
