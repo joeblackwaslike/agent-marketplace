@@ -19,6 +19,7 @@ syndication:
   x: { status: pending }
   linkedin: { status: pending }
   facebook: { status: pending }
+  instagram: { status: pending }
 ---
 Ready body.
 `;

@@ -25,6 +25,7 @@ function makeArticle(): Article {
         x: { status: 'pending' },
         linkedin: { status: 'synced' },
         facebook: { status: 'synced' },
+        instagram: { status: 'pending' },
       },
     },
   };
@@ -42,6 +43,7 @@ function makeDeps(
         x: 'Sharp line.',
         linkedin: 'unused',
         facebook: 'unused',
+        instagram: 'unused',
         website: { tag: 'AI Agents' },
       }),
     },
@@ -58,6 +60,10 @@ function makeDeps(
       x: { platform: 'x', publish: vi.fn(async () => ({ status: 'synced' as const })) },
       linkedin: { platform: 'linkedin', publish: vi.fn() },
       facebook: { platform: 'facebook', publish: vi.fn() },
+      instagram: {
+        platform: 'instagram',
+        publish: vi.fn(async () => ({ status: 'synced' as const })),
+      },
     },
     ...overrides,
   };
@@ -142,6 +148,7 @@ describe('syncArticle', () => {
       status: 'synced',
       url: 'https://dev.to/joe/new-post',
     };
+    article.frontmatter.syndication.instagram = { status: 'synced', url: null };
 
     const deps = makeDeps(siteIndexPath, {
       live: { website: true, devtoUrl: 'https://dev.to/joe/new-post' },

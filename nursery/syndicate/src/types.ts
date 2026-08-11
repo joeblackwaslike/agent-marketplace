@@ -5,7 +5,8 @@ export type PlatformKey =
   | 'website'
   | 'x'
   | 'linkedin'
-  | 'facebook';
+  | 'facebook'
+  | 'instagram';
 
 export type SyncStatus = 'pending' | 'synced';
 

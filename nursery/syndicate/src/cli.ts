@@ -25,7 +25,7 @@ import type { Article, PlatformKey } from './types.js';
 import { isArticleOnWebsite, resolveArticlePagePath } from './website-status.js';
 
 export type ManualPublishers = Record<
-  'substack' | 'medium' | 'x' | 'linkedin' | 'facebook',
+  'substack' | 'medium' | 'x' | 'linkedin' | 'facebook' | 'instagram',
   Publisher
 >;
 
@@ -46,6 +46,7 @@ async function confirm(message: string): Promise<void> {
 const X_INTENT_URL = 'https://x.com/intent/post';
 const LINKEDIN_FEED_URL = 'https://www.linkedin.com/feed/';
 const FACEBOOK_HOME_URL = 'https://www.facebook.com/';
+const INSTAGRAM_HOME_URL = 'https://www.instagram.com/';
 
 function buildXDestinationLink(text: string): DestinationLink {
   return { url: `${X_INTENT_URL}?text=${encodeURIComponent(text)}`, label: 'x.com' };
@@ -57,6 +58,10 @@ function buildLinkedinDestinationLink(): DestinationLink {
 
 function buildFacebookDestinationLink(): DestinationLink {
   return { url: FACEBOOK_HOME_URL, label: 'facebook.com' };
+}
+
+function buildInstagramDestinationLink(): DestinationLink {
+  return { url: INSTAGRAM_HOME_URL, label: 'instagram.com' };
 }
 
 function createManualPublishers(config: Config): ManualPublishers {
@@ -90,6 +95,13 @@ function createManualPublishers(config: Config): ManualPublishers {
       confirm,
       terminalLink,
       buildFacebookDestinationLink,
+    ),
+    instagram: createClipboardPublisher(
+      'instagram',
+      defaultClipboardWrite,
+      confirm,
+      terminalLink,
+      buildInstagramDestinationLink,
     ),
   };
 }

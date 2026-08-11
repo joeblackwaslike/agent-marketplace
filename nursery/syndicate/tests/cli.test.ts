@@ -44,6 +44,7 @@ function makeArticle(filePath: string, title: string): Article {
         x: { status: 'pending' },
         linkedin: { status: 'pending' },
         facebook: { status: 'pending' },
+        instagram: { status: 'pending' },
       },
     },
   };
@@ -63,6 +64,7 @@ function makeContext(): SyncContext {
       x: { platform: 'x', publish: vi.fn() },
       linkedin: { platform: 'linkedin', publish: vi.fn() },
       facebook: { platform: 'facebook', publish: vi.fn() },
+      instagram: { platform: 'instagram', publish: vi.fn() },
     },
   };
 }
@@ -188,6 +190,7 @@ describe('syncSingleArticle', () => {
           x: { status: 'synced', url: null },
           linkedin: { status: 'synced', url: null },
           facebook: { status: 'synced', url: null },
+          instagram: { status: 'synced', url: null },
         },
       },
     };
@@ -213,6 +216,7 @@ describe('syncSingleArticle', () => {
         x: { platform: 'x', publish: vi.fn() },
         linkedin: { platform: 'linkedin', publish: vi.fn() },
         facebook: { platform: 'facebook', publish: vi.fn() },
+        instagram: { platform: 'instagram', publish: vi.fn() },
       },
     };
     return { context, listMyArticles, createArticle };
@@ -280,6 +284,7 @@ syndication:
   x: { status: pending }
   linkedin: { status: pending }
   facebook: { status: pending }
+  instagram: { status: pending }
 ---
 
 Body.
@@ -306,7 +311,15 @@ Body.
     await runBaseline(filePath);
 
     const prompted = vi.mocked(input).mock.calls.map(([opts]) => opts.message);
-    for (const platform of ['substack', 'medium', 'devto', 'x', 'linkedin', 'facebook']) {
+    for (const platform of [
+      'substack',
+      'medium',
+      'devto',
+      'x',
+      'linkedin',
+      'facebook',
+      'instagram',
+    ]) {
       // Anchor on the fixed template text around the platform name, not the platform name
       // alone — "Existing Post" (the fixture title) contains a literal "x", so a bare
       // `.includes(platform)` check for platform "x" would be satisfied by ANY prompted

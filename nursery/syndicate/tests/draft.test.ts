@@ -13,6 +13,7 @@ describe('draftCaptions', () => {
       x: 'One sharp line. https://sub.example.com/p/x',
       linkedin: 'Longer take.',
       facebook: 'Narrative take.',
+      instagram: 'Punchy line.\n\nLink in bio.',
       website: { tag: 'AI Agents' },
     };
     const model: DraftModel = { generate: async () => fixture };
@@ -36,6 +37,7 @@ describe('draftSchema', () => {
       x: longX,
       linkedin: 'Longer take.',
       facebook: 'Narrative take.',
+      instagram: 'Punchy line.\n\nLink in bio.',
       website: { tag: 'AI Agents' },
     });
 

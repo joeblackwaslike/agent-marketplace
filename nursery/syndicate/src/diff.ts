@@ -12,6 +12,7 @@ const DOWNSTREAM_ORDER: PlatformKey[] = [
   'x',
   'linkedin',
   'facebook',
+  'instagram',
 ];
 
 function isPlatformLive(

@@ -16,6 +16,7 @@ export const draftSchema = z.object({
   x: z.string(),
   linkedin: z.string(),
   facebook: z.string(),
+  instagram: z.string(),
   website: z.object({ tag: z.string() }),
 });
 

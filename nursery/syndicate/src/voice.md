@@ -7,4 +7,6 @@ or "check out my latest." Assume the reader is a peer, not an audience to be sol
 - X: one sharp, specific line plus the URL. No hashtags.
 - LinkedIn: 2-4 short paragraphs, professional framing, still concrete over vague.
 - Facebook: more narrative, a couple sentences of context before the point.
+- Instagram: 2-4 short, punchy lines paired with a reposted image, no URL (Instagram
+  captions can't hold clickable links) — end with a literal "Link in bio" line.
 - Website blurb: a one- or two-word topic tag only (e.g. "Claude Code", "AI Agents").

@@ -10,10 +10,15 @@ import type { Article, PlatformKey } from './types.js';
 import { insertWritingCard, renderArticlePage } from './website-publisher.js';
 import { resolveArticlePagePath } from './website-status.js';
 
-type ManualPlatform = 'substack' | 'medium' | 'x' | 'linkedin' | 'facebook';
-type CaptionPlatform = 'x' | 'linkedin' | 'facebook';
+type ManualPlatform = 'substack' | 'medium' | 'x' | 'linkedin' | 'facebook' | 'instagram';
+type CaptionPlatform = 'x' | 'linkedin' | 'facebook' | 'instagram';
 
-const CAPTION_PLATFORMS: ReadonlySet<PlatformKey> = new Set(['x', 'linkedin', 'facebook']);
+const CAPTION_PLATFORMS: ReadonlySet<PlatformKey> = new Set([
+  'x',
+  'linkedin',
+  'facebook',
+  'instagram',
+]);
 const SYNCED_STATUS = 'synced' as const;
 
 function isCaptionPlatform(platform: PlatformKey): platform is CaptionPlatform {

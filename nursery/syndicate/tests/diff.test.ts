@@ -21,6 +21,7 @@ function makeArticle(overrides: Partial<Article['frontmatter']['syndication']> =
         x: { status: 'pending' },
         linkedin: { status: 'pending' },
         facebook: { status: 'pending' },
+        instagram: { status: 'pending' },
         ...overrides,
       },
     },
@@ -43,7 +44,7 @@ describe('computeGaps', () => {
 
     const gaps = computeGaps(article, { website: true, devtoUrl: null });
 
-    expect(gaps).toEqual(['substack', 'medium', 'devto', 'x', 'linkedin', 'facebook']);
+    expect(gaps).toEqual(['substack', 'medium', 'devto', 'x', 'linkedin', 'facebook', 'instagram']);
   });
 
   it('excludes platforms already synced or live', () => {
@@ -58,7 +59,7 @@ describe('computeGaps', () => {
       devtoUrl: 'https://dev.to/joe/x',
     });
 
-    expect(gaps).toEqual(['linkedin', 'facebook']);
+    expect(gaps).toEqual(['linkedin', 'facebook', 'instagram']);
   });
 
   it('returns an empty array when everything is synced or live', () => {
@@ -68,6 +69,7 @@ describe('computeGaps', () => {
       x: { status: 'synced', url: null },
       linkedin: { status: 'synced', url: null },
       facebook: { status: 'synced', url: null },
+      instagram: { status: 'synced', url: null },
     });
 
     const gaps = computeGaps(article, {
