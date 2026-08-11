@@ -38,7 +38,9 @@ function buildCard(entry: WritingCardEntry): string {
 export function insertWritingCard(html: string, entry: WritingCardEntry): string {
   const card = buildCard(entry);
   const existingPattern = new RegExp(
-    `<article class="writing-card reveal" data-slug="${escapeRegExp(entry.slug)}">.*?</article>`,
+    `<article class="writing-card reveal" data-slug="${escapeRegExp(
+      escapeHtml(entry.slug),
+    )}">.*?</article>`,
   );
 
   if (existingPattern.test(html)) {
@@ -126,7 +128,7 @@ export function renderArticlePage(article: Article, siteBaseUrl: string, tag: st
     <meta property="og:title" content="${escapeHtml(title)}" />
     <meta property="og:description" content="${escapeHtml(description)}" />
     <meta property="og:type" content="article" />
-    <link rel="canonical" href="${canonicalUrl}" />
+    <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />
     <title>${escapeHtml(title)} · ${SITE_TITLE}</title>
 
     ${renderThemeInitScript()}

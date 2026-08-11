@@ -83,6 +83,28 @@ describe('insertWritingCard', () => {
     expect(result).not.toContain('Original Title');
     expect(result.match(/data-slug="repeat"/g)).toHaveLength(1);
   });
+
+  it('replaces an existing card for a slug containing HTML-special characters', () => {
+    const withCard = insertWritingCard(BASE_HTML, {
+      slug: 'foo&bar',
+      tag: 'AI Agents',
+      title: 'Original Title',
+      url: '/writing/foo-bar/',
+      readTime: 5,
+    });
+
+    const result = insertWritingCard(withCard, {
+      slug: 'foo&bar',
+      tag: 'AI Agents',
+      title: 'Updated Title',
+      url: '/writing/foo-bar/',
+      readTime: 6,
+    });
+
+    expect(result).toContain('Updated Title');
+    expect(result).not.toContain('Original Title');
+    expect(result.match(/data-slug="foo&amp;bar"/g)).toHaveLength(1);
+  });
 });
 
 function makeArticle(): Article {
@@ -145,5 +167,17 @@ describe('renderArticlePage', () => {
 
     expect(html).toContain('href="../../style.css"');
     expect(html).toContain("from '../../theme.js'");
+  });
+
+  it('HTML-escapes the canonical link href', () => {
+    const article = makeArticle();
+    article.frontmatter.slug = 'my-article-"onmouseover="alert(1)';
+
+    const html = renderArticlePage(article, 'https://joeblack.nyc', 'AI Agents');
+
+    expect(html).toContain(
+      '<link rel="canonical" href="https://joeblack.nyc/writing/my-article-&quot;onmouseover=&quot;alert(1)/" />',
+    );
+    expect(html).not.toContain('href="https://joeblack.nyc/writing/my-article-"onmouseover="');
   });
 });
