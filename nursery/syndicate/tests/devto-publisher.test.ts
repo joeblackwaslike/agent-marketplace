@@ -76,6 +76,23 @@ describe('createDevtoPostClient', () => {
     expect(body.article.tags).toEqual(['claudecode', 'aiagents', 'autonomousagents']);
   });
 
+  it('caps tags at 4 — dev.to rejects a longer list', async () => {
+    const fetchMock = vi.fn(async () => Response.json({ url: 'https://dev.to/joe/new' }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const client = createDevtoPostClient('secret-key');
+    await client.createArticle({
+      title: 'New Post',
+      bodyMarkdown: '# body',
+      canonicalUrl: 'https://sub.example.com/p/new',
+      tags: ['one', 'two', 'three', 'four', 'five', 'six'],
+    });
+
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const body = JSON.parse(init.body as string) as { article: Record<string, unknown> };
+    expect(body.article.tags).toEqual(['one', 'two', 'three', 'four']);
+  });
+
   it('throws an error that includes the response body when the publish request fails', async () => {
     const fetchMock = vi.fn(
       async () =>

@@ -25,9 +25,16 @@ async function readErrorDetail(response: Response): Promise<string> {
   }
 }
 
+const DEVTO_MAX_TAGS = 4;
+
 /** dev.to rejects tags containing hyphens or other non-alphanumeric characters. */
 function sanitizeDevtoTag(tag: string): string {
   return tag.replaceAll(/[^a-zA-Z0-9]/g, '');
+}
+
+/** dev.to rejects more than 4 tags per article. */
+function sanitizeDevtoTags(tags: string[]): string[] {
+  return tags.slice(0, DEVTO_MAX_TAGS).map((tag) => sanitizeDevtoTag(tag));
 }
 
 export function createDevtoPostClient(apiKey: string): DevtoPostClient {
@@ -44,7 +51,7 @@ export function createDevtoPostClient(apiKey: string): DevtoPostClient {
             published: true,
             // biome-ignore lint/style/useNamingConvention: dev.to API request field
             canonical_url: input.canonicalUrl,
-            tags: input.tags.map((tag) => sanitizeDevtoTag(tag)),
+            tags: sanitizeDevtoTags(input.tags),
           },
         }),
       });
