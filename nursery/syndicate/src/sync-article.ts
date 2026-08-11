@@ -8,6 +8,7 @@ import type { Publisher } from './publishers/publisher.js';
 import { estimateReadTime } from './read-time.js';
 import type { Article, PlatformKey } from './types.js';
 import { insertWritingCard, renderArticlePage } from './website-publisher.js';
+import { resolveArticlePagePath } from './website-status.js';
 
 type ManualPlatform = 'substack' | 'medium' | 'x' | 'linkedin' | 'facebook';
 type CaptionPlatform = 'x' | 'linkedin' | 'facebook';
@@ -53,7 +54,7 @@ async function syncWebsite(
   await deps.persistFrontmatter(article);
 
   const pageHtml = renderArticlePage(article, deps.siteBaseUrl, tag);
-  const pagePath = path.join(path.dirname(deps.siteIndexPath), 'writing', slug, 'index.html');
+  const pagePath = resolveArticlePagePath(deps.siteIndexPath, slug);
   await mkdir(path.dirname(pagePath), { recursive: true });
   await writeFile(pagePath, pageHtml, 'utf8');
 

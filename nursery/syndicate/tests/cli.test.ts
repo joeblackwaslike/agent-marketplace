@@ -80,7 +80,13 @@ describe('runSyncArticles', () => {
     expect(commitAndPush).toHaveBeenCalledOnce();
     const [paths, message] = commitAndPush.mock.calls[0] as [string[], string];
     expect(new Set(paths)).toEqual(
-      new Set(['/articles/one.md', '/articles/two.md', SITE_INDEX_PATH]),
+      new Set([
+        '/articles/one.md',
+        '/articles/two.md',
+        SITE_INDEX_PATH,
+        '/fake/site/writing/one/index.html',
+        '/fake/site/writing/two/index.html',
+      ]),
     );
     expect(message).toBe('chore(syndicate): sync articles');
   });
@@ -115,7 +121,9 @@ describe('runSyncArticles', () => {
 
     expect(commitAndPush).toHaveBeenCalledOnce();
     const [paths, message] = commitAndPush.mock.calls[0] as [string[], string];
-    expect(new Set(paths)).toEqual(new Set(['/articles/one.md', SITE_INDEX_PATH]));
+    expect(new Set(paths)).toEqual(
+      new Set(['/articles/one.md', SITE_INDEX_PATH, '/fake/site/writing/one/index.html']),
+    );
     expect(message).toBe('chore(syndicate): sync articles (partial run)');
   });
 

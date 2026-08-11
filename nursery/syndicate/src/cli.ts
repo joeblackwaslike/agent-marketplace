@@ -22,7 +22,7 @@ import { scanReadyArticles } from './scan.js';
 import { syncArticle } from './sync-article.js';
 import { terminalLink } from './terminal-link.js';
 import type { Article, PlatformKey } from './types.js';
-import { isArticleOnWebsite } from './website-status.js';
+import { isArticleOnWebsite, resolveArticlePagePath } from './website-status.js';
 
 export type ManualPublishers = Record<
   'substack' | 'medium' | 'x' | 'linkedin' | 'facebook',
@@ -143,7 +143,11 @@ export async function runSyncArticles(
       try {
         const changed = await deps.syncOne(article, context);
         if (changed) {
-          changedFiles.push(article.filePath, context.siteIndexPath);
+          changedFiles.push(
+            article.filePath,
+            context.siteIndexPath,
+            resolveArticlePagePath(context.siteIndexPath, article.frontmatter.slug),
+          );
         }
       } catch (error) {
         const detail = error instanceof Error ? error.message : String(error);
