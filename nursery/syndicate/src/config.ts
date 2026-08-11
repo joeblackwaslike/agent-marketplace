@@ -17,6 +17,7 @@ export function loadDotEnv(path = '.env'): void {
 const envSchema = z.object({
   ANTHROPIC_API_KEY: z.string().min(1),
   DEVTO_API_KEY: z.string().min(1),
+  SUBSTACK_SUBDOMAIN: z.string().min(1),
   ARTICLES_DIR: z.string().default('private-content/drafts/articles'),
   SITE_INDEX_PATH: z.string().default('site/index.html'),
 });

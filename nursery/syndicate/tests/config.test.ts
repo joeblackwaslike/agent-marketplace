@@ -9,13 +9,22 @@ describe('loadConfig', () => {
     const config = loadConfig({
       ANTHROPIC_API_KEY: 'sk-ant-test',
       DEVTO_API_KEY: 'devto-test',
+      SUBSTACK_SUBDOMAIN: 'joeblackwaslike',
     });
     expect(config.ARTICLES_DIR).toBe('private-content/drafts/articles');
     expect(config.SITE_INDEX_PATH).toBe('site/index.html');
   });
 
   it('throws when ANTHROPIC_API_KEY is missing', () => {
-    expect(() => loadConfig({ DEVTO_API_KEY: 'devto-test' })).toThrow();
+    expect(() =>
+      loadConfig({ DEVTO_API_KEY: 'devto-test', SUBSTACK_SUBDOMAIN: 'joeblackwaslike' }),
+    ).toThrow();
+  });
+
+  it('throws when SUBSTACK_SUBDOMAIN is missing', () => {
+    expect(() =>
+      loadConfig({ ANTHROPIC_API_KEY: 'sk-ant-test', DEVTO_API_KEY: 'devto-test' }),
+    ).toThrow();
   });
 });
 

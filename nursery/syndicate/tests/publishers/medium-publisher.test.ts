@@ -14,10 +14,14 @@ describe('createMediumPublisher', () => {
       caption: 'should be ignored',
     });
 
+    // The article URL is what's on the clipboard to paste — it doesn't need to be clickable,
+    // clicking it just reopens the Substack post. The thing that needs to be clickable is the
+    // destination you navigate TO: Medium's import page.
     expect(clipboardWrite).toHaveBeenCalledWith('https://sub.example.com/p/x');
-    expect(formatLink).toHaveBeenCalledWith('https://sub.example.com/p/x');
+    expect(formatLink).toHaveBeenCalledWith('https://medium.com/p/import', expect.any(String));
     expect(confirm).toHaveBeenCalledOnce();
-    expect(confirm).toHaveBeenCalledWith(expect.stringContaining('https://sub.example.com/p/x'));
+    const [message] = confirm.mock.calls[0] as [string];
+    expect(message).toContain('https://sub.example.com/p/x');
     expect(result).toEqual({ status: 'synced' });
   });
 });

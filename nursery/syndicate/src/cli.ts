@@ -4,13 +4,14 @@ import { pathToFileURL } from 'node:url';
 import { input } from '@inquirer/prompts';
 import { Command } from 'commander';
 import { type EditPrompt, createInquirerEditPrompt } from './approve.js';
-import { loadConfig, loadDotEnv } from './config.js';
+import { type Config, loadConfig, loadDotEnv } from './config.js';
 import { type DevtoPostClient, createDevtoPostClient } from './devto-publisher.js';
 import { type DevtoClient, createDevtoClient, isArticleOnDevto } from './devto-status.js';
 import { type DraftModel, createClaudeDraftModel } from './draft.js';
 import { readArticle, writeArticleFrontmatter } from './frontmatter.js';
 import { commitAndPushByRepo, resolveRepoRoot } from './git.js';
 import {
+  type DestinationLink,
   createClipboardPublisher,
   defaultClipboardWrite,
 } from './publishers/clipboard-publisher.js';
@@ -41,13 +42,53 @@ async function confirm(message: string): Promise<void> {
   await input({ message: `${message} (press Enter)` });
 }
 
-function createManualPublishers(): ManualPublishers {
+const X_INTENT_URL = 'https://x.com/intent/post';
+const LINKEDIN_FEED_URL = 'https://www.linkedin.com/feed/';
+const FACEBOOK_HOME_URL = 'https://www.facebook.com/';
+
+function buildXDestinationLink(text: string): DestinationLink {
+  return { url: `${X_INTENT_URL}?text=${encodeURIComponent(text)}`, label: 'x.com' };
+}
+
+function buildLinkedinDestinationLink(): DestinationLink {
+  return { url: LINKEDIN_FEED_URL, label: 'linkedin.com/feed' };
+}
+
+function buildFacebookDestinationLink(): DestinationLink {
+  return { url: FACEBOOK_HOME_URL, label: 'facebook.com' };
+}
+
+function createManualPublishers(config: Config): ManualPublishers {
+  const substackNewPostUrl = `https://${config.SUBSTACK_SUBDOMAIN}.substack.com/publish`;
+
   return {
-    substack: createSubstackPublisher((message) => input({ message })),
+    substack: createSubstackPublisher(
+      (message) => input({ message }),
+      substackNewPostUrl,
+      terminalLink,
+    ),
     medium: createMediumPublisher(defaultClipboardWrite, confirm, terminalLink),
-    x: createClipboardPublisher('x', defaultClipboardWrite, confirm),
-    linkedin: createClipboardPublisher('linkedin', defaultClipboardWrite, confirm),
-    facebook: createClipboardPublisher('facebook', defaultClipboardWrite, confirm),
+    x: createClipboardPublisher(
+      'x',
+      defaultClipboardWrite,
+      confirm,
+      terminalLink,
+      buildXDestinationLink,
+    ),
+    linkedin: createClipboardPublisher(
+      'linkedin',
+      defaultClipboardWrite,
+      confirm,
+      terminalLink,
+      buildLinkedinDestinationLink,
+    ),
+    facebook: createClipboardPublisher(
+      'facebook',
+      defaultClipboardWrite,
+      confirm,
+      terminalLink,
+      buildFacebookDestinationLink,
+    ),
   };
 }
 
@@ -137,7 +178,7 @@ export async function runSync(repoRoot: string): Promise<void> {
     devtoPostClient: createDevtoPostClient(config.DEVTO_API_KEY),
     draftModel: createClaudeDraftModel(),
     editPrompt: createInquirerEditPrompt(),
-    manualPublishers: createManualPublishers(),
+    manualPublishers: createManualPublishers(config),
   };
 
   const articles = await scanReadyArticles(articlesDir);

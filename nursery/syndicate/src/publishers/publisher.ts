@@ -13,3 +13,5 @@ export type Publisher = {
   platform: string;
   publish: (input: PublishInput) => Promise<PublishResult>;
 };
+
+export type LinkFormatter = (url: string, label?: string) => string;
