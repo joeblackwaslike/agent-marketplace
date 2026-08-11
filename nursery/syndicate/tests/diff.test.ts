@@ -29,7 +29,9 @@ function makeArticle(overrides: Partial<Article['frontmatter']['syndication']> =
 
 describe('computeGaps', () => {
   it('returns only website when the website is not yet live, regardless of other statuses', () => {
-    const article = makeArticle({ substack: { status: 'synced', url: 'https://sub.example.com/p/x' } });
+    const article = makeArticle({
+      substack: { status: 'synced', url: 'https://sub.example.com/p/x' },
+    });
 
     const gaps = computeGaps(article, { website: false, devtoUrl: null });
 

@@ -5,7 +5,14 @@ export type LiveStatus = {
   devtoUrl: string | null;
 };
 
-const DOWNSTREAM_ORDER: PlatformKey[] = ['substack', 'medium', 'devto', 'x', 'linkedin', 'facebook'];
+const DOWNSTREAM_ORDER: PlatformKey[] = [
+  'substack',
+  'medium',
+  'devto',
+  'x',
+  'linkedin',
+  'facebook',
+];
 
 function isPlatformLive(
   platform: PlatformKey,
