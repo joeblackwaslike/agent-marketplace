@@ -10,6 +10,7 @@ describe('loadConfig', () => {
       ANTHROPIC_API_KEY: 'sk-ant-test',
       DEVTO_API_KEY: 'devto-test',
       SUBSTACK_SUBDOMAIN: 'joeblackwaslike',
+      SITE_BASE_URL: 'https://joeblack.nyc',
     });
     expect(config.ARTICLES_DIR).toBe('private-content/drafts/articles');
     expect(config.SITE_INDEX_PATH).toBe('site/index.html');
@@ -17,13 +18,42 @@ describe('loadConfig', () => {
 
   it('throws when ANTHROPIC_API_KEY is missing', () => {
     expect(() =>
-      loadConfig({ DEVTO_API_KEY: 'devto-test', SUBSTACK_SUBDOMAIN: 'joeblackwaslike' }),
+      loadConfig({
+        DEVTO_API_KEY: 'devto-test',
+        SUBSTACK_SUBDOMAIN: 'joeblackwaslike',
+        SITE_BASE_URL: 'https://joeblack.nyc',
+      }),
     ).toThrow();
   });
 
   it('throws when SUBSTACK_SUBDOMAIN is missing', () => {
     expect(() =>
-      loadConfig({ ANTHROPIC_API_KEY: 'sk-ant-test', DEVTO_API_KEY: 'devto-test' }),
+      loadConfig({
+        ANTHROPIC_API_KEY: 'sk-ant-test',
+        DEVTO_API_KEY: 'devto-test',
+        SITE_BASE_URL: 'https://joeblack.nyc',
+      }),
+    ).toThrow();
+  });
+
+  it('throws when SITE_BASE_URL is missing', () => {
+    expect(() =>
+      loadConfig({
+        ANTHROPIC_API_KEY: 'sk-ant-test',
+        DEVTO_API_KEY: 'devto-test',
+        SUBSTACK_SUBDOMAIN: 'joeblackwaslike',
+      }),
+    ).toThrow();
+  });
+
+  it('throws when SITE_BASE_URL is not a valid URL', () => {
+    expect(() =>
+      loadConfig({
+        ANTHROPIC_API_KEY: 'sk-ant-test',
+        DEVTO_API_KEY: 'devto-test',
+        SUBSTACK_SUBDOMAIN: 'joeblackwaslike',
+        SITE_BASE_URL: 'not-a-url',
+      }),
     ).toThrow();
   });
 });
