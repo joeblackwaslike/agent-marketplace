@@ -44,6 +44,20 @@ describe('computeWebsiteContentHash', () => {
 
     expect(computeWebsiteContentHash(changed)).not.toBe(computeWebsiteContentHash(original));
   });
+
+  it('produces a different hash when websiteTag changes, since the tag is rendered on the page', () => {
+    const original = makeArticle({ websiteTag: 'AI Agents' });
+    const changed = makeArticle({ websiteTag: 'Claude Code' });
+
+    expect(computeWebsiteContentHash(changed)).not.toBe(computeWebsiteContentHash(original));
+  });
+
+  it('produces a different hash when publishedAt changes, since the date is rendered on the page', () => {
+    const original = makeArticle({ publishedAt: '2026-01-01T00:00:00.000Z' });
+    const changed = makeArticle({ publishedAt: '2026-06-01T00:00:00.000Z' });
+
+    expect(computeWebsiteContentHash(changed)).not.toBe(computeWebsiteContentHash(original));
+  });
 });
 
 describe('getWebsiteLiveState', () => {
