@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -17,6 +17,7 @@ import { runBaseline, runSyncArticles, syncSingleArticle } from '../src/cli.js';
 import type { DevtoArticleSummary } from '../src/devto-status.js';
 import { commitAndPushByRepo } from '../src/git.js';
 import type { Article } from '../src/types.js';
+import { computeWebsiteContentHash } from '../src/website-status.js';
 
 function makeDevtoArticle(canonicalUrl: string | null, url: string): DevtoArticleSummary {
   // biome-ignore lint/style/useNamingConvention: dev.to API response field
@@ -170,7 +171,7 @@ describe('syncSingleArticle', () => {
   });
 
   function makeArticle(): Article {
-    return {
+    const article: Article = {
       filePath: articleFilePath,
       content: 'The article body.',
       frontmatter: {
@@ -194,6 +195,10 @@ describe('syncSingleArticle', () => {
         },
       },
     };
+    // These tests exercise devto/slug-matching logic, not content staleness — stamp a
+    // matching hash so the website is read as 'current', not 'stale'.
+    article.frontmatter.websiteContentHash = computeWebsiteContentHash(article);
+    return article;
   }
 
   function makeContext(devtoArticles: DevtoArticleSummary[]): {
@@ -263,6 +268,28 @@ describe('syncSingleArticle', () => {
       status: 'synced',
       url: 'https://dev.to/joe/alpha-post',
     });
+  });
+
+  it('regenerates the website page when the article content has changed since the last sync', async () => {
+    const article = makeArticle();
+    article.frontmatter.websiteTag = 'Alpha Tag';
+    article.frontmatter.syndication.devto = {
+      status: 'synced',
+      url: 'https://dev.to/joe/alpha-post',
+    };
+    // Content changed after the stored hash was computed — simulates an edit made to the
+    // source markdown without re-running sync yet.
+    article.content = 'The article body, now with a correction.';
+    const { context } = makeContext([
+      makeDevtoArticle('https://joeblack.nyc/writing/alpha-post/', 'https://dev.to/joe/alpha-post'),
+    ]);
+
+    const changed = await syncSingleArticle(article, context);
+
+    expect(changed).toBe(true);
+    const pageHtml = await readFile(join(siteDir, 'writing', 'alpha-post', 'index.html'), 'utf8');
+    expect(pageHtml).toContain('now with a correction');
+    expect(article.frontmatter.websiteContentHash).toBe(computeWebsiteContentHash(article));
   });
 });
 

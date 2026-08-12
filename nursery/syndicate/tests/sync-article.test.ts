@@ -36,7 +36,7 @@ function makeDeps(
   overrides: Partial<SyncArticleDeps> = {},
 ): SyncArticleDeps {
   return {
-    live: { website: false, devtoUrl: null },
+    live: { website: 'missing', devtoUrl: null },
     devtoPostClient: { createArticle: vi.fn(async () => ({ url: 'https://dev.to/joe/new-post' })) },
     draftModel: {
       generate: async () => ({
@@ -111,7 +111,7 @@ describe('syncArticle', () => {
       status: 'synced',
       url: 'https://joeblack.nyc/writing/new-post/',
     };
-    const deps = makeDeps(siteIndexPath, { live: { website: true, devtoUrl: null } });
+    const deps = makeDeps(siteIndexPath, { live: { website: 'current', devtoUrl: null } });
 
     const changed = await syncArticle(article, deps);
 
@@ -151,10 +151,89 @@ describe('syncArticle', () => {
     article.frontmatter.syndication.instagram = { status: 'synced', url: null };
 
     const deps = makeDeps(siteIndexPath, {
-      live: { website: true, devtoUrl: 'https://dev.to/joe/new-post' },
+      live: { website: 'current', devtoUrl: 'https://dev.to/joe/new-post' },
     });
 
     const changed = await syncArticle(article, deps);
     expect(changed).toBe(false);
+  });
+
+  it('preserves the original publishedAt when re-syncing a stale website page', async () => {
+    const article = makeArticle();
+    article.frontmatter.publishedAt = '2026-01-01T00:00:00.000Z';
+    article.frontmatter.syndication.website = {
+      status: 'synced',
+      url: 'https://joeblack.nyc/writing/new-post/',
+    };
+    article.frontmatter.syndication.substack = {
+      status: 'synced',
+      url: 'https://sub.example.com/p/new',
+    };
+    article.frontmatter.syndication.medium = { status: 'synced', url: null };
+    article.frontmatter.syndication.x = { status: 'synced', url: null };
+    article.frontmatter.syndication.devto = {
+      status: 'synced',
+      url: 'https://dev.to/joe/new-post',
+    };
+    article.frontmatter.syndication.instagram = { status: 'synced', url: null };
+    const deps = makeDeps(siteIndexPath, {
+      live: { website: 'stale', devtoUrl: 'https://dev.to/joe/new-post' },
+    });
+
+    const changed = await syncArticle(article, deps);
+
+    expect(changed).toBe(true);
+    expect(article.frontmatter.publishedAt).toBe('2026-01-01T00:00:00.000Z');
+    expect(deps.manualPublishers.substack.publish).not.toHaveBeenCalled();
+  });
+
+  it('reuses a cached websiteTag without calling the draft model when refreshing a stale page', async () => {
+    const article = makeArticle();
+    article.frontmatter.websiteTag = 'Cached Tag';
+    article.frontmatter.syndication.website = {
+      status: 'synced',
+      url: 'https://joeblack.nyc/writing/new-post/',
+    };
+    article.frontmatter.syndication.substack = {
+      status: 'synced',
+      url: 'https://sub.example.com/p/new',
+    };
+    article.frontmatter.syndication.medium = { status: 'synced', url: null };
+    article.frontmatter.syndication.x = { status: 'synced', url: null };
+    article.frontmatter.syndication.devto = {
+      status: 'synced',
+      url: 'https://dev.to/joe/new-post',
+    };
+    article.frontmatter.syndication.instagram = { status: 'synced', url: null };
+    const generate = vi.fn(async () => ({
+      x: 'unused',
+      linkedin: 'unused',
+      facebook: 'unused',
+      instagram: 'unused',
+      website: { tag: 'Freshly Drafted Tag' },
+    }));
+    const deps = makeDeps(siteIndexPath, {
+      live: { website: 'stale', devtoUrl: 'https://dev.to/joe/new-post' },
+      draftModel: { generate },
+    });
+
+    await syncArticle(article, deps);
+
+    expect(generate).not.toHaveBeenCalled();
+    const pageHtml = await readFile(
+      join(dirname(siteIndexPath), 'writing', 'new-post', 'index.html'),
+      'utf8',
+    );
+    expect(pageHtml).toContain('Cached Tag');
+    expect(pageHtml).not.toContain('Freshly Drafted Tag');
+  });
+
+  it('stamps a websiteContentHash after syncing the website', async () => {
+    const article = makeArticle();
+    const deps = makeDeps(siteIndexPath);
+
+    await syncArticle(article, deps);
+
+    expect(article.frontmatter.websiteContentHash).toBeTruthy();
   });
 });

@@ -23,6 +23,8 @@ export type Frontmatter = {
   description: string;
   publishedAt: string | null;
   syndication: Record<PlatformKey, PlatformSync>;
+  websiteTag?: string;
+  websiteContentHash?: string;
 };
 
 export type Article = {

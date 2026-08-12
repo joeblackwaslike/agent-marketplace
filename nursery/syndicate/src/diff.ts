@@ -1,7 +1,8 @@
 import type { Article, PlatformKey } from './types.js';
+import type { WebsiteLiveState } from './website-status.js';
 
 export type LiveStatus = {
-  website: boolean;
+  website: WebsiteLiveState;
   devtoUrl: string | null;
 };
 
@@ -27,9 +28,12 @@ function isPlatformLive(
 export function computeGaps(article: Article, live: LiveStatus): PlatformKey[] {
   const { syndication } = article.frontmatter;
 
-  if (!live.website) {
+  if (live.website === 'missing') {
     return ['website'];
   }
 
-  return DOWNSTREAM_ORDER.filter((platform) => !isPlatformLive(platform, syndication, live));
+  const downstreamGaps = DOWNSTREAM_ORDER.filter(
+    (platform) => !isPlatformLive(platform, syndication, live),
+  );
+  return live.website === 'stale' ? ['website', ...downstreamGaps] : downstreamGaps;
 }
