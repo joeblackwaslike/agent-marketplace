@@ -197,3 +197,152 @@ describe('renderArticlePage', () => {
     expect(html).not.toContain('href="https://joeblack.nyc/writing/my-article-"onmouseover="');
   });
 });
+
+describe('renderArticlePage — CTAs', () => {
+  it('renders a CTA card in place of its marker comment', () => {
+    const article = makeArticle();
+    article.content =
+      'Intro paragraph.\n\n<!-- cta: {"copy": "Subscribe for more.", "actionLabel": "Subscribe", "actionUrl": "https://joeblackwaslike.substack.com/subscribe"} -->\n\n## Next section\n\nMore text.\n';
+
+    const html = renderArticlePage(article, 'https://joeblack.nyc', 'AI Agents');
+
+    expect(html).toContain('class="cta-card"');
+    expect(html).toContain('Subscribe for more.');
+    expect(html).toContain('href="https://joeblackwaslike.substack.com/subscribe"');
+    expect(html).not.toContain('<!-- cta:');
+  });
+
+  it('renders a marker placed as the last block in the content, after everything else', () => {
+    const article = makeArticle();
+    article.content =
+      'Intro paragraph.\n\n## Closing thoughts\n\nFinal words.\n\n<!-- cta: {"copy": "One more thing.", "actionLabel": "Subscribe", "actionUrl": "https://joeblackwaslike.substack.com/subscribe"} -->\n';
+
+    const html = renderArticlePage(article, 'https://joeblack.nyc', 'AI Agents');
+
+    expect(html.indexOf('Final words.')).toBeLessThan(html.indexOf('One more thing.'));
+  });
+
+  it('renders multiple distinct CTAs in document order', () => {
+    const article = makeArticle();
+    article.content =
+      '<!-- cta: {"copy": "First CTA.", "actionLabel": "Go", "actionUrl": "https://example.com/a"} -->\n\n## Section\n\n<!-- cta: {"copy": "Second CTA.", "actionLabel": "Go", "actionUrl": "https://example.com/b"} -->\n';
+
+    const html = renderArticlePage(article, 'https://joeblack.nyc', 'AI Agents');
+
+    expect(html.indexOf('First CTA.')).toBeLessThan(html.indexOf('Second CTA.'));
+    expect((html.match(/class="cta-card"/g) ?? []).length).toBe(2);
+  });
+
+  it('leaves a malformed (invalid JSON) marker untouched, as an inert comment, without throwing', () => {
+    const article = makeArticle();
+    article.content = 'Intro.\n\n<!-- cta: {not valid json} -->\n\nMore text.\n';
+
+    const html = renderArticlePage(article, 'https://joeblack.nyc', 'AI Agents');
+
+    expect(html).toContain('<!-- cta: {not valid json} -->');
+    expect(html).not.toContain('class="cta-card"');
+  });
+
+  it('leaves a marker missing a required field untouched, as an inert comment', () => {
+    const article = makeArticle();
+    article.content =
+      'Intro.\n\n<!-- cta: {"copy": "Missing fields.", "actionLabel": "Go"} -->\n\nMore text.\n';
+
+    const html = renderArticlePage(article, 'https://joeblack.nyc', 'AI Agents');
+
+    expect(html).not.toContain('class="cta-card"');
+    expect(html).toContain('<!-- cta:');
+  });
+
+  it('renders a payload with extra, unknown fields', () => {
+    const article = makeArticle();
+    article.content =
+      '<!-- cta: {"copy": "Extra fields.", "actionLabel": "Go", "actionUrl": "https://example.com", "unknown": "ignored"} -->\n';
+
+    const html = renderArticlePage(article, 'https://joeblack.nyc', 'AI Agents');
+
+    expect(html).toContain('class="cta-card"');
+    expect(html).toContain('Extra fields.');
+  });
+
+  it('HTML-escapes CTA copy, actionLabel, and actionUrl, including an XSS-style injection attempt', () => {
+    const article = makeArticle();
+    const payload = JSON.stringify({
+      copy: 'Subscribe <script>alert(1)</script> now',
+      actionLabel: 'Go & <b>now</b>',
+      actionUrl: 'https://example.com/"onmouseover="alert(1)',
+    });
+    article.content = `<!-- cta: ${payload} -->\n`;
+
+    const html = renderArticlePage(article, 'https://joeblack.nyc', 'AI Agents');
+
+    expect(html).not.toContain('<script>alert(1)</script>');
+    expect(html).toContain('&lt;script&gt;');
+    expect(html).not.toContain('"onmouseover="alert(1)');
+    expect(html).toContain('&quot;onmouseover=');
+    expect(html).toContain('&amp;');
+  });
+
+  it('parses correctly when copy text contains a literal closing brace', () => {
+    const article = makeArticle();
+    article.content =
+      '<!-- cta: {"copy": "Everything you need {and more}.", "actionLabel": "Go", "actionUrl": "https://example.com"} -->\n';
+
+    const html = renderArticlePage(article, 'https://joeblack.nyc', 'AI Agents');
+
+    expect(html).toContain('class="cta-card"');
+    expect(html).toContain('Everything you need {and more}.');
+  });
+
+  it('renders no CTA cards when the article has no markers', () => {
+    const html = renderArticlePage(makeArticle(), 'https://joeblack.nyc', 'AI Agents');
+
+    expect(html).not.toContain('class="cta-card"');
+  });
+});
+
+describe('renderArticlePage — share links', () => {
+  it('includes X and LinkedIn share links built from the title and canonical URL', () => {
+    const html = renderArticlePage(makeArticle(), 'https://joeblack.nyc', 'AI Agents');
+    const canonicalUrl = 'https://joeblack.nyc/writing/my-article/';
+
+    expect(html).toContain(
+      `href="https://x.com/intent/post?text=${encodeURIComponent('My Article')}&amp;url=${encodeURIComponent(canonicalUrl)}"`,
+    );
+    expect(html).toContain(
+      `href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonicalUrl)}"`,
+    );
+  });
+
+  it('includes a copy-link button wired to the canonical URL via the clipboard API', () => {
+    const html = renderArticlePage(makeArticle(), 'https://joeblack.nyc', 'AI Agents');
+
+    expect(html).toContain('id="copy-link-btn"');
+    expect(html).toContain('data-url="https://joeblack.nyc/writing/my-article/"');
+    expect(html).toContain('navigator.clipboard.writeText');
+  });
+
+  it('HTML-escapes a title with special characters used to build the X share intent', () => {
+    const article = makeArticle();
+    article.frontmatter.title = 'Fish & Chips "Recipe"';
+
+    const html = renderArticlePage(article, 'https://joeblack.nyc', 'AI Agents');
+
+    const expectedText = encodeURIComponent('Fish & Chips "Recipe"');
+    expect(html).toContain(`text=${expectedText}`);
+    expect(html).not.toContain('text=Fish & Chips');
+  });
+});
+
+describe('renderArticlePage — giscus embed', () => {
+  it('includes a giscus mount point and client script with the configured repo and theme', () => {
+    const html = renderArticlePage(makeArticle(), 'https://joeblack.nyc', 'AI Agents');
+
+    expect(html).toContain('<div class="giscus"></div>');
+    expect(html).toContain('src="https://giscus.app/client.js"');
+    expect(html).toContain('data-repo="joeblackwaslike/agent-marketplace"');
+    expect(html).toContain('data-theme="preferred_color_scheme"');
+    expect(html).toMatch(/data-repo-id="[^"]+"/);
+    expect(html).toMatch(/data-category-id="[^"]+"/);
+  });
+});

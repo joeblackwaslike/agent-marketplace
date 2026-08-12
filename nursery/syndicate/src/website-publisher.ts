@@ -3,6 +3,12 @@ import { estimateReadTime } from './read-time.js';
 import type { Article } from './types.js';
 
 const SITE_TITLE = 'joeblack.nyc';
+const X_SHARE_INTENT_URL = 'https://x.com/intent/post';
+const LINKEDIN_SHARE_URL = 'https://www.linkedin.com/sharing/share-offsite/';
+const GISCUS_REPO = 'joeblackwaslike/agent-marketplace';
+const GISCUS_REPO_ID = 'R_kgDOSIKodw';
+const GISCUS_CATEGORY = 'Comments';
+const GISCUS_CATEGORY_ID = 'DIC_kwDOSIKod84DDLEf';
 
 function escapeHtml(value: string): string {
   return value
@@ -25,6 +31,102 @@ function escapeRegExp(value: string): string {
  */
 function stripLeadingTitle(content: string): string {
   return content.replace(/^\s*#[ \t][^\n]*\n+/, '');
+}
+
+const CTA_COMMENT_PATTERN = /<!--\s*cta:([\s\S]*?)-->/g;
+
+type CtaPayload = {
+  copy: string;
+  actionLabel: string;
+  actionUrl: string;
+};
+
+function isCtaPayload(value: unknown): value is CtaPayload {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as CtaPayload).copy === 'string' &&
+    typeof (value as CtaPayload).actionLabel === 'string' &&
+    typeof (value as CtaPayload).actionUrl === 'string'
+  );
+}
+
+function renderCtaCard(cta: CtaPayload): string {
+  return `<aside class="cta-card">
+      <p class="cta-card-copy">${escapeHtml(cta.copy)}</p>
+      <a class="btn-primary cta-card-action" href="${escapeHtml(
+        cta.actionUrl,
+      )}" target="_blank" rel="noopener">${escapeHtml(cta.actionLabel)}</a>
+    </aside>`;
+}
+
+/**
+ * A marker with malformed JSON or a missing required field is left in the output as an inert
+ * HTML comment (renders as nothing) rather than stripped — a second catch-all removal pass
+ * risks consuming adjacent valid markup, and leaving it visible in a warning is enough for an
+ * author to find and fix it during a `sync` run. Do not "fix" this into a stripping pass.
+ */
+function substituteCtaMarkers(bodyHtml: string): string {
+  return bodyHtml.replaceAll(CTA_COMMENT_PATTERN, (match, rawJson: string) => {
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(rawJson.trim());
+    } catch {
+      console.warn(`Skipping malformed CTA marker (invalid JSON): ${match}`);
+      return match;
+    }
+    if (!isCtaPayload(parsed)) {
+      console.warn(`Skipping malformed CTA marker (missing fields): ${match}`);
+      return match;
+    }
+    return renderCtaCard(parsed);
+  });
+}
+
+function renderShareLinks(title: string, canonicalUrl: string): string {
+  const xHref = `${X_SHARE_INTENT_URL}?text=${encodeURIComponent(title)}&url=${encodeURIComponent(canonicalUrl)}`;
+  const linkedinHref = `${LINKEDIN_SHARE_URL}?url=${encodeURIComponent(canonicalUrl)}`;
+
+  return `<div class="share-links">
+      <span class="share-links-label">Share</span>
+      <a class="btn-ghost share-btn" href="${escapeHtml(xHref)}" target="_blank" rel="noopener">X</a>
+      <a class="btn-ghost share-btn" href="${escapeHtml(linkedinHref)}" target="_blank" rel="noopener">LinkedIn</a>
+      <button class="btn-ghost share-btn" type="button" id="copy-link-btn" data-url="${escapeHtml(canonicalUrl)}">Copy link</button>
+    </div>
+    <script>
+      (function () {
+        var btn = document.getElementById('copy-link-btn');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          navigator.clipboard.writeText(btn.dataset.url).then(function () {
+            var original = btn.textContent;
+            btn.textContent = 'Copied';
+            setTimeout(function () { btn.textContent = original; }, 2000);
+          });
+        });
+      })();
+    </script>`;
+}
+
+function renderGiscusEmbed(): string {
+  return `<div class="giscus-wrap">
+      <div class="giscus"></div>
+      <script src="https://giscus.app/client.js"
+        data-repo="${GISCUS_REPO}"
+        data-repo-id="${GISCUS_REPO_ID}"
+        data-category="${GISCUS_CATEGORY}"
+        data-category-id="${GISCUS_CATEGORY_ID}"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+      </script>
+    </div>`;
 }
 
 export type WritingCardEntry = {
@@ -124,7 +226,9 @@ export function renderArticlePage(article: Article, siteBaseUrl: string, tag: st
   const { title, description, slug, publishedAt } = article.frontmatter;
   const canonicalUrl = `${siteBaseUrl}/writing/${slug}/`;
   const readTime = estimateReadTime(article.content);
-  const bodyHtml = marked.parse(stripLeadingTitle(article.content), { async: false });
+  const bodyHtml = substituteCtaMarkers(
+    marked.parse(stripLeadingTitle(article.content), { async: false }),
+  );
   const metaLine = [formatPublishedLabel(publishedAt), `${readTime} min read`]
     .filter(Boolean)
     .join(' · ');
@@ -161,6 +265,8 @@ export function renderArticlePage(article: Article, siteBaseUrl: string, tag: st
         <div class="article-body">
           ${bodyHtml}
         </div>
+        ${renderShareLinks(title, canonicalUrl)}
+        ${renderGiscusEmbed()}
       </div>
     </article>
 
