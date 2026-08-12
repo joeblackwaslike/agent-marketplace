@@ -50,13 +50,16 @@ async function syncWebsite(
     status: SYNCED_STATUS,
     url: `${deps.siteBaseUrl}/writing/${slug}/`,
   };
-  article.frontmatter.websiteContentHash = computeWebsiteContentHash(article);
 
   // Persist before writing the page file: the website gap can go stale and become
   // retriable again (see website-status.ts / diff.ts), but on first publish the URL
   // it guards must already be durable before the file exists. Otherwise a crash
   // between the file write and the outer loop's persistFrontmatter call would
-  // silently blank canonicalUrl for every downstream platform.
+  // silently blank canonicalUrl for every downstream platform. websiteContentHash is
+  // deliberately NOT set yet here - it's only made durable once both writes below
+  // succeed (via the outer loop's persistFrontmatter call), so a crash between this
+  // point and then leaves the page correctly re-classified as 'stale' next run
+  // instead of wrongly 'current' against content that was never actually written.
   await deps.persistFrontmatter(article);
 
   const pageHtml = renderArticlePage(article, deps.siteBaseUrl, tag);
@@ -73,6 +76,8 @@ async function syncWebsite(
     readTime: estimateReadTime(article.content),
   });
   await writeFile(deps.siteIndexPath, updated, 'utf8');
+
+  article.frontmatter.websiteContentHash = computeWebsiteContentHash(article);
 }
 
 async function syncDevto(

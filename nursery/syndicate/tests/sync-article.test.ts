@@ -236,4 +236,23 @@ describe('syncArticle', () => {
 
     expect(article.frontmatter.websiteContentHash).toBeTruthy();
   });
+
+  it('does not persist the new websiteContentHash until after the page and site-index writes succeed', async () => {
+    const article = makeArticle();
+    const persistedHashes: (string | undefined)[] = [];
+    const deps = makeDeps(siteIndexPath, {
+      persistFrontmatter: vi.fn(async (a: Article) => {
+        persistedHashes.push(a.frontmatter.websiteContentHash);
+      }),
+    });
+
+    await syncArticle(article, deps);
+
+    // First persist (canonical-URL durability, before the page file exists) must not
+    // carry the new hash yet - otherwise a crash between it and the page write would
+    // leave frontmatter claiming a hash the on-disk page doesn't actually match, and
+    // getWebsiteLiveState would wrongly report 'current' forever.
+    expect(persistedHashes[0]).toBeUndefined();
+    expect(persistedHashes.at(-1)).toBe(article.frontmatter.websiteContentHash);
+  });
 });
