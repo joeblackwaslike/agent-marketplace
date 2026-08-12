@@ -34,7 +34,7 @@ describe('computeGaps', () => {
       substack: { status: 'synced', url: 'https://sub.example.com/p/x' },
     });
 
-    const gaps = computeGaps(article, { website: false, devtoUrl: null });
+    const gaps = computeGaps(article, { website: 'missing', devtoUrl: null });
 
     expect(gaps).toEqual(['website']);
   });
@@ -42,7 +42,7 @@ describe('computeGaps', () => {
   it('returns downstream gaps once the website is live', () => {
     const article = makeArticle();
 
-    const gaps = computeGaps(article, { website: true, devtoUrl: null });
+    const gaps = computeGaps(article, { website: 'current', devtoUrl: null });
 
     expect(gaps).toEqual(['substack', 'medium', 'devto', 'x', 'linkedin', 'facebook', 'instagram']);
   });
@@ -55,7 +55,7 @@ describe('computeGaps', () => {
     });
 
     const gaps = computeGaps(article, {
-      website: true,
+      website: 'current',
       devtoUrl: 'https://dev.to/joe/x',
     });
 
@@ -73,10 +73,38 @@ describe('computeGaps', () => {
     });
 
     const gaps = computeGaps(article, {
-      website: true,
+      website: 'current',
       devtoUrl: 'https://dev.to/joe/x',
     });
 
     expect(gaps).toEqual([]);
+  });
+
+  it('re-includes website when its content has gone stale, without re-triggering already-synced downstream platforms', () => {
+    const article = makeArticle({
+      substack: { status: 'synced', url: 'https://sub.example.com/p/x' },
+      medium: { status: 'synced', url: null },
+      x: { status: 'synced', url: null },
+      linkedin: { status: 'synced', url: null },
+      facebook: { status: 'synced', url: null },
+      instagram: { status: 'synced', url: null },
+    });
+
+    const gaps = computeGaps(article, {
+      website: 'stale',
+      devtoUrl: 'https://dev.to/joe/x',
+    });
+
+    expect(gaps).toEqual(['website']);
+  });
+
+  it('combines a stale website with genuinely-unsynced downstream platforms', () => {
+    const article = makeArticle({
+      substack: { status: 'synced', url: 'https://sub.example.com/p/x' },
+    });
+
+    const gaps = computeGaps(article, { website: 'stale', devtoUrl: null });
+
+    expect(gaps).toEqual(['website', 'medium', 'devto', 'x', 'linkedin', 'facebook', 'instagram']);
   });
 });

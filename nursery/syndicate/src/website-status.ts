@@ -1,16 +1,32 @@
+import { createHash } from 'node:crypto';
 import { access } from 'node:fs/promises';
 import path from 'node:path';
+import type { Article } from './types.js';
+
+export type WebsiteLiveState = 'missing' | 'stale' | 'current';
 
 export function resolveArticlePagePath(siteIndexPath: string, slug: string): string {
   return path.join(path.dirname(siteIndexPath), 'writing', slug, 'index.html');
 }
 
-export async function isArticleOnWebsite(siteIndexPath: string, slug: string): Promise<boolean> {
-  const pagePath = resolveArticlePagePath(siteIndexPath, slug);
+export function computeWebsiteContentHash(article: Article): string {
+  const { title, description, websiteTag, publishedAt } = article.frontmatter;
+  return createHash('sha256')
+    .update(`${article.content} ${title} ${description} ${websiteTag ?? ''} ${publishedAt ?? ''}`)
+    .digest('hex');
+}
+
+export async function getWebsiteLiveState(
+  siteIndexPath: string,
+  article: Article,
+): Promise<WebsiteLiveState> {
+  const pagePath = resolveArticlePagePath(siteIndexPath, article.frontmatter.slug);
   try {
     await access(pagePath);
-    return true;
   } catch {
-    return false;
+    return 'missing';
   }
+  return article.frontmatter.websiteContentHash === computeWebsiteContentHash(article)
+    ? 'current'
+    : 'stale';
 }

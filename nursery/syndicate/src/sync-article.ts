@@ -8,7 +8,7 @@ import type { Publisher } from './publishers/publisher.js';
 import { estimateReadTime } from './read-time.js';
 import type { Article, PlatformKey } from './types.js';
 import { insertWritingCard, renderArticlePage } from './website-publisher.js';
-import { resolveArticlePagePath } from './website-status.js';
+import { computeWebsiteContentHash, resolveArticlePagePath } from './website-status.js';
 
 type ManualPlatform = 'substack' | 'medium' | 'x' | 'linkedin' | 'facebook' | 'instagram';
 type CaptionPlatform = 'x' | 'linkedin' | 'facebook' | 'instagram';
@@ -43,19 +43,23 @@ async function syncWebsite(
   draft: Draft | null,
 ): Promise<void> {
   const { slug } = article.frontmatter;
-  const tag = draft?.website.tag ?? 'Writing';
-  article.frontmatter.publishedAt = new Date().toISOString();
+  const tag = article.frontmatter.websiteTag ?? draft?.website.tag ?? 'Writing';
+  article.frontmatter.websiteTag = tag;
+  article.frontmatter.publishedAt ??= new Date().toISOString();
   article.frontmatter.syndication.website = {
     status: SYNCED_STATUS,
     url: `${deps.siteBaseUrl}/writing/${slug}/`,
   };
 
-  // Persist before writing the page file: once the page file exists, the
-  // website gap becomes permanently non-retriable (see website-status.ts /
-  // diff.ts), so the URL it guards must already be durable before that
-  // happens. Otherwise a crash between the file write and the outer loop's
-  // persistFrontmatter call would silently and permanently blank
-  // canonicalUrl for every downstream platform.
+  // Persist before writing the page file: the website gap can go stale and become
+  // retriable again (see website-status.ts / diff.ts), but on first publish the URL
+  // it guards must already be durable before the file exists. Otherwise a crash
+  // between the file write and the outer loop's persistFrontmatter call would
+  // silently blank canonicalUrl for every downstream platform. websiteContentHash is
+  // deliberately NOT set yet here - it's only made durable once both writes below
+  // succeed (via the outer loop's persistFrontmatter call), so a crash between this
+  // point and then leaves the page correctly re-classified as 'stale' next run
+  // instead of wrongly 'current' against content that was never actually written.
   await deps.persistFrontmatter(article);
 
   const pageHtml = renderArticlePage(article, deps.siteBaseUrl, tag);
@@ -72,6 +76,8 @@ async function syncWebsite(
     readTime: estimateReadTime(article.content),
   });
   await writeFile(deps.siteIndexPath, updated, 'utf8');
+
+  article.frontmatter.websiteContentHash = computeWebsiteContentHash(article);
 }
 
 async function syncDevto(
@@ -141,7 +147,8 @@ export async function syncArticle(article: Article, deps: SyncArticleDeps): Prom
 
   const canonicalUrl = article.frontmatter.syndication.website.url ?? '';
   const needsDraft =
-    gaps.some((platform) => isCaptionPlatform(platform)) || gaps.includes('website');
+    gaps.some((platform) => isCaptionPlatform(platform)) ||
+    (gaps.includes('website') && !article.frontmatter.websiteTag);
   const draft = needsDraft
     ? await draftCaptions(deps.draftModel, article.content, canonicalUrl)
     : null;

@@ -22,7 +22,7 @@ import { scanReadyArticles } from './scan.js';
 import { syncArticle } from './sync-article.js';
 import { terminalLink } from './terminal-link.js';
 import type { Article, PlatformKey } from './types.js';
-import { isArticleOnWebsite, resolveArticlePagePath } from './website-status.js';
+import { getWebsiteLiveState, resolveArticlePagePath } from './website-status.js';
 
 export type ManualPublishers = Record<
   'substack' | 'medium' | 'x' | 'linkedin' | 'facebook' | 'instagram',
@@ -107,7 +107,7 @@ function createManualPublishers(config: Config): ManualPublishers {
 }
 
 export async function syncSingleArticle(article: Article, context: SyncContext): Promise<boolean> {
-  const website = await isArticleOnWebsite(context.siteIndexPath, article.frontmatter.slug);
+  const website = await getWebsiteLiveState(context.siteIndexPath, article);
   const canonicalUrl = article.frontmatter.syndication.website.url;
   const devtoUrl = canonicalUrl ? await isArticleOnDevto(context.devtoClient, canonicalUrl) : null;
 
@@ -221,9 +221,9 @@ async function baselinePlatform(article: Article, platform: PlatformKey): Promis
 export async function runBaseline(filePath: string): Promise<void> {
   const article = await readArticle(filePath);
 
-  // website's "baseline" state is authoritatively the filesystem (whether the page file
-  // exists — see isArticleOnWebsite/computeGaps), not something an operator can assert, so
-  // it's excluded from this prompt loop.
+  // website's "baseline" state is authoritatively the filesystem/content-hash check (see
+  // getWebsiteLiveState/computeGaps), not something an operator can assert, so it's
+  // excluded from this prompt loop.
   const platforms = (Object.keys(article.frontmatter.syndication) as PlatformKey[]).filter(
     (platform) => platform !== 'website',
   );
