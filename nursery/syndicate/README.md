@@ -12,7 +12,8 @@ Configuration is read from environment variables (see `src/config.ts`):
 
 | Variable | Required | Description |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | yes | Used to draft X/LinkedIn/Facebook captions via Claude |
+| `ANTHROPIC_API_KEY` | one of these two | Draft captions via the pay-per-token Anthropic Messages API |
+| `CLAUDE_CODE_OAUTH_TOKEN` | one of these two | Draft captions via a Claude Max/Pro subscription instead — minted with `claude setup-token`, takes precedence over `ANTHROPIC_API_KEY` when both are set |
 | `DEVTO_API_KEY` | yes | Used to check dev.to sync status and publish new posts |
 | `ARTICLES_DIR` | no | Defaults to `private-content/drafts/articles` |
 | `SITE_INDEX_PATH` | no | Defaults to `site/index.html` |

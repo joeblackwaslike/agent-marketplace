@@ -26,6 +26,17 @@ describe('loadConfig', () => {
     ).toThrow();
   });
 
+  it('does not throw when ANTHROPIC_API_KEY is missing but CLAUDE_CODE_OAUTH_TOKEN is set', () => {
+    expect(() =>
+      loadConfig({
+        CLAUDE_CODE_OAUTH_TOKEN: 'sk-ant-oat01-test',
+        DEVTO_API_KEY: 'devto-test',
+        SUBSTACK_SUBDOMAIN: 'joeblackwaslike',
+        SITE_BASE_URL: 'https://joeblack.nyc',
+      }),
+    ).not.toThrow();
+  });
+
   it('throws when SUBSTACK_SUBDOMAIN is missing', () => {
     expect(() =>
       loadConfig({

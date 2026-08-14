@@ -14,14 +14,23 @@ export function loadDotEnv(path = '.env'): void {
   }
 }
 
-const envSchema = z.object({
-  ANTHROPIC_API_KEY: z.string().min(1),
-  DEVTO_API_KEY: z.string().min(1),
-  SUBSTACK_SUBDOMAIN: z.string().min(1),
-  SITE_BASE_URL: z.url(),
-  ARTICLES_DIR: z.string().default('private-content/drafts/articles'),
-  SITE_INDEX_PATH: z.string().default('site/index.html'),
-});
+const envSchema = z
+  .object({
+    // Either credential authenticates draftCaptions()'s Claude calls (see src/draft.ts):
+    // ANTHROPIC_API_KEY bills the pay-per-token Messages API, CLAUDE_CODE_OAUTH_TOKEN routes
+    // through a Claude Max/Pro subscription instead and takes precedence when both are set.
+    ANTHROPIC_API_KEY: z.string().min(1).optional(),
+    CLAUDE_CODE_OAUTH_TOKEN: z.string().min(1).optional(),
+    DEVTO_API_KEY: z.string().min(1),
+    SUBSTACK_SUBDOMAIN: z.string().min(1),
+    SITE_BASE_URL: z.url(),
+    ARTICLES_DIR: z.string().default('private-content/drafts/articles'),
+    SITE_INDEX_PATH: z.string().default('site/index.html'),
+  })
+  .refine((env) => Boolean(env.ANTHROPIC_API_KEY) || Boolean(env.CLAUDE_CODE_OAUTH_TOKEN), {
+    message: 'Either ANTHROPIC_API_KEY or CLAUDE_CODE_OAUTH_TOKEN is required',
+    path: ['ANTHROPIC_API_KEY'],
+  });
 
 export type Config = z.infer<typeof envSchema>;
 

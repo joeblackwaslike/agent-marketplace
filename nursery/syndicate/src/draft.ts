@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { anthropic } from '@ai-sdk/anthropic';
+import { query } from '@anthropic-ai/claude-agent-sdk';
 import { Output, generateText } from 'ai';
 import { z } from 'zod';
 
@@ -26,7 +27,57 @@ export type DraftModel = {
   generate: (prompt: string) => Promise<Draft>;
 };
 
-export function createClaudeDraftModel(): DraftModel {
+export function getClaudeBackend(): 'oauth' | 'api-key' {
+  return process.env.CLAUDE_CODE_OAUTH_TOKEN ? 'oauth' : 'api-key';
+}
+
+/**
+ * query() spawns the `claude` CLI as a subprocess, and Claude Code's own auth precedence ranks
+ * ANTHROPIC_API_KEY/ANTHROPIC_AUTH_TOKEN above CLAUDE_CODE_OAUTH_TOKEN. Since ANTHROPIC_API_KEY
+ * stays in .env as the api-key backend's own credential, it must be stripped from the
+ * subprocess env here or `query()` silently falls back to the (exhausted) billed key instead of
+ * the subscription token.
+ */
+function subprocessEnv(): Record<string, string | undefined> {
+  const env = { ...process.env };
+  // biome-ignore lint/performance/noDelete: env is a plain-object copy, not process.env itself
+  delete env.ANTHROPIC_API_KEY;
+  // biome-ignore lint/performance/noDelete: env is a plain-object copy, not process.env itself
+  delete env.ANTHROPIC_AUTH_TOKEN;
+  return env;
+}
+
+export function createOauthDraftModel(): DraftModel {
+  return {
+    async generate(prompt: string) {
+      let structuredOutput: unknown;
+      for await (const message of query({
+        prompt,
+        options: {
+          tools: [],
+          maxTurns: 1,
+          model: 'claude-sonnet-5',
+          outputFormat: { type: 'json_schema', schema: z.toJSONSchema(draftSchema) },
+          env: subprocessEnv(),
+        },
+      })) {
+        if (message.type === 'result') {
+          if (message.subtype === 'success') {
+            structuredOutput = message.structured_output;
+          }
+          break;
+        }
+      }
+
+      if (structuredOutput === undefined) {
+        throw new Error('draft.ts: oauth backend did not return a structured_output result');
+      }
+      return draftSchema.parse(structuredOutput);
+    },
+  };
+}
+
+function createApiKeyDraftModel(): DraftModel {
   return {
     async generate(prompt: string) {
       const { output } = await generateText({
@@ -37,6 +88,10 @@ export function createClaudeDraftModel(): DraftModel {
       return output;
     },
   };
+}
+
+export function createClaudeDraftModel(): DraftModel {
+  return getClaudeBackend() === 'oauth' ? createOauthDraftModel() : createApiKeyDraftModel();
 }
 
 export async function buildDraftPrompt(
