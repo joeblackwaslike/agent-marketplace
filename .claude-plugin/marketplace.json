@@ -64,8 +64,8 @@
       "name": "agent-skills",
       "description": "Joe Black's custom skills for Claude Code — agentic development, multi-provider plugin architecture, Claude Code plugin development, and best practices for working with Claude Code.",
       "source": {
-        "source": "github",
-        "repo": "joeblackwaslike/agent-skills"
+        "source": "url",
+        "url": "https://github.com/joeblackwaslike/agent-skills.git"
       },
       "category": "productivity",
       "keywords": [
