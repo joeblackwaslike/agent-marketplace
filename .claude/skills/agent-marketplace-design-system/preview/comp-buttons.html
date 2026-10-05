@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .btn{font-family:var(--font-mono);font-weight:500;font-size:13.5px;letter-spacing:-0.01em;padding:11px 20px;border-radius:var(--r-sm);border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+  .primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .secondary{background:var(--fg-1);color:var(--bg);border-color:var(--fg-1)}
+  .subtle{background:var(--surface-2);color:var(--fg-1);border-color:var(--line)}
+  .ghost{background:transparent;color:var(--fg-1);border-color:var(--line-strong)}
+  .quiet{background:transparent;border-color:transparent;color:var(--fg-2);padding-left:0;padding-right:0}
+  .quiet:hover{color:var(--accent)}
+  .lab{font-family:var(--font-mono);font-size:10px;color:var(--fg-4);margin-top:8px;text-transform:uppercase;letter-spacing:0.1em}
+  .sw{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+</style></head>
+<body style="background:var(--bg)">
+  <div class="row" style="align-items:flex-start;gap:22px">
+    <div class="col"><button class="btn primary">Explore Plugins →</button><span class="lab">primary · accent</span></div>
+    <div class="col"><button class="btn secondary">Install marketplace</button><span class="lab">secondary · ink</span></div>
+    <div class="col"><button class="btn subtle"><svg class="sw" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button><span class="lab">subtle · surface</span></div>
+  </div>
+  <div class="row" style="align-items:flex-start;gap:22px;margin-top:18px">
+    <div class="col"><button class="btn ghost">Get in Touch</button><span class="lab">ghost · outline</span></div>
+    <div class="col"><button class="btn quiet">All posts →</button><span class="lab">quiet · link</span></div>
+  </div>
+</body></html>

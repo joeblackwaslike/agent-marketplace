@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  body{padding:26px 28px;background:var(--bg)}
+  h1{font-family:var(--font-mono);font-weight:600;font-size:16px;letter-spacing:-0.02em;color:var(--fg-1);margin:0 0 4px}
+  .sub{font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg-3);margin-bottom:22px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:16px 12px}
+  .opt{display:flex;flex-direction:column;gap:6px}
+  .sw{height:50px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:space-between;padding:0 9px;font-family:var(--font-mono);font-weight:700;font-size:15px;letter-spacing:-0.04em}
+  .sw .p{opacity:0.9}
+  .sw .b{font-size:10px;font-weight:600;border:1px solid currentColor;border-radius:3px;padding:1px 5px;opacity:0.85}
+  .meta{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.02em}
+  .hex{color:var(--fg-2)} .num{color:var(--fg-4)}
+  /* link-preview row: accent text on carbon */
+  .lk{font-family:var(--font-mono);font-size:11px}
+</style>
+</head>
+<body>
+  <h1>Accent color — 80 options</h1>
+  <div class="sub">even hue spectrum · shown as fill with ink-on-color · call out the numbers you like</div>
+  <div class="grid" id="grid"></div>
+
+  <script>
+    function hslHex(h,s,l){
+      s/=100; l/=100;
+      const k=n=>(n+h/30)%12, a=s*Math.min(l,1-l);
+      const f=n=>l-a*Math.max(-1,Math.min(k(n)-3,9-k(n),1));
+      const to=x=>Math.round(255*x).toString(16).padStart(2,'0');
+      return '#'+to(f(0))+to(f(8))+to(f(4));
+    }
+    // ink that reads on a given L: dark ink on bright colors
+    const grid=document.getElementById('grid');
+    const N=80;
+    for(let i=0;i<N;i++){
+      const h=Math.round(i/N*360);
+      // vivid accent tuned for dark carbon
+      const s=82, l= (h>40&&h<75)?54:60; // dip lightness slightly in yellow band
+      const hex=hslHex(h,s,l);
+      const ink = l>56 ? '#0a0c0a' : '#0a0c0a';
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML =
+        '<div class="sw" style="background:'+hex+';color:'+ink+'"><span class="p">$jb</span><span class="b">Aa</span></div>'+
+        '<div class="lk" style="color:'+hex+'">Explore Plugins →</div>'+
+        '<div class="meta"><span class="hex">'+hex+'</span><span class="num">'+String(i+1).padStart(2,'0')+'</span></div>';
+      grid.appendChild(opt);
+    }
+  </script>
+</body>
+</html>

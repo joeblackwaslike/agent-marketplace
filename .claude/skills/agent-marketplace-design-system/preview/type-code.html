@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css"></head>
+<body style="background:var(--bg)">
+  <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px;font-family:var(--font-mono);font-size:13px;line-height:1.7">
+    <div><span style="color:var(--tok-com)"># install &amp; run a sandboxed tool</span></div>
+    <div><span style="color:var(--tok-key)">import</span> <span style="color:var(--fg-1)">{ exec }</span> <span style="color:var(--tok-key)">from</span> <span style="color:var(--tok-str)">"mcp-exec"</span></div>
+    <div><span style="color:var(--tok-key)">const</span> <span style="color:var(--fg-1)">out</span> = <span style="color:var(--tok-key)">await</span> <span style="color:var(--tok-fn)">exec</span><span style="color:var(--fg-1)">(</span><span style="color:var(--tok-str)">"pytest -q"</span><span style="color:var(--fg-1)">)</span></div>
+    <div style="margin-top:8px;color:var(--accent)">$ <span style="color:var(--fg-2)">claude plugin install mcp-exec</span></div>
+  </div>
+  <div style="font-family:var(--font-mono);font-size:11px;color:var(--fg-3);margin-top:12px">Code tokens: <span style="color:var(--tok-key)">keyword</span> · <span style="color:var(--tok-str)">string</span> · <span style="color:var(--tok-fn)">function</span> · <span style="color:var(--tok-com)">comment</span></div>
+</body></html>

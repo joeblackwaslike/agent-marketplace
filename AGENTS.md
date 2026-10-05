@@ -2,8 +2,12 @@
 
 This file provides instructions and context for AI coding agents working on this project.
 
-## Design System
-The design system for agent-marketplace can be found in the skill: `personal-agent-skills:agent-marketplace-design-system`.
+## Skills
+
+Project-scoped skills live in `.claude/skills/` and are auto-discovered by Claude Code when working in this repo:
+
+- **agent-marketplace-design-system** — dark-first cool-carbon design system for this repo's UI; cyan-teal accent, mono-forward type
+- **ai-brand-content-system** — Joe's AI brand positioning, content planning, and cross-platform publishing (YouTube/TikTok/Instagram/X/Reddit/Medium/Substack/GitHub)
 
 ## Build & Test
 

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .pill{font-family:var(--font-mono);font-size:12px;font-weight:500;padding:6px 15px;border-radius:100px;border:1px solid var(--line-strong);background:transparent;color:var(--fg-2);cursor:pointer}
+  .pill.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .tabs{display:inline-flex;gap:3px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);padding:3px}
+  .tab{font-family:var(--font-mono);font-size:13px;font-weight:500;padding:7px 18px;border:none;border-radius:var(--r-sm);background:transparent;color:var(--fg-2);cursor:pointer}
+  .tab.active{background:var(--accent);color:var(--accent-ink)}
+  .lab{font-family:var(--font-mono);font-size:10px;color:var(--fg-4);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;display:block}
+</style></head>
+<body style="background:var(--bg)">
+  <div class="tabs"><button class="tab active">Claude Code</button><button class="tab">Codex CLI</button></div>
+  <span class="lab">platform switch</span>
+  <div style="display:flex;gap:7px;margin-top:18px;flex-wrap:wrap">
+    <button class="pill active">All</button>
+    <button class="pill">Productivity</button>
+    <button class="pill">Execution</button>
+    <button class="pill">Memory</button>
+  </div>
+  <span class="lab">category filter pills</span>
+</body></html>

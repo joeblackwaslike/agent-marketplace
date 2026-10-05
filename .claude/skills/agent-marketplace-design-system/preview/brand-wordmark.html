@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  .tile{border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:600;letter-spacing:-0.045em;overflow:hidden}
+  .surf{background:var(--surface-2);border:1px solid var(--line-strong);color:var(--fg-1)} .surf .a{color:var(--accent)}
+  .acc{background:var(--accent);color:var(--accent-ink)} .acc .a{color:var(--accent-ink)}
+  .ink{background:#060806;border:1px solid var(--line);color:var(--accent)} .ink .a{color:var(--accent)}
+  .lab{font-family:var(--font-mono);font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg-4);text-align:center}
+  .opt{display:flex;flex-direction:column;align-items:center;gap:8px}
+</style>
+</head>
+<body style="background:var(--bg)">
+  <div style="display:flex;align-items:center;gap:26px">
+    <!-- chosen monogram: /jb -->
+    <div class="opt">
+      <div class="tile surf" style="width:72px;height:72px;font-size:24px"><span class="a">/</span>jb</div>
+      <span class="lab">primary · 45</span>
+    </div>
+    <div class="opt">
+      <div class="tile acc" style="width:62px;height:62px;font-size:21px"><span class="a">/</span>jb</div>
+      <span class="lab">accent fill</span>
+    </div>
+    <div class="opt">
+      <div class="tile ink" style="width:62px;height:62px;font-size:21px"><span class="a">/</span>jb</div>
+      <span class="lab">carbon</span>
+    </div>
+    <div class="opt">
+      <div class="tile surf" style="width:34px;height:34px;font-size:12px"><span class="a">/</span>jb</div>
+      <span class="lab">favicon</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-left:6px">
+      <div style="font-family:var(--font-mono);font-weight:600;font-size:30px;letter-spacing:-0.04em;color:var(--fg-1)">joeblack<span style="color:var(--accent)">.nyc</span></div>
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--fg-3);letter-spacing:0.04em">monogram <span style="color:var(--accent)">/jb</span> · the slash reads as a path — pure mono identity, no extra typeface</div>
+    </div>
+  </div>
+</body></html>

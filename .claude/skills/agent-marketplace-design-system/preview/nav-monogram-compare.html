@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head><meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css"><link rel="stylesheet" href="_card.css">
+<style>
+  body{padding:0;background:var(--bg)}
+  .lab{font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--fg-4);padding:18px 24px 8px}
+  .nav{display:flex;align-items:center;gap:24px;height:60px;padding:0 24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface-1)}
+  .mk-tile{width:34px;height:34px;border-radius:var(--r-sm);background:var(--surface-2);border:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:600;font-size:13px;letter-spacing:-0.04em;color:var(--fg-1);flex-shrink:0}
+  .mk-tile .a{color:var(--accent)}
+  .wm{font-family:var(--font-mono);font-weight:600;font-size:15px;letter-spacing:-0.03em;color:var(--fg-1)}
+  .wm .t{color:var(--accent)}
+  .links{display:flex;gap:22px;flex:1}
+  .links a{font-family:var(--font-mono);font-size:13px;color:var(--fg-3)}
+  .links a.on{color:var(--accent)}
+  .ic{display:flex;gap:12px;align-items:center}
+  .ic img{width:17px;height:17px;filter:invert(1);opacity:0.5}
+</style>
+</head>
+<body>
+  <div class="lab">Option A — monogram tile + wordmark</div>
+  <nav class="nav">
+    <span class="mk-tile"><span class="a">/</span>jb</span>
+    <span class="wm">joeblack<span class="t">.nyc</span></span>
+    <span class="links"><a class="on">Plugins</a><a>Writing</a><a>Projects</a><a>Connect</a></span>
+    <span class="ic"><img src="../assets/brand-icons/github.svg"><img src="../assets/brand-icons/x.svg"></span>
+  </nav>
+
+  <div class="lab">Option B — monogram tile only</div>
+  <nav class="nav">
+    <span class="mk-tile"><span class="a">/</span>jb</span>
+    <span class="links" style="margin-left:8px"><a class="on">Plugins</a><a>Writing</a><a>Projects</a><a>Connect</a></span>
+    <span class="ic"><img src="../assets/brand-icons/github.svg"><img src="../assets/brand-icons/x.svg"></span>
+  </nav>
+
+  <div class="lab">Option C — wordmark only (current)</div>
+  <nav class="nav">
+    <span class="wm">joeblack<span class="t">.nyc</span></span>
+    <span class="links" style="margin-left:8px"><a class="on">Plugins</a><a>Writing</a><a>Projects</a><a>Connect</a></span>
+    <span class="ic"><img src="../assets/brand-icons/github.svg"><img src="../assets/brand-icons/x.svg"></span>
+  </nav>
+</body>
+</html>

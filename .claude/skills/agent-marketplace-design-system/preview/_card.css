@@ -1,0 +1,33 @@
+/* Shared frame for Design System tab preview cards.
+   Each card links ../colors_and_type.css then this file.
+   Cards are ~700px wide; keep them edge-to-edge, no titles (the asset
+   name renders outside the card). */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--fg-1);
+  padding: 22px 24px;
+  -webkit-font-smoothing: antialiased;
+}
+.row { display: flex; gap: 14px; align-items: stretch; flex-wrap: wrap; }
+.col { display: flex; flex-direction: column; gap: 6px; }
+.mono { font-family: var(--font-mono); }
+.muted { color: var(--fg-3); }
+.tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--fg-3);
+}
+
+/* swatch */
+.sw { display: flex; flex-direction: column; gap: 7px; flex: 1; min-width: 0; }
+.sw .chip {
+  height: 56px; border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+}
+.sw .nm { font-family: var(--font-mono); font-size: 11px; color: var(--fg-1); letter-spacing: 0.02em; }
+.sw .hx { font-family: var(--font-mono); font-size: 10.5px; color: var(--fg-3); }

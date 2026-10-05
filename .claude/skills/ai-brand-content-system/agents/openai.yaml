@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Brand Content System"
+  short_description: "Joe AI brand content engine"
+  default_prompt: "Use $ai-brand-content-system to turn this project or idea into a brand-aligned content plan and platform repurposing pack."
