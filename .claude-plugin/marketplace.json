@@ -173,7 +173,8 @@
       "description": "Make every Claude Code session discoverable by what was done, asked, and questioned. Indexes transcripts into a sidecar SQLite store with heuristic and LLM-powered synthesis. Includes SessionEnd hook for forward capture and UserPromptSubmit hook for search reminders.",
       "source": {
         "source": "github",
-        "repo": "joeblackwaslike/cc-recall"
+        "repo": "joeblackwaslike/cc-recall",
+        "ref": "release"
       },
       "category": "memory",
       "keywords": [

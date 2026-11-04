@@ -1,8 +1,8 @@
 {
-  "observed_at": "2026-07-29T21:45:10.776Z",
+  "observed_at": "2026-11-04T02:27:05.846Z",
   "provider": "claude-code",
   "event_name": "UserPromptSubmit",
-  "session_id": "78fe12c5-1c32-4d59-8ec5-6e257d4e6bd9",
+  "session_id": "7bc56e06-5b69-4988-ac26-d8bd1517697b",
   "turn_id": null,
-  "prompt_summary": "You are indexing a Claude Code session transcript so it can be found later by what\nwas DONE, ASKED, and QUESTIONED. Read the digest and reply with ONLY a JSON object\n(no prose, no code fences) of this…"
+  "prompt_summary": "Workspace boundary (important):\n- Confine source, project, user-data, and system file changes to the current working directory, which is a git worktree. Do not intentionally create, modify, move, or d…"
 }
